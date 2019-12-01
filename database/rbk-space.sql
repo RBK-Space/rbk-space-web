@@ -19,8 +19,7 @@ USE `rbk-space` ;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `rbk-space`.`users` (
   `userID` INT NOT NULL AUTO_INCREMENT,
-  `firstName` VARCHAR(45) NOT NULL,
-  `lastName` VARCHAR(45) NOT NULL,
+  `fullName` VARCHAR(100) NOT NULL,
   `username` VARCHAR(45) NOT NULL,
   `email` VARCHAR(45) NOT NULL,
   `token` VARCHAR(45) NULL,
