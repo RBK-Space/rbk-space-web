@@ -1,15 +1,12 @@
 var mysql = require("mysql");
-const path = require("path");
-var config = require(path.join(__dirname, "../config/config.js"));
-var sequelize = require("sequelize");
 
-//Connect to Database
+//Connect to Database using the global configuration
 
 var connection = mysql.createConnection({
-  host: config.host,
-  user: config.user,
-  password: config.password,
-  database: config.database
+  host: global.gConfig.host,
+  user: global.gConfig.user,
+  password: global.gConfig.password,
+  database: global.gConfig.database
 });
 
 module.exports = connection;
@@ -17,17 +14,41 @@ module.exports = {
   users: {
     // get all users data
     get: function(callback) {
-      db.query(
-        "select * from `rbk-space`.users  as u left join `rbk-space`.userDetails as ud on u.userID = ud.userId",
-        function(err, results) {
-          if (err) {
-            console.log("Can not fetch users");
-          } else {
-            // console.log(rows);
-            callback(err, results);
-          }
+      connection.query("call `rbk-space`.getUsers()", function(err, results) {
+        if (err) {
+          console.log("Can not fetch users", err);
+        } else {
+          // console.log(rows);
+          callback(err, results);
         }
-      );
+      });
+    },
+    //static = refactor to dynamic
+    getUserById: function(callback) {
+      var userId = 1;
+      connection.query("call `rbk-space`.getUserById(?)", userId, function(
+        err,
+        results
+      ) {
+        if (err) {
+          console.log("Can not fetch user", err);
+        } else {
+          callback(err, results);
+        }
+      });
+    },
+    getUserByName: function(callback) {
+      var name = "Fay";
+      connection.query("call `rbk-space`.getUserByName(?)", name, function(
+        err,
+        results
+      ) {
+        if (err) {
+          console.log("Can not fetch user", err);
+        } else {
+          callback(err, results);
+        }
+      });
     }
   }
 };

@@ -7,15 +7,11 @@ process.env.NODE_ENV = "development";
 //config
 const config = require("../config/config.js");
 
-//db
-const db = require("../database/index.js");
-
 //module
 const app = express();
-
-app.get("/global", (req, res) => {
-  res.json(global.gConfig);
-});
+//routes
+const routes = require("./routes/index");
+app.use("/", routes);
 
 app.listen(global.gConfig.node_port, () => {
   console.log(
