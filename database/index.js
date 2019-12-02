@@ -15,13 +15,13 @@ var connection = mysql.createConnection({
 module.exports = connection;
 module.exports = {
   users: {
-    // Ditto as above.
+    // get all users data
     get: function(callback) {
       db.query(
         "select * from `rbk-space`.users  as u left join `rbk-space`.userDetails as ud on u.userID = ud.userId",
         function(err, results) {
           if (err) {
-            console.log("Can not fetch the user");
+            console.log("Can not fetch users");
           } else {
             // console.log(rows);
             callback(err, results);
