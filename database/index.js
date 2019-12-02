@@ -11,6 +11,7 @@ var connection = mysql.createConnection({
 
 module.exports = connection;
 module.exports = {
+  //users functions
   users: {
     // get all users data
     get: function(callback) {
@@ -24,8 +25,7 @@ module.exports = {
       });
     },
     //static = refactor to dynamic
-    getUserById: function(callback) {
-      var userId = 1;
+    getUserById: function(callback, userId) {
       connection.query("call `rbk-space`.getUserById(?)", userId, function(
         err,
         results
@@ -37,14 +37,63 @@ module.exports = {
         }
       });
     },
-    getUserByName: function(callback) {
-      var name = "Fay";
+    getUserByName: function(callback, name) {
       connection.query("call `rbk-space`.getUserByName(?)", name, function(
         err,
         results
       ) {
         if (err) {
           console.log("Can not fetch user", err);
+        } else {
+          callback(err, results);
+        }
+      });
+    }
+  },
+  //cohorts functions
+  cohorts: {
+    //get all cohorts data
+    get: function(callback) {
+      connection.query("call `rbk-space`.getCohorts()", function(err, results) {
+        if (err) {
+          console.log("Can not fetch data", err);
+        } else {
+          callback(err, results);
+        }
+      });
+    },
+    //get all users by a specified cohort
+    getCohortUsers: function(callback, cohort) {
+      connection.query("call `rbk-space`.getCohortUsers(?)", cohort, function(
+        err,
+        results
+      ) {
+        if (err) {
+          console.log("Can not fetch data", err);
+        } else {
+          callback(err, results);
+        }
+      });
+    }
+  },
+  //skills function
+  skills: {
+    get: function(callback) {
+      connection.query("call `rbk-space`.getSkills()", function(err, results) {
+        if (err) {
+          console.log("Can not fetch data", err);
+        } else {
+          callback(err, results);
+        }
+      });
+    },
+    getSkillUsers: function(callback, skill) {
+      connection.query("call `rbk-space`.getUserBySkill(?)", skill, function(
+        err,
+        results
+      ) {
+        if (err) {
+          console.log("Can not fetch data", err);
         } else {
           callback(err, results);
         }
