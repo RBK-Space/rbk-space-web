@@ -153,54 +153,42 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `rbk-space`.`userDetails`
 -- -----------------------------------------------------
-CREATE TABLE
-IF NOT EXISTS `rbk-space`.`userDetails`
+CREATE TABLE `userDetails`
 (
-  `userId` INT NOT NULL,
-  `cohortId` INT NOT NULL,
-  `empStatus` INT NOT NULL,
-  `github` VARCHAR
-(500) NULL,
-  `facebook` VARCHAR
-(500) NULL,
-  `twitter` VARCHAR
-(500) NULL,
-  `linkedin` VARCHAR
-(500) NULL,
-  INDEX `userId_idx`
-(`userId` ASC),
-  INDEX `cohortId_idx`
-(`cohortId` ASC),
-  INDEX `empStatus_idx`
-(`empStatus` ASC),
-  CONSTRAINT `userIdDetFk`
-    FOREIGN KEY
-(`userId`)
-    REFERENCES `rbk-space`.`users`
+  `userId` int
+(11) NOT NULL,
+  `cohortId` int
+(11) NOT NULL,
+  `empStatus` int
+(11) NOT NULL,
+  `github` varchar
+(500) DEFAULT NULL,
+  `facebook` varchar
+(500) DEFAULT NULL,
+  `twitter` varchar
+(500) DEFAULT NULL,
+  `linkedin` varchar
+(500) DEFAULT NULL,
+  `imgUrl` varchar
+(500) DEFAULT NULL,
+  `bio` varchar
+(500) DEFAULT NULL,
+  KEY `userId_idx`
+(`userId`),
+  KEY `cohortId_idx`
+(`cohortId`),
+  KEY `empStatus_idx`
+(`empStatus`),
+  CONSTRAINT `cohortId` FOREIGN KEY
+(`cohortId`) REFERENCES `cohorts`
+(`cohortId`),
+  CONSTRAINT `empStatus` FOREIGN KEY
+(`empStatus`) REFERENCES `empstatus`
+(`empId`),
+  CONSTRAINT `userIdDetFk` FOREIGN KEY
+(`userId`) REFERENCES `users`
 (`userID`)
-    ON
-DELETE NO ACTION
-    ON
-UPDATE NO ACTION,
-  CONSTRAINT `cohortId`
-    FOREIGN KEY
-(`cohortId`)
-    REFERENCES `rbk-space`.`cohorts`
-(`cohortId`)
-    ON
-DELETE NO ACTION
-    ON
-UPDATE NO ACTION,
-  CONSTRAINT `empStatus`
-    FOREIGN KEY
-(`empStatus`)
-    REFERENCES `rbk-space`.`empStatus`
-(`empId`)
-    ON
-DELETE NO ACTION
-    ON
-UPDATE NO ACTION)
-ENGINE = InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
 
 
 -- -----------------------------------------------------
@@ -273,23 +261,22 @@ END
 DELIMITER ;
 
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getCohortUsers`
-(IN name varchar
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getPostsByCohort`
+(IN cohort varchar
 (10))
 BEGIN
-  select u.userID as userId, u.fullName as fullName, u.username as username, ud.imgUrl as image,
-    u.email as email, ud.facebook as fb, ud.github as gh, ud.linkedin as li, ud.twitter as tw,
-    c.cohortName as cohort, es.empStatus as empStat
+  select u.userID as userId, u.username as userName, u.fullName as fullName, ud.imgUrl as imgUrl, p.postId as postId,
+    p.postBody as postBody, p.postType as postType, p.createdAt as createdAt, c.cohortName
   from `rbk
   -space`.users u 
-	left join `rbk-space`.userDetails ud on
+	left join `rbk-space`.posts p on
+  (u.userID = p.userId) 
+    left join `rbk-space`.userDetails ud on
   (u.userID = ud.userId)
-	left join `rbk-space`.cohorts c on
+    left join `rbk-space`.cohorts as c on
   (ud.cohortId = c.cohortId)
-	left join `rbk-space`.empStatus es on
-  (ud.empStatus = es.empId)
-	where c.cohortName REGEXP name;
-END ;;
+	where c.cohortName REGEXP cohort;
+END;;
 DELIMITER ;
 
 DELIMITER ;;
@@ -303,19 +290,40 @@ END
 ;;
 DELIMITER ;
 
+USE `rbk-space`;
+DROP procedure IF EXISTS `getPosts`;
+
+DELIMITER ;;
+USE `rbk-space`
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getPosts`
+()
+BEGIN
+  select u.userID as userId, u.username as userName, u.fullName as fullName, ud.imgUrl as imgUrl, p.postId as postId,
+    p.postBody as postBody, p.postType as postType, p.createdAt as createdAt
+  from `rbk
+  -space`.users u 
+	left join `rbk-space`.posts p on
+  (u.userID = p.userId)
+;
+END
+
+DELIMITER ;
+
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getPostsByBody`
 (IN body varchar
 (100))
 BEGIN
-  select u.userID as userId, u.username as userName, u.fullName as fullName, p.postId as postId,
+  select u.userID as userId, u.username as userName, u.fullName as fullName, ud.imgUrl, p.postId as postId,
     p.postBody as postBody, p.postType as postType, p.createdAt as createdAt
   from `rbk
   -space`.users u 
+    left join `rbk-space`.userDetails ud on
+  (u.useriD = ud.userId)
 	left join `rbk-space`.posts p on
   (u.userID = p.userId) 
 	where p.postBody REGEXP body;
-END ;;
+END;;
 DELIMITER ;
 
 DELIMITER ;;
@@ -323,7 +331,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getPostsByCohort`
 (IN cohort varchar
 (10))
 BEGIN
-  select u.userID as userId, u.username as userName, u.fullName as fullName, p.postId as postId,
+  select u.userID as userId, u.username as userName, u.fullName as fullName, ud.imgUrl as imgUrl, p.postId as postId,
     p.postBody as postBody, p.postType as postType, p.createdAt as createdAt, c.cohortName
   from `rbk
   -space`.users u 
@@ -341,10 +349,12 @@ DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getPostsByType`
 (IN type tinyint)
 BEGIN
-  select u.userID as userId, u.username as userName, u.fullName as fullName, p.postId as postId,
+  select u.userID as userId, u.username as userName, u.fullName as fullName, ud.imgUrl as imgUrl, p.postId as postId,
     p.postBody as postBody, p.postType as postType, p.createdAt as createdAt
   from `rbk
   -space`.users u 
+    left join `rbk-space`.userDetails ud on
+  (u.userID = ud.userId)
 	left join `rbk-space`.posts p on
   (u.userID = p.userId) 
 	where p.postType = type;
@@ -357,14 +367,16 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getPostsByUser`
 (IN user varchar
 (10))
 BEGIN
-  select u.userID as userId, u.username as userName, u.fullName as fullName, p.postId as postId,
+  select u.userID as userId, u.username as userName, u.fullName as fullName, ud.imgUrl as imgUrl, p.postId as postId,
     p.postBody as postBody, p.postType as postType, p.createdAt as createdAt
   from `rbk
   -space`.users u 
+    left join `rbk-space`.userDetails ud on
+  (u.userID = ud.userId)
 	left join `rbk-space`.posts p on
   (u.userID = p.userId) 
 	where u.fullName REGEXP user;
-END ;;
+END;;
 DELIMITER ;
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getProjectById`
@@ -384,7 +396,7 @@ DELIMITER ;
 
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getProjects`
-()
+(IN id int)
 BEGIN
   select u.userID as userId, u.fullName, pr.projectId as projectId,
     pr.title as projectTitle, pr.link as projectLink, pr.desc as projectDesc
@@ -394,7 +406,7 @@ BEGIN
   (pt.userId = u.userID)
 	left join `rbk-space`.projects pr on
   (pt.projectId = pr.projectId);
-END ;;
+END;;
 DELIMITER ;
 
 DELIMITER ;;
@@ -516,4 +528,32 @@ BEGIN
   (ud.empStatus = es.empId)
 	where es.empStatus REGEXP status;
 END ;;
+DELIMITER ;
+
+USE `rbk-space`;
+DROP procedure IF EXISTS `addUser`;
+
+DELIMITER ;;
+USE `rbk-space`
+CREATE PROCEDURE `addUser`
+(IN fullName varchar
+(100), username varchar
+(45), email varchar
+(45), token varchar
+(45),
+															github varchar
+(500), imgUrl varchar
+(500))
+BEGIN
+    START TRANSACTION;
+INSERT INTO users
+  (fullName, username, email, token)
+VALUES(fullName, username, email, token);
+INSERT INTO userDetails
+  (userid, github, imgUrl)
+VALUES(LAST_INSERT_ID(), github, imgUrl);
+COMMIT;
+
+END;;
+
 DELIMITER ;
