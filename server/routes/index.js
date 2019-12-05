@@ -37,22 +37,90 @@ router.post("/user/login", (req, res) => {
   var username = req.body.username;
   var github = req.body.github;
   var imgUrl = req.body.imgUrl;
-  db.users.addUser(
-    fullName,
-    username,
-    github,
-    imgUrl
-      .then(function(dbUser) {
-        //After creating the user successfully, return it back to the client
-        res.json(dbUser);
-      })
-      .catch(function(err) {
-        res.json(err);
-      })
-  );
+  var email = req.body.email;
+  var token = req.body.token;
+  db.users.addUser([fullName, username, email, token, github, imgUrl], function(
+    err,
+    results
+  ) {
+    res.json(results[0]);
+  });
 });
+
 // Route to edit user's basic info
-router.post("/user/edit/basic", (req, res) => {});
+router.post("/user/edit/basic", (req, res) => {
+  var imgUrl = req.body.imgUrl || null;
+  var bio = req.body.bio || null;
+  var empStatus = req.body.empStatus || null;
+  var userId = req.body.userId || null;
+  //check if skills are array
+  var skillId = req.body.skillId || null;
+  if (imgUrl !== null) {
+    db.users.editUserImg([userId, imgUrl], function(err, dbUser) {
+      res.json(dbUser);
+    });
+  }
+  if (bio !== null) {
+    db.users.editUserBio([userId, bio], function(err, dbUser) {
+      res.json(dbUser);
+    });
+  }
+  if (empStatus !== null) {
+    db.users.editUserEmpStatus([userId, empStatus], function(err, dbUser) {
+      res.json(dbUser);
+    });
+  }
+  if (userId !== null && skillId !== null) {
+    db.users.addUserSkill([userId, empStatus], function(err, dbUser) {
+      res.json(dbUser);
+    });
+  }
+});
+// Route to edit user's contact info
+router.post("/user/edit/contact", (req, res) => {
+  var facebook = req.body.facebook || null;
+  var twitter = req.body.twitter || null;
+  var linkedin = req.body.linkedin || null;
+  var userId = req.body.userId || null;
+  if (facebook !== null) {
+    db.users.editFacebook([userId, facebook], function(err, dbUser) {
+      res.json(dbUser);
+    });
+  }
+  if (twitter !== null) {
+    db.users.editTwitter([userId, twitter], function(err, dbUser) {
+      res.json(dbUser);
+    });
+  }
+  if (linkedin !== null) {
+    db.users.editLinkedin([userId, linkedin], function(err, dbUser) {
+      res.json(dbUser);
+    });
+  }
+});
+//Route to edit user's portfolio
+
+router.post("/user/edit/portfolio", (req, res) => {
+  var title = req.body.title;
+  var link = req.body.link;
+  var description = req.body.description;
+  var userId = req.body.userId || null;
+  if (
+    title !== null &&
+    link !== null &&
+    description !== null &&
+    userId !== null
+  ) {
+    db.users.addUserProject([userId, title, link, description], function(
+      err,
+      dbPost
+    ) {
+      console.log("inserted successfully");
+
+      res.json(dbPost);
+    });
+  }
+});
 //cohorts routes
 //Route to get all cohorts data
 router.get("/cohorts", (req, res) => {
@@ -157,5 +225,17 @@ router.get("/user/posts/body/:text", (req, res) => {
   db.posts.getPostsByBody(function(err, results) {
     res.json(results);
   }, text);
+});
+//Route to add a post
+router.post("/user/post/add", (req, res) => {
+  var postType = req.body.postType;
+  var postBody = req.body.postBody;
+  var userId = req.body.userId;
+  //console.log(postType !== null && postBody !== null && userId !== null);
+  if (postType !== null && postBody !== null && userId !== null) {
+    db.posts.addPost([postType, postBody, userId], function(err, results) {
+      res.send(results);
+    });
+  }
 });
 module.exports = router;

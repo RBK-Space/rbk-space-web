@@ -49,19 +49,127 @@ module.exports = {
         }
       });
     },
+    //get user by email
+    getUserByEmail: function(callback, email) {
+      connection.query("call `rbk-space`.getUserByEmail(?)", email, function(
+        err,
+        results
+      ) {
+        if (err) {
+          console.log("Can not fetch user", err);
+        } else {
+          callback(err, results);
+        }
+      });
+    },
     //Add new user on login
-    addUser: function(callback, fullName, username, github, imgUrl) {
+    addUser: function(x, callback) {
       connection.query(
         "call `rbk-space`. `addUser`(?, ?, ?, ?, ?, ?)",
-        fullName,
-        username,
-        github,
-        imgUrl,
+        x,
         function(err, results) {
           if (err) {
             console.log("Can not insert user", err);
           } else {
-            callback(err, results);
+            console.log("Added Successfully");
+            callback(err, results[0]);
+          }
+        }
+      );
+    },
+    editUserImg: function(x, callback) {
+      connection.query("call `rbk-space`.editUserImg(?, ?) ", x, function(
+        err,
+        results
+      ) {
+        if (err) {
+          console.log("Can not edit user", err);
+        } else {
+          callback(err, results[0]);
+        }
+      });
+    },
+    editUserBio: function(x, callback) {
+      connection.query("call `rbk-space`.editUserBio(?, ?) ", x, function(
+        err,
+        results
+      ) {
+        if (err) {
+          console.log("Can not edit user", err);
+        } else {
+          callback(err, results[0]);
+        }
+      });
+    },
+    editUserEmpStatus: function(x, callback) {
+      connection.query("call `rbk-space`.editUserEmpStatus(?, ?) ", x, function(
+        err,
+        results
+      ) {
+        if (err) {
+          console.log("Can not edit user", err);
+        } else {
+          callback(err, results[0]);
+        }
+      });
+    },
+    addUserSkill: function(x, callback) {
+      connection.query("call `rbk-space`.addUserSkill(?, ?) ", x, function(
+        err,
+        results
+      ) {
+        if (err) {
+          console.log("Can not edit user", err);
+        } else {
+          callback(err, results);
+        }
+      });
+    },
+    editFacebook: function(x, callback) {
+      connection.query("call `rbk-space`.editFacebook(?, ?)", x, function(
+        err,
+        results
+      ) {
+        if (err) {
+          console.log("Can not edit user", err);
+        } else {
+          callback(err, results[0]);
+        }
+      });
+    },
+    editTwitter: function(x, callback) {
+      connection.query("call `rbk-space`.editTwitter(?, ?)", x, function(
+        err,
+        results
+      ) {
+        if (err) {
+          console.log("Can not edit user", err);
+        } else {
+          callback(err, results[0]);
+        }
+      });
+    },
+    editLinkedin: function(x, callback) {
+      connection.query("call `rbk-space`.editLinkedin(?, ?)", x, function(
+        err,
+        results
+      ) {
+        if (err) {
+          console.log("Can not edit user", err);
+        } else {
+          callback(err, results[0]);
+        }
+      });
+    },
+    addUserProject: function(x, callback) {
+      connection.query(
+        "call `rbk-space`.adduserProject(?, ?, ?, ?)",
+        x,
+        function(err, results) {
+          if (err) {
+            console.log("Can not edit user", err);
+          } else {
+            callback(err, results[0]);
           }
         }
       );
@@ -252,6 +360,20 @@ module.exports = {
           callback(err, results);
         }
       });
+    },
+    addPost: function(x, callback) {
+      //console.log(callback);
+      connection.query(
+        "call `rbk-space`.addPost(?, ?, ?)",
+        x,
+        (err, results) => {
+          if (err) {
+            console.log("Can not fetch data", err);
+          } else {
+            callback(null, results[0]);
+          }
+        }
+      );
     }
   }
 };
