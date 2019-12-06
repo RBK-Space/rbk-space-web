@@ -23,8 +23,15 @@ router.get("/user/:id", (req, res) => {
     res.json(results);
   }, id);
 });
+//Route to get user by email
+router.get("/user/email/:email", (req, res) => {
+  var email = req.params.email;
+  db.users.getUserByEmail(function(err, results) {
+    res.json(results);
+  }, email);
+});
 //Route to get user by name or part of name
-router.get("/user/:name", (req, res) => {
+router.get("/user/name/:name", (req, res) => {
   var name = req.params.name;
   db.users.getUserByName(function(err, results) {
     res.json(results);
