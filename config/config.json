@@ -1,0 +1,28 @@
+{
+  "development": {
+    "config_id": "development",
+    "app_name": "rbk-space",
+    "app_desc": "rbk-space desc",
+    "node_port": 3000,
+    "json_indentation": 4,
+    "host": "localhost",
+    "db_port": 3306,
+    "user": "root",
+    "password": "rbk-space",
+    "database": "rbk-space"
+  },
+  "testing": {
+    "config_id": "testing",
+    "database": "rbk-space-test"
+  },
+  "staging": {
+    "config_id": "staging",
+    "node_port": 8080,
+    "database": "rbk-space-stag"
+  },
+  "production": {
+    "config_id": "production",
+    "node_port": 8080,
+    "database": "rbk-space-prod"
+  }
+}
