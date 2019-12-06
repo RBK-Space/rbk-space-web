@@ -8,6 +8,10 @@ var connection = mysql.createConnection({
   password: global.gConfig.password,
   database: global.gConfig.database
 });
+var someVal = [];
+var setValue = function(value) {
+  someVal = value;
+};
 
 module.exports = connection;
 module.exports = {
@@ -58,7 +62,7 @@ module.exports = {
         if (err) {
           console.log("Can not fetch user", err);
         } else {
-          callback(err, results);
+          callback(err, results[0]);
         }
       });
     },
@@ -72,7 +76,10 @@ module.exports = {
             console.log("Can not insert user", err);
           } else {
             console.log("Added Successfully");
+            setValue(results[0]);
+            //console.log(someVal);
             callback(err, results[0]);
+            return someVal;
           }
         }
       );
