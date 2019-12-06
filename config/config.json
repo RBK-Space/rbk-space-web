@@ -3,7 +3,7 @@
     "config_id": "development",
     "app_name": "rbk-space",
     "app_desc": "rbk-space desc",
-    "node_port": 3000,
+    "node_port": 4000,
     "json_indentation": 4,
     "host": "localhost",
     "db_port": 3306,
