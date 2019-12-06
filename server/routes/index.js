@@ -31,7 +31,6 @@ router.get("/user/:name", (req, res) => {
   }, name);
 });
 //Route to insert new user into DB
-//Need to be Revised
 router.post("/user/login", (req, res) => {
   var fullName = req.body.fullName;
   var username = req.body.username;
@@ -39,12 +38,22 @@ router.post("/user/login", (req, res) => {
   var imgUrl = req.body.imgUrl;
   var email = req.body.email;
   var token = req.body.token;
-  db.users.addUser([fullName, username, email, token, github, imgUrl], function(
-    err,
-    results
-  ) {
-    res.json(results[0]);
-  });
+  var user = {};
+  db.users.getUserByEmail(function(err, results) {
+    if (results.length) {
+      //Home page
+      user = results[0];
+      console.log("user already exists");
+      res.json(user);
+    } else {
+      db.users.addUser(
+        [fullName, username, email, token, github, imgUrl],
+        function(err, dbUser) {
+          res.json(dbUser[0]);
+        }
+      );
+    }
+  }, email);
 });
 
 // Route to edit user's basic info
@@ -71,7 +80,7 @@ router.post("/user/edit/basic", (req, res) => {
     });
   }
   if (userId !== null && skillId !== null) {
-    db.users.addUserSkill([userId, empStatus], function(err, dbUser) {
+    db.users.addUserSkill([userId, skillId], function(err, dbUser) {
       res.json(dbUser);
     });
   }
@@ -113,11 +122,11 @@ router.post("/user/edit/portfolio", (req, res) => {
   ) {
     db.users.addUserProject([userId, title, link, description], function(
       err,
-      dbPost
+      dbProject
     ) {
       console.log("inserted successfully");
 
-      res.json(dbPost);
+      res.json(dbProject);
     });
   }
 });
