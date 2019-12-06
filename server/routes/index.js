@@ -30,6 +30,7 @@ router.get("/user/:name", (req, res) => {
     res.json(results);
   }, name);
 });
+
 //Route to insert new user into DB
 router.post("/user/login", (req, res) => {
   var fullName = req.body.fullName;
