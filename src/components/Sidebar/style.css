@@ -1,0 +1,49 @@
+@import '~antd/dist/antd.css';
+
+.home-page aside {
+  width: 250px;
+  margin: 20px;
+  padding: 20px;
+  background-color: lightslategrey;
+  color: #000;
+  min-height: 250px;
+  position: fixed;
+  border-radius: 10px;
+}
+
+.home-page .home-content .container {
+  width: 800px;
+  margin: auto;
+}
+aside .user-img img {
+  width: 80px;
+  height: 80px;
+}
+aside .user-name {
+  display: block;
+  margin-top: 10px;
+}
+.social-links {
+  list-style: none;
+  padding: 0px;
+  display: flex;
+  justify-content: space-around;
+  padding: 0px 15px;
+  margin-top: 10px;
+}
+
+.bio,
+.employment-status,
+.edit-profile {
+  display: block;
+  margin: 10px 0px;
+  color: #000;
+}
+.user-name,
+.employment-status {
+  font-weight: bold;
+}
+.edit-profile-text {
+  margin-left: 5px;
+  color: #000;
+}

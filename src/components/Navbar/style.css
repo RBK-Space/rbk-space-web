@@ -1,0 +1,41 @@
+@import '~antd/dist/antd.css';
+.header-layout {
+  padding-bottom: 80px;
+  background-color: #ffffff;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  position: fixed;
+  width: 100%;
+  z-index: 1;
+}
+content {
+  height: 2000px;
+}
+.menu-item {
+  display: flex !important;
+  justify-content: space-around !important;
+}
+
+.search-bar > span {
+  padding-top: 15px;
+  width: 350px;
+}
+.search-bar .ant-input-group-addon button {
+  padding: 0px;
+  padding-left: 10px;
+}
+.search-wrapper .ant-menu.ant-menu-dark .ant-menu-item-selected,
+.search-wrapper .ant-menu-submenu-popup.ant-menu-dark .ant-menu-item-selected {
+  background-color: transparent;
+}
+.radio-group-wrapper {
+  margin-left: 15px;
+}
+.radio-group .radio-button span {
+  color: #ffffff;
+}
+.ant-radio-input__placeholder {
+  color: #000;
+}

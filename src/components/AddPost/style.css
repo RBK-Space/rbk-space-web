@@ -1,0 +1,14 @@
+@import '~antd/dist/antd.css';
+
+.tabs-wrapper .tabs .ant-tabs-bar {
+  margin-left: auto;
+  margin-right: auto;
+  width: 250px !important;
+}
+.tabs-wrapper .tabs textarea {
+  min-height: 150px;
+  width: 100%;
+}
+.tabs-wrapper .tabs .post-btn {
+  margin-top: 10px;
+}
