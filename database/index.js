@@ -1,12 +1,12 @@
 var mysql = require('mysql');
-
+const config = require('../config/config');
 //Connect to Database using the global configuration
 
 var connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'rbk-space',
-  database: 'rbk-space'
+  host: global.gConfig.host,
+  user: global.gConfig.user,
+  password: global.gConfig.password,
+  database: global.gConfig.database
 });
 var someVal = [];
 var setValue = function(value) {
@@ -62,7 +62,9 @@ module.exports = {
         if (err) {
           console.log('Can not fetch user', err);
         } else {
+          setValue(results[0]);
           callback(err, results[0]);
+          return someVal;
         }
       });
     },
@@ -76,10 +78,8 @@ module.exports = {
             console.log('Can not insert user', err);
           } else {
             console.log('Added Successfully');
-            setValue(results[0]);
             //console.log(someVal);
             callback(err, results[0]);
-            return someVal;
           }
         }
       );

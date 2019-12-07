@@ -11,9 +11,6 @@ export default class Header extends Component {
     const { authenticated } = this.props;
     return (
       <ul className='menu'>
-        <li>
-          <Link to='/'>Home</Link>
-        </li>
         {authenticated ? (
           <li onClick={this._handleLogoutClick}>Logout</li>
         ) : (
