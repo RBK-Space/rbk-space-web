@@ -64,7 +64,7 @@ export default class HomePage extends Component {
             <div>
               <h1>You have login succcessfully!</h1>
               <h2>Welcome {this.state.user[0].fullName}!</h2>
-              <img alt='user profile image' src={this.state.user[0].image} />
+              <img alt='user profilePic' src={this.state.user[0].image} />
             </div>
           )}
         </div>
