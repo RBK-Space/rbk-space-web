@@ -132,6 +132,18 @@ module.exports = {
         }
       });
     },
+    deleteUserSkill: function(x, callback) {
+      connection.query("call `rbk-space`.deleteUserSkill(?, ?) ", x, function(
+        err,
+        results
+      ) {
+        if (err) {
+          console.log("Can not delete user", err);
+        } else {
+          callback(err, results);
+        }
+      });
+    },
     editFacebook: function(x, callback) {
       connection.query("call `rbk-space`.editFacebook(?, ?)", x, function(
         err,
@@ -180,6 +192,18 @@ module.exports = {
           }
         }
       );
+    },
+    deleteUserProject: function(x, callback) {
+      connection.query("call `rbk-space`.deleteProject(?, ?)", x, function(
+        err,
+        results
+      ) {
+        if (err) {
+          console.log("Can not delete user");
+        } else {
+          callback(err, results[0]);
+        }
+      });
     }
   },
   //cohorts functions
@@ -381,6 +405,18 @@ module.exports = {
           }
         }
       );
+    },
+    deletePost: function(x, callback) {
+      connection.query("call `rbk-space`.deletePost(?)", x, function(
+        err,
+        results
+      ) {
+        if (err) {
+          console.log("Can not delete post", err);
+        } else {
+          callback(null, results[0]);
+        }
+      });
     }
   }
 };
