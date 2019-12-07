@@ -48,9 +48,10 @@ router.post("/user/login", (req, res) => {
   var token = req.body.token;
   var user = {};
   db.users.getUserByEmail(function(err, results) {
-    if (results.length) {
+    if (results.length > 0) {
       //Home page
       user = results[0];
+      console.log(results[0]);
       console.log("user already exists");
       res.json(user);
     } else {
