@@ -62,7 +62,9 @@ module.exports = {
         if (err) {
           console.log("Can not fetch user", err);
         } else {
+          setValue(results[0]);
           callback(err, results[0]);
+          return someVal;
         }
       });
     },
@@ -76,10 +78,8 @@ module.exports = {
             console.log("Can not insert user", err);
           } else {
             console.log("Added Successfully");
-            setValue(results[0]);
             //console.log(someVal);
             callback(err, results[0]);
-            return someVal;
           }
         }
       );
