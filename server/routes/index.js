@@ -139,6 +139,20 @@ router.post("/user/edit/portfolio", (req, res) => {
     });
   }
 });
+
+//Route to delete project from user portfolio
+router.post("/userProject/delete", (req, res) => {
+  var projectId = req.body.projectId;
+  var userId = req.body.userId;
+  if (projectId !== null && userId !== null) {
+    db.users.deleteUserProject([userId, projectId], function(err, skill) {
+      if (skill.length > 0) {
+        console.log("Project deleted successfully");
+      }
+      res.send("Project deleted successfully");
+    });
+  }
+});
 //cohorts routes
 //Route to get all cohorts data
 router.get("/cohorts", (req, res) => {
@@ -168,6 +182,20 @@ router.get("/skillUsers/:skill", (req, res) => {
   db.cohorts.getCohortUsers(function(err, results) {
     res.json(results);
   }, skill);
+});
+
+//Route to delete a user skill
+router.post("/skillUsers/delete", (req, res) => {
+  var skill = req.body.skill;
+  var userId = req.body.userId;
+  if (skillId !== null && userId !== null) {
+    db.users.deleteUserSkill([userId, skillId], function(err, skill) {
+      if (skill.length > 0) {
+        console.log("Skill deleted successfully");
+      }
+      res.send("Skill deleted successfully");
+    });
+  }
 });
 
 //Employment Status functions
@@ -253,6 +281,18 @@ router.post("/user/post/add", (req, res) => {
   if (postType !== null && postBody !== null && userId !== null) {
     db.posts.addPost([postType, postBody, userId], function(err, results) {
       res.send(results);
+    });
+  }
+});
+//Route to delete a post
+router.post("/user/post/delete", (req, res) => {
+  var postId = req.body.postId;
+  if (postId !== null) {
+    db.post.deletePost([postId], function(err, skill) {
+      if (skill.length > 0) {
+        console.log("Post deleted successfully");
+      }
+      res.send("Post deleted successfully");
     });
   }
 });
