@@ -1,37 +1,38 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-var request = require("request");
-var db = require("../../database/index.js");
-var bodyParser = require("body-parser");
+const cors = require('cors');
+var request = require('request');
+var db = require('../../database/index.js');
+var bodyParser = require('body-parser');
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
-router.get("/", (req, res) => {
-  res.status(200).send("Home Page");
+router.get('/', (req, res) => {
+  res.status(200).send('Home Page');
 });
 //users routes
 //Route to get all users
-router.get("/users", (req, res) => {
+router.get('/users', (req, res) => {
   db.users.get(function(err, results) {
     res.json(results);
   });
 });
 //Route to get user by id
-router.get("/user/:id", (req, res) => {
+router.get('/user/:id', (req, res) => {
   var id = req.params.id;
   db.users.getUserById(function(err, results) {
     res.json(results);
   }, id);
 });
 //Route to get user by email
-router.get("/user/email/:email", (req, res) => {
+router.get('/user/email/:email', (req, res) => {
   var email = req.params.email;
   db.users.getUserByEmail(function(err, results) {
     res.json(results);
   }, email);
 });
 //Route to get user by name or part of name
-router.get("/user/name/:name", (req, res) => {
+router.get('/user/name/:name', (req, res) => {
   var name = req.params.name;
   db.users.getUserByName(function(err, results) {
     res.json(results);
@@ -39,7 +40,8 @@ router.get("/user/name/:name", (req, res) => {
 });
 
 //Route to insert new user into DB
-router.post("/user/login", (req, res) => {
+//Need to be Revised
+router.post('/user/login', (req, res) => {
   var fullName = req.body.fullName;
   var username = req.body.username;
   var github = req.body.github;
@@ -52,7 +54,7 @@ router.post("/user/login", (req, res) => {
       //Home page
       user = results[0];
       console.log(results[0]);
-      console.log("user already exists");
+      console.log('user already exists');
       res.json(user);
     } else {
       db.users.addUser(
@@ -66,7 +68,7 @@ router.post("/user/login", (req, res) => {
 });
 
 // Route to edit user's basic info
-router.post("/user/edit/basic", (req, res) => {
+router.post('/user/edit/basic', (req, res) => {
   var imgUrl = req.body.imgUrl || null;
   var bio = req.body.bio || null;
   var empStatus = req.body.empStatus || null;
@@ -95,7 +97,7 @@ router.post("/user/edit/basic", (req, res) => {
   }
 });
 // Route to edit user's contact info
-router.post("/user/edit/contact", (req, res) => {
+router.post('/user/edit/contact', (req, res) => {
   var facebook = req.body.facebook || null;
   var twitter = req.body.twitter || null;
   var linkedin = req.body.linkedin || null;
@@ -118,7 +120,7 @@ router.post("/user/edit/contact", (req, res) => {
 });
 //Route to edit user's portfolio
 
-router.post("/user/edit/portfolio", (req, res) => {
+router.post('/user/edit/portfolio', (req, res) => {
   var title = req.body.title;
   var link = req.body.link;
   var description = req.body.description;
@@ -133,7 +135,7 @@ router.post("/user/edit/portfolio", (req, res) => {
       err,
       dbProject
     ) {
-      console.log("inserted successfully");
+      console.log('inserted successfully');
 
       res.json(dbProject);
     });
@@ -141,28 +143,28 @@ router.post("/user/edit/portfolio", (req, res) => {
 });
 
 //Route to delete project from user portfolio
-router.post("/userProject/delete", (req, res) => {
+router.post('/userProject/delete', (req, res) => {
   var projectId = req.body.projectId;
   var userId = req.body.userId;
   if (projectId !== null && userId !== null) {
     db.users.deleteUserProject([userId, projectId], function(err, skill) {
       if (skill.length > 0) {
-        console.log("Project deleted successfully");
+        console.log('Project deleted successfully');
       }
-      res.send("Project deleted successfully");
+      res.send('Project deleted successfully');
     });
   }
 });
 //cohorts routes
 //Route to get all cohorts data
-router.get("/cohorts", (req, res) => {
+router.get('/cohorts', (req, res) => {
   db.cohorts.get(function(err, results) {
     res.json(results);
   });
 });
 
 //Route to get all users by cohort
-router.get("/cohortUsers/:cohort", (req, res) => {
+router.get('/cohortUsers/:cohort', (req, res) => {
   var cohort = req.params.cohort;
   db.cohorts.getCohortUsers(function(err, results) {
     res.json(results);
@@ -171,13 +173,13 @@ router.get("/cohortUsers/:cohort", (req, res) => {
 
 //skills
 //Route to get all skills lists
-router.get("/skills", (req, res) => {
+router.get('/skills', (req, res) => {
   db.skills.get(function(err, results) {
     res.json(results);
   });
 });
 //Route to get all users who have a skill
-router.get("/skillUsers/:skill", (req, res) => {
+router.get('/skillUsers/:skill', (req, res) => {
   var skill = req.params.skill;
   db.cohorts.getCohortUsers(function(err, results) {
     res.json(results);
@@ -185,15 +187,15 @@ router.get("/skillUsers/:skill", (req, res) => {
 });
 
 //Route to delete a user skill
-router.post("/skillUsers/delete", (req, res) => {
-  var skill = req.body.skill;
+router.post('/skillUsers/delete', (req, res) => {
+  var skillId = req.body.skill;
   var userId = req.body.userId;
   if (skillId !== null && userId !== null) {
     db.users.deleteUserSkill([userId, skillId], function(err, skill) {
       if (skill.length > 0) {
-        console.log("Skill deleted successfully");
+        console.log('Skill deleted successfully');
       }
-      res.send("Skill deleted successfully");
+      res.send('Skill deleted successfully');
     });
   }
 });
@@ -201,13 +203,13 @@ router.post("/skillUsers/delete", (req, res) => {
 //Employment Status functions
 
 //Route to get all employment status
-router.get("/empStatus", (req, res) => {
+router.get('/empStatus', (req, res) => {
   db.empStatus.get(function(err, results) {
     res.json(results);
   });
 });
 //Route to get users by employment status
-router.get("/empStatus/:empStat", (req, res) => {
+router.get('/empStatus/:empStat', (req, res) => {
   var empStat = req.params.empStat;
   db.empStatus.getUsersByEmpStatus(function(err, results) {
     res.json(results);
@@ -216,21 +218,21 @@ router.get("/empStatus/:empStat", (req, res) => {
 
 //Portfolio functions
 //Route to get all user's projects
-router.get("/portfolio/:userId", (req, res) => {
+router.get('/portfolio/:userId', (req, res) => {
   var userId = req.params.userId;
   db.portfolio.get(function(err, results) {
     res.json(results);
   }, userId);
 });
 //Route to get all user projects using full name or part of it
-router.get("/portfolio/user/:userName", (req, res) => {
+router.get('/portfolio/user/:userName', (req, res) => {
   var userName = req.params.userName;
   db.portfolio.getProjectsByUName(function(err, results) {
     res.json(results);
   }, userName);
 });
 //Route to get project by id
-router.get("/project/:projectId", (req, res) => {
+router.get('/project/:projectId', (req, res) => {
   var projectId = req.params.projectId;
   db.portfolio.getProjectById(function(err, results) {
     res.json(results);
@@ -239,44 +241,45 @@ router.get("/project/:projectId", (req, res) => {
 
 //posts functions
 //Route to get all posts
-router.get("/posts", (req, res) => {
+router.get('/posts', (req, res) => {
   db.posts.get(function(err, results) {
     res.json(results);
   });
 });
 //Route to get posts by a specific user
-router.get("/user/posts/:userName", (req, res) => {
+router.get('/user/posts/:userName', (req, res) => {
   var userName = req.params.userName;
   db.posts.getPostsByUser(function(err, results) {
     res.json(results);
   }, userName);
 });
 //Route to get all posts by users in a specific cohort
-router.get("/user/posts/cohort/:cohort", (req, res) => {
+router.get('/user/posts/cohort/:cohort', (req, res) => {
   var cohort = req.params.cohort;
   db.posts.getPostsByCohort(function(err, results) {
     res.json(results);
   }, cohort);
 });
 //Route to get all posts by post's type
-router.get("/user/posts/type/:type", (req, res) => {
+router.get('/user/posts/type/:type', (req, res) => {
   var type = req.params.type;
   db.posts.getPostsByType(function(err, results) {
     res.json(results);
   }, type);
 });
 //Route to get all posts by text in its body
-router.get("/user/posts/body/:text", (req, res) => {
+router.get('/user/posts/body/:text', (req, res) => {
   var text = req.params.text;
   db.posts.getPostsByBody(function(err, results) {
     res.json(results);
   }, text);
 });
 //Route to add a post
-router.post("/user/post/add", (req, res) => {
-  var postType = req.body.postType;
-  var postBody = req.body.postBody;
-  var userId = req.body.userId;
+router.post('/user/post/add', (req, res) => {
+  const { data } = req.body;
+  var postType = data.postType;
+  var postBody = data.postBody;
+  var userId = data.userId;
   //console.log(postType !== null && postBody !== null && userId !== null);
   if (postType !== null && postBody !== null && userId !== null) {
     db.posts.addPost([postType, postBody, userId], function(err, results) {
@@ -285,14 +288,14 @@ router.post("/user/post/add", (req, res) => {
   }
 });
 //Route to delete a post
-router.post("/user/post/delete", (req, res) => {
+router.post('/user/post/delete', (req, res) => {
   var postId = req.body.postId;
   if (postId !== null) {
     db.post.deletePost([postId], function(err, skill) {
       if (skill.length > 0) {
-        console.log("Post deleted successfully");
+        console.log('Post deleted successfully');
       }
-      res.send("Post deleted successfully");
+      res.send('Post deleted successfully');
     });
   }
 });
