@@ -5,13 +5,16 @@ export default class Header extends Component {
     const { authenticated } = this.props;
     console.log(authenticated);
     return (
-      <ul className='menu'>
-        {authenticated ? (
-          <li onClick={this._handleLogoutClick}>Logout</li>
-        ) : (
-          <li onClick={this._handleSignInClick}>Login</li>
-        )}
-      </ul>
+      <>
+        <h1>Welcome to RBK-Space</h1>
+        <ul className='menu'>
+          {authenticated ? (
+            <li onClick={this._handleLogoutClick}>Logout</li>
+          ) : (
+            <li onClick={this._handleSignInClick}>Login</li>
+          )}
+        </ul>
+      </>
     );
   }
 

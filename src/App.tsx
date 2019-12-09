@@ -16,7 +16,6 @@ const App: React.FC = () => {
     <Homepage />
     // <Provider store={store}>
     //   <div className='App'>
-
     //     <Navbar />
     //     <Sidebar />
     //     <div className='container'>
