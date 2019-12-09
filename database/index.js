@@ -1,5 +1,6 @@
-var mysql = require("mysql");
-const config = require("../config/config");
+
+var mysql = require('mysql');
+const config = require('../config/config');
 
 //Connect to Database using the global configuration
 
@@ -20,9 +21,11 @@ module.exports = {
   users: {
     // get all users data
     get: function(callback) {
+
       connection.query("call getUsers()", function(err, results) {
+
         if (err) {
-          console.log("Can not fetch users", err);
+          console.log('Can not fetch users', err);
         } else {
           // console.log(rows);
           callback(err, results);
@@ -33,7 +36,7 @@ module.exports = {
     getUserById: function(callback, userId) {
       connection.query(" call getUserById(?)", userId, function(err, results) {
         if (err) {
-          console.log("Can not fetch user", err);
+          console.log('Can not fetch user', err);
         } else {
           callback(err, results);
         }
@@ -42,7 +45,7 @@ module.exports = {
     getUserByName: function(callback, name) {
       connection.query(" call getUserByName(?)", name, function(err, results) {
         if (err) {
-          console.log("Can not fetch user", err);
+          console.log('Can not fetch user', err);
         } else {
           callback(err, results);
         }
@@ -50,12 +53,13 @@ module.exports = {
     },
     //get user by email
     getUserByEmail: function(callback, email) {
+
       connection.query(" call getUserByEmail(?)", email, function(
         err,
         results
       ) {
         if (err) {
-          console.log("Can not fetch user", err);
+          console.log('Can not fetch user', err);
         } else {
           setValue(results[0]);
           callback(err, results[0]);
@@ -65,20 +69,18 @@ module.exports = {
     },
     //Add new user on login
     addUser: function(x, callback) {
-      connection.query(" call  `addUser`(?, ?, ?, ?, ?, ?)", x, function(
-        err,
-        results
-      ) {
-        if (err) {
-          console.log("Can not insert user", err);
-        } else {
-          console.log("Added Successfully");
-          //console.log(someVal);
-          callback(err, results[0]);
+      connection.query(" call  `addUser`(?, ?, ?, ?, ?, ?)", x, function(err, results) {
+          if (err) {
+            console.log('Can not insert user', err);
+          } else {
+            console.log('Added Successfully');
+            //console.log(someVal);
+            callback(err, results[0]);
+          }
         }
-      });
+      );
     },
-    editUserImg: function(x, callback) {
+   editUserImg: function(x, callback) {
       connection.query(" call editUserImg(?, ?) ", x, function(err, results) {
         if (err) {
           console.log("Can not edit user", err);
@@ -88,9 +90,9 @@ module.exports = {
       });
     },
     editUserBio: function(x, callback) {
-      connection.query(" call editUserBio(?, ?) ", x, function(err, results) {
+      connection.query(" call editUserBio(?, ?) ", x, function(err, results) {     
         if (err) {
-          console.log("Can not edit user", err);
+          console.log('Can not edit user', err);
         } else {
           callback(err, results[0]);
         }
@@ -102,7 +104,7 @@ module.exports = {
         results
       ) {
         if (err) {
-          console.log("Can not edit user", err);
+          console.log('Can not edit user', err);
         } else {
           callback(err, results[0]);
         }
@@ -111,7 +113,7 @@ module.exports = {
     addUserSkill: function(x, callback) {
       connection.query(" call addUserSkill(?, ?) ", x, function(err, results) {
         if (err) {
-          console.log("Can not edit user", err);
+          console.log('Can not edit user', err);
         } else {
           callback(err, results);
         }
@@ -132,7 +134,7 @@ module.exports = {
     editFacebook: function(x, callback) {
       connection.query(" call editFacebook(?, ?)", x, function(err, results) {
         if (err) {
-          console.log("Can not edit user", err);
+          console.log('Can not edit user', err);
         } else {
           callback(err, results[0]);
         }
@@ -141,7 +143,7 @@ module.exports = {
     editTwitter: function(x, callback) {
       connection.query(" call editTwitter(?, ?)", x, function(err, results) {
         if (err) {
-          console.log("Can not edit user", err);
+          console.log('Can not edit user', err);
         } else {
           callback(err, results[0]);
         }
@@ -150,14 +152,24 @@ module.exports = {
     editLinkedin: function(x, callback) {
       connection.query(" call editLinkedin(?, ?)", x, function(err, results) {
         if (err) {
-          console.log("Can not edit user", err);
+          console.log('Can not edit user', err);
         } else {
           callback(err, results[0]);
         }
       });
     },
     addUserProject: function(x, callback) {
-      connection.query(" call adduserProject(?, ?, ?, ?)", x, function(
+      connection.query(" call adduserProject(?, ?, ?, ?)", x, function(err, results) {
+          if (err) {
+            console.log('Can not edit user', err);
+          } else {
+            callback(err, results[0]);
+          }
+        }
+      );
+    },
+    deleteUserProject: function(x, callback) {
+      connection.query("call deleteProject(?, ?)", x, function(
         err,
         results
       ) {
@@ -184,7 +196,7 @@ module.exports = {
     get: function(callback) {
       connection.query(" call getCohorts()", function(err, results) {
         if (err) {
-          console.log("Can not fetch data", err);
+          console.log('Can not fetch data', err);
         } else {
           callback(err, results);
         }
@@ -192,12 +204,13 @@ module.exports = {
     },
     //get all users by a specified cohort
     getCohortUsers: function(callback, cohort) {
+
       connection.query(" call getCohortUsers(?)", cohort, function(
         err,
         results
       ) {
         if (err) {
-          console.log("Can not fetch data", err);
+          console.log('Can not fetch data', err);
         } else {
           callback(err, results);
         }
@@ -209,7 +222,7 @@ module.exports = {
     get: function(callback) {
       connection.query(" call getSkills()", function(err, results) {
         if (err) {
-          console.log("Can not fetch data", err);
+          console.log('Can not fetch data', err);
         } else {
           callback(err, results);
         }
@@ -221,7 +234,7 @@ module.exports = {
         results
       ) {
         if (err) {
-          console.log("Can not fetch data", err);
+          console.log('Can not fetch data', err);
         } else {
           callback(err, results);
         }
@@ -233,7 +246,7 @@ module.exports = {
     get: function(callback) {
       connection.query(" call getEmpStatus()", function(err, results) {
         if (err) {
-          console.log("Can not fetch data", err);
+          console.log('Can not fetch data', err);
         } else {
           callback(err, results);
         }
@@ -258,7 +271,7 @@ module.exports = {
     get: function(callback, userId) {
       connection.query(" call getProjects(?)", userId, function(err, results) {
         if (err) {
-          console.log("Can not fetch data", err);
+          console.log('Can not fetch data', err);
         } else {
           callback(err, results);
         }
@@ -281,7 +294,7 @@ module.exports = {
     getProjectById: function(callback, id) {
       connection.query(" call getProjectById(?)", id, function(err, results) {
         if (err) {
-          console.log("Can not fetch data", err);
+          console.log('Can not fetch data', err);
         } else {
           callback(err, results);
         }
@@ -294,8 +307,9 @@ module.exports = {
   posts: {
     get: function(callback) {
       connection.query(" call getPosts()", function(err, results) {
+
         if (err) {
-          console.log("Can not fetch data", err);
+          console.log('Can not fetch data', err);
         } else {
           callback(err, results);
         }
@@ -308,7 +322,7 @@ module.exports = {
         results
       ) {
         if (err) {
-          console.log("Can not fetch data", err);
+          console.log('Can not fetch data', err);
         } else {
           callback(err, results);
         }
@@ -321,7 +335,7 @@ module.exports = {
         results
       ) {
         if (err) {
-          console.log("Can not fetch data", err);
+          console.log('Can not fetch data', err);
         } else {
           callback(err, results);
         }
@@ -331,7 +345,7 @@ module.exports = {
     getPostsByType: function(callback, type) {
       connection.query(" call getPostsByType(?)", type, function(err, results) {
         if (err) {
-          console.log("Can not fetch data", err);
+          console.log('Can not fetch data', err);
         } else {
           callback(err, results);
         }
@@ -341,7 +355,7 @@ module.exports = {
     getPostsByBody: function(callback, text) {
       connection.query(" call getPostsByBody(?)", text, function(err, results) {
         if (err) {
-          console.log("Can not fetch data", err);
+          console.log('Can not fetch data', err);
         } else {
           callback(err, results);
         }
