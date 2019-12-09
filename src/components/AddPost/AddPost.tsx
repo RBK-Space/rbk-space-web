@@ -1,13 +1,24 @@
 import React, { Component } from 'react';
 import { Tabs, Input, Button, Upload, Icon, message } from 'antd';
+import { connect } from 'react-redux';
+import { addPost } from './../../actions/posts';
 import './style.css';
 const { TextArea } = Input;
 const { TabPane } = Tabs;
 const { Dragger } = Upload;
 
-class AddPost extends Component {
+interface IPostProps {
+  posts?: any;
+  addPost?: any;
+}
+class AddPost extends Component<IPostProps> {
   callback(key: any) {
-    console.log(key);
+    // console.log(key);
+  }
+
+  handleClick() {
+    const { addPost } = this.props;
+    addPost({ postType: '0', postBody: 'Hello', userId: 1 });
   }
 
   render() {
@@ -32,12 +43,16 @@ class AddPost extends Component {
         <Tabs className='tabs' defaultActiveKey='1' onChange={this.callback}>
           <TabPane className='tab' tab='Add Post' key='1'>
             <TextArea />
-            <Button type='primary' className='post-btn'>
+            <Button
+              type='primary'
+              className='post-btn'
+              onClick={this.handleClick.bind(this)}
+            >
               Add Post
             </Button>
           </TabPane>
           <TabPane className='tab' tab='Add Image' key='2'>
-            <Dragger {...props}>
+            <Dragger className='dragger' {...props}>
               <p className='ant-upload-drag-icon'>
                 <Icon type='inbox' />
               </p>
@@ -49,11 +64,22 @@ class AddPost extends Component {
                 uploading company data or other band files
               </p>
             </Dragger>
+            <Button type='primary' className='img-btn'>
+              Add Image
+            </Button>
           </TabPane>
         </Tabs>
       </div>
     );
   }
 }
+const mapStateToProps = (state: any) => ({
+  posts: state.allPostsReducer.posts
+});
 
-export default AddPost;
+// Actions
+const mapDispatchToProps = {
+  addPost
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddPost);

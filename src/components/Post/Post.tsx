@@ -1,8 +1,18 @@
 import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
 import './style.css';
 import { Button } from 'antd';
+import { connect } from 'react-redux';
+import { store } from './../../App';
+import * as postActions from './../../actions/posts';
+import { getAllPosts } from './../../actions/posts';
 
-class Post extends Component {
+interface IPostProps {
+  posts?: any;
+  getAllPosts?: any;
+}
+
+class Post extends Component<IPostProps> {
   myFunction(e: any) {
     let dots: HTMLElement = document.getElementById('dots' + e)!;
     let moreText: HTMLElement = document.getElementById('more' + e)!;
@@ -19,86 +29,80 @@ class Post extends Component {
     }
   }
 
+  componentDidMount = async () => {
+    const { getAllPosts } = this.props;
+    getAllPosts();
+  };
+
   render() {
+    const { posts } = this.props;
+    console.log(posts);
+    console.log(store.getState());
     return (
-      <div>
-        <div className='post-wrapper'>
-          <div className='post'>
-            <div className='user-img'>
-              <img src='https://via.placeholder.com/100/100' alt='' />
-            </div>
-            <div className='post-data'>
-              <div className='user-time'>
-                <span className='post-writer'>Kareem</span>
-                <span className='post-date'>date</span>
-              </div>
-              <div className='post-body'>
-                <p>
-                  Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                  Libero eius repellat nam quo, illo assumenda dolorem expedita
-                  vitae eum, culpa odit, delectus esse corporis veniam eligendi
-                  atque rerum. Omnis, rerum!
-                  <span id={`dots${51}`}>...</span>
-                  <span id={`more${51}`} className='hide'>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Quibusdam suscipit architecto ducimus consectetur fuga nam
-                    sunt, magni incidunt corrupti consequatur blanditiis officia
-                    aut. Aspernatur corrupti, odio aperiam eveniet quidem ex?
-                  </span>
-                </p>
-                <Button
-                  onClick={(event: React.MouseEvent<HTMLElement>) => {
-                    this.myFunction(
-                      (event.target as HTMLElement).id.substring(5)
-                    );
-                  }}
-                  id={`myBtn${51}`}
-                >
-                  Read more
-                </Button>
-              </div>
-            </div>
-          </div>
-          <div className='post'>
-            <div className='user-img'>
-              <img src='https://via.placeholder.com/100/100' alt='' />
-            </div>
-            <div className='post-data'>
-              <div className='user-time'>
-                <span className='post-writer'>Kareem</span>
-                <span className='post-date'>date</span>
-              </div>
-              <div className='post-body'>
-                <p>
-                  Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                  Libero eius repellat nam quo, illo assumenda dolorem expedita
-                  vitae eum, culpa odit, delectus esse corporis veniam eligendi
-                  atque rerum. Omnis, rerum!
-                  <span id={`dots${52}`}>...</span>
-                  <span id={`more${52}`} className='hide'>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Quibusdam suscipit architecto ducimus consectetur fuga nam
-                    sunt, magni incidunt corrupti consequatur blanditiis officia
-                    aut. Aspernatur corrupti, odio aperiam eveniet quidem ex?
-                  </span>
-                </p>
-                <Button
-                  onClick={(event: React.MouseEvent<HTMLElement>) => {
-                    this.myFunction(
-                      (event.target as HTMLElement).id.substring(5)
-                    );
-                  }}
-                  id={`myBtn${52}`}
-                >
-                  Read more
-                </Button>
-              </div>
+      <>
+        {posts.length > 0 ? (
+          <div>
+            <div className='post-wrapper'>
+              {posts[0].map((post: any, index: any) => (
+                <div className='post' key={index}>
+                  <div className='user-img'>
+                    <img src={post.imgUrl} alt='' />
+                  </div>
+                  <div className='post-data'>
+                    <div className='user-time'>
+                      <span className='post-writer'>{post.userName}</span>
+                      <span className='post-date'>{post.createdAt}</span>
+                    </div>
+                    <div className='post-body'>
+                      <p>
+                        {post.postBody
+                          .split(' ')
+                          .splice(0, 30)
+                          .join(' ')}
+                        <span id={`dots${post.postId}`}>...</span>
+                        <span id={`more${post.postId}`} className='hide'>
+                          {post.postBody
+                            .split(' ')
+                            .splice(30)
+                            .join(' ')}
+                        </span>
+                      </p>
+                      {post.postBody.split(' ').length > 30 ? (
+                        <Button
+                          onClick={(event: React.MouseEvent<HTMLElement>) => {
+                            this.myFunction(
+                              (event.target as HTMLElement).id.substring(5)
+                            );
+                          }}
+                          id={`myBtn${post.postId}`}
+                        >
+                          Read more
+                        </Button>
+                      ) : null}
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-        </div>
-      </div>
+        ) : (
+          <div>Nothing to show</div>
+        )}
+      </>
     );
   }
 }
+const mapStateToProps = (state: any) => ({
+  posts: state.allPostsReducer.posts
+});
 
-export default Post;
+// const mapDispatchToProps = (dispatch: any) => {
+//   return bindActionCreators(postActions, dispatch);
+// };
+
+// Actions
+const mapDispatchToProps = {
+  getAllPosts
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Post);

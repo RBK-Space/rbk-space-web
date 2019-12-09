@@ -4,11 +4,10 @@
   width: 250px;
   margin: 20px;
   padding: 20px;
-  background-color: lightslategrey;
   color: #000;
   min-height: 250px;
   position: fixed;
-  border-radius: 10px;
+  border-right: 1px solid #000;
 }
 
 .home-page .home-content .container {
