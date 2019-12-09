@@ -1,5 +1,5 @@
-var mysql = require("mysql");
-
+var mysql = require('mysql');
+const config = require('../config/config');
 //Connect to Database using the global configuration
 
 var connection = mysql.createConnection({
@@ -8,6 +8,10 @@ var connection = mysql.createConnection({
   password: global.gConfig.password,
   database: global.gConfig.database
 });
+var someVal = [];
+var setValue = function(value) {
+  someVal = value;
+};
 
 module.exports = connection;
 module.exports = {
@@ -15,9 +19,9 @@ module.exports = {
   users: {
     // get all users data
     get: function(callback) {
-      connection.query("call `rbk-space`.getUsers()", function(err, results) {
+      connection.query('call `rbk-space`.getUsers()', function(err, results) {
         if (err) {
-          console.log("Can not fetch users", err);
+          console.log('Can not fetch users', err);
         } else {
           // console.log(rows);
           callback(err, results);
@@ -26,24 +30,24 @@ module.exports = {
     },
     //static = refactor to dynamic
     getUserById: function(callback, userId) {
-      connection.query("call `rbk-space`.getUserById(?)", userId, function(
+      connection.query('call `rbk-space`.getUserById(?)', userId, function(
         err,
         results
       ) {
         if (err) {
-          console.log("Can not fetch user", err);
+          console.log('Can not fetch user', err);
         } else {
           callback(err, results);
         }
       });
     },
     getUserByName: function(callback, name) {
-      connection.query("call `rbk-space`.getUserByName(?)", name, function(
+      connection.query('call `rbk-space`.getUserByName(?)', name, function(
         err,
         results
       ) {
         if (err) {
-          console.log("Can not fetch user", err);
+          console.log('Can not fetch user', err);
         } else {
           callback(err, results);
         }
@@ -51,111 +55,126 @@ module.exports = {
     },
     //get user by email
     getUserByEmail: function(callback, email) {
-      connection.query("call `rbk-space`.getUserByEmail(?)", email, function(
+      connection.query('call `rbk-space`.getUserByEmail(?)', email, function(
         err,
         results
       ) {
         if (err) {
-          console.log("Can not fetch user", err);
+          console.log('Can not fetch user', err);
         } else {
-          callback(err, results);
+          setValue(results[0]);
+          callback(err, results[0]);
+          return someVal;
         }
       });
     },
     //Add new user on login
     addUser: function(x, callback) {
       connection.query(
-        "call `rbk-space`. `addUser`(?, ?, ?, ?, ?, ?)",
+        'call `rbk-space`. `addUser`(?, ?, ?, ?, ?, ?)',
         x,
         function(err, results) {
           if (err) {
-            console.log("Can not insert user", err);
+            console.log('Can not insert user', err);
           } else {
-            console.log("Added Successfully");
+            console.log('Added Successfully');
+            //console.log(someVal);
             callback(err, results[0]);
           }
         }
       );
     },
     editUserImg: function(x, callback) {
-      connection.query("call `rbk-space`.editUserImg(?, ?) ", x, function(
+      connection.query('call `rbk-space`.editUserImg(?, ?) ', x, function(
         err,
         results
       ) {
         if (err) {
-          console.log("Can not edit user", err);
+          console.log('Can not edit user', err);
         } else {
           callback(err, results[0]);
         }
       });
     },
     editUserBio: function(x, callback) {
-      connection.query("call `rbk-space`.editUserBio(?, ?) ", x, function(
+      connection.query('call `rbk-space`.editUserBio(?, ?) ', x, function(
         err,
         results
       ) {
         if (err) {
-          console.log("Can not edit user", err);
+          console.log('Can not edit user', err);
         } else {
           callback(err, results[0]);
         }
       });
     },
     editUserEmpStatus: function(x, callback) {
-      connection.query("call `rbk-space`.editUserEmpStatus(?, ?) ", x, function(
+      connection.query('call `rbk-space`.editUserEmpStatus(?, ?) ', x, function(
         err,
         results
       ) {
         if (err) {
-          console.log("Can not edit user", err);
+          console.log('Can not edit user', err);
         } else {
           callback(err, results[0]);
         }
       });
     },
     addUserSkill: function(x, callback) {
-      connection.query("call `rbk-space`.addUserSkill(?, ?) ", x, function(
+      connection.query('call `rbk-space`.addUserSkill(?, ?) ', x, function(
         err,
         results
       ) {
         if (err) {
-          console.log("Can not edit user", err);
+          console.log('Can not edit user', err);
+        } else {
+          callback(err, results);
+        }
+      });
+    },
+    deleteUserSkill: function(x, callback) {
+      connection.query("call `rbk-space`.deleteUserSkill(?, ?) ", x, function(
+        err,
+        results
+      ) {
+        if (err) {
+          console.log("Can not delete user", err);
         } else {
           callback(err, results);
         }
       });
     },
     editFacebook: function(x, callback) {
-      connection.query("call `rbk-space`.editFacebook(?, ?)", x, function(
+      connection.query('call `rbk-space`.editFacebook(?, ?)', x, function(
         err,
         results
       ) {
         if (err) {
-          console.log("Can not edit user", err);
+          console.log('Can not edit user', err);
         } else {
           callback(err, results[0]);
         }
       });
     },
     editTwitter: function(x, callback) {
-      connection.query("call `rbk-space`.editTwitter(?, ?)", x, function(
+      connection.query('call `rbk-space`.editTwitter(?, ?)', x, function(
         err,
         results
       ) {
         if (err) {
-          console.log("Can not edit user", err);
+          console.log('Can not edit user', err);
         } else {
           callback(err, results[0]);
         }
       });
     },
     editLinkedin: function(x, callback) {
-      connection.query("call `rbk-space`.editLinkedin(?, ?)", x, function(
+      connection.query('call `rbk-space`.editLinkedin(?, ?)', x, function(
         err,
         results
       ) {
         if (err) {
-          console.log("Can not edit user", err);
+          console.log('Can not edit user', err);
         } else {
           callback(err, results[0]);
         }
@@ -163,25 +182,37 @@ module.exports = {
     },
     addUserProject: function(x, callback) {
       connection.query(
-        "call `rbk-space`.adduserProject(?, ?, ?, ?)",
+        'call `rbk-space`.adduserProject(?, ?, ?, ?)',
         x,
         function(err, results) {
           if (err) {
-            console.log("Can not edit user", err);
+            console.log('Can not edit user', err);
           } else {
             callback(err, results[0]);
           }
         }
       );
+    },
+    deleteUserProject: function(x, callback) {
+      connection.query("call `rbk-space`.deleteProject(?, ?)", x, function(
+        err,
+        results
+      ) {
+        if (err) {
+          console.log("Can not delete user");
+        } else {
+          callback(err, results[0]);
+        }
+      });
     }
   },
   //cohorts functions
   cohorts: {
     //get all cohorts data
     get: function(callback) {
-      connection.query("call `rbk-space`.getCohorts()", function(err, results) {
+      connection.query('call `rbk-space`.getCohorts()', function(err, results) {
         if (err) {
-          console.log("Can not fetch data", err);
+          console.log('Can not fetch data', err);
         } else {
           callback(err, results);
         }
@@ -189,12 +220,12 @@ module.exports = {
     },
     //get all users by a specified cohort
     getCohortUsers: function(callback, cohort) {
-      connection.query("call `rbk-space`.getCohortUsers(?)", cohort, function(
+      connection.query('call `rbk-space`.getCohortUsers(?)', cohort, function(
         err,
         results
       ) {
         if (err) {
-          console.log("Can not fetch data", err);
+          console.log('Can not fetch data', err);
         } else {
           callback(err, results);
         }
@@ -204,21 +235,21 @@ module.exports = {
   //skills function
   skills: {
     get: function(callback) {
-      connection.query("call `rbk-space`.getSkills()", function(err, results) {
+      connection.query('call `rbk-space`.getSkills()', function(err, results) {
         if (err) {
-          console.log("Can not fetch data", err);
+          console.log('Can not fetch data', err);
         } else {
           callback(err, results);
         }
       });
     },
     getSkillUsers: function(callback, skill) {
-      connection.query("call `rbk-space`.getUserBySkill(?)", skill, function(
+      connection.query('call `rbk-space`.getUserBySkill(?)', skill, function(
         err,
         results
       ) {
         if (err) {
-          console.log("Can not fetch data", err);
+          console.log('Can not fetch data', err);
         } else {
           callback(err, results);
         }
@@ -228,12 +259,12 @@ module.exports = {
   //Employment Status functions
   empStatus: {
     get: function(callback) {
-      connection.query("call `rbk-space`.getEmpStatus()", function(
+      connection.query('call `rbk-space`.getEmpStatus()', function(
         err,
         results
       ) {
         if (err) {
-          console.log("Can not fetch data", err);
+          console.log('Can not fetch data', err);
         } else {
           callback(err, results);
         }
@@ -241,11 +272,11 @@ module.exports = {
     },
     getUsersByEmpStatus: function(callback, empStatus) {
       connection.query(
-        "call `rbk-space`.getUsersByEmpStat(?)",
+        'call `rbk-space`.getUsersByEmpStat(?)',
         empStatus,
         function(err, results) {
           if (err) {
-            console.log("Can not fetch data", err);
+            console.log('Can not fetch data', err);
           } else {
             callback(err, results);
           }
@@ -257,12 +288,12 @@ module.exports = {
   //get all user's projects depending on userId
   portfolio: {
     get: function(callback, userId) {
-      connection.query("call `rbk-space`.getProjects(?)", userId, function(
+      connection.query('call `rbk-space`.getProjects(?)', userId, function(
         err,
         results
       ) {
         if (err) {
-          console.log("Can not fetch data", err);
+          console.log('Can not fetch data', err);
         } else {
           callback(err, results);
         }
@@ -271,11 +302,11 @@ module.exports = {
     //get all user's projects using any part of user name
     getProjectsByUName: function(callback, userName) {
       connection.query(
-        "call `rbk-space`.getUserProjects(?)",
+        'call `rbk-space`.getUserProjects(?)',
         userName,
         function(err, results) {
           if (err) {
-            console.log("Can not fetch data", err);
+            console.log('Can not fetch data', err);
           } else {
             callback(err, results);
           }
@@ -284,12 +315,12 @@ module.exports = {
     },
     //get a project by its id
     getProjectById: function(callback, id) {
-      connection.query("call `rbk-space`.getProjectById(?)", id, function(
+      connection.query('call `rbk-space`.getProjectById(?)', id, function(
         err,
         results
       ) {
         if (err) {
-          console.log("Can not fetch data", err);
+          console.log('Can not fetch data', err);
         } else {
           callback(err, results);
         }
@@ -301,9 +332,9 @@ module.exports = {
   //get all posts
   posts: {
     get: function(callback) {
-      connection.query("call `rbk-space`.getPosts()", function(err, results) {
+      connection.query('call `rbk-space`.getPosts()', function(err, results) {
         if (err) {
-          console.log("Can not fetch data", err);
+          console.log('Can not fetch data', err);
         } else {
           callback(err, results);
         }
@@ -311,12 +342,12 @@ module.exports = {
     },
     //get all posts for a specific user
     getPostsByUser: function(callback, userName) {
-      connection.query("call `rbk-space`.getPostsByUser(?)", userName, function(
+      connection.query('call `rbk-space`.getPostsByUser(?)', userName, function(
         err,
         results
       ) {
         if (err) {
-          console.log("Can not fetch data", err);
+          console.log('Can not fetch data', err);
         } else {
           callback(err, results);
         }
@@ -324,12 +355,12 @@ module.exports = {
     },
     // get all posts published by users in a specific user
     getPostsByCohort: function(callback, cohort) {
-      connection.query("call `rbk-space`.getPostsByCohort(?)", cohort, function(
+      connection.query('call `rbk-space`.getPostsByCohort(?)', cohort, function(
         err,
         results
       ) {
         if (err) {
-          console.log("Can not fetch data", err);
+          console.log('Can not fetch data', err);
         } else {
           callback(err, results);
         }
@@ -337,12 +368,12 @@ module.exports = {
     },
     //get all posts by a post type (e.g. all text posts)
     getPostsByType: function(callback, type) {
-      connection.query("call `rbk-space`.getPostsByType(?)", type, function(
+      connection.query('call `rbk-space`.getPostsByType(?)', type, function(
         err,
         results
       ) {
         if (err) {
-          console.log("Can not fetch data", err);
+          console.log('Can not fetch data', err);
         } else {
           callback(err, results);
         }
@@ -350,12 +381,12 @@ module.exports = {
     },
     //get all posts containing a text in their/ its body
     getPostsByBody: function(callback, text) {
-      connection.query("call `rbk-space`.getPostsByBody(?)", text, function(
+      connection.query('call `rbk-space`.getPostsByBody(?)', text, function(
         err,
         results
       ) {
         if (err) {
-          console.log("Can not fetch data", err);
+          console.log('Can not fetch data', err);
         } else {
           callback(err, results);
         }
@@ -364,16 +395,28 @@ module.exports = {
     addPost: function(x, callback) {
       //console.log(callback);
       connection.query(
-        "call `rbk-space`.addPost(?, ?, ?)",
+        'call `rbk-space`.addPost(?, ?, ?)',
         x,
         (err, results) => {
           if (err) {
-            console.log("Can not fetch data", err);
+            console.log('Can not fetch data', err);
           } else {
             callback(null, results[0]);
           }
         }
       );
+    },
+    deletePost: function(x, callback) {
+      connection.query("call `rbk-space`.deletePost(?)", x, function(
+        err,
+        results
+      ) {
+        if (err) {
+          console.log("Can not delete post", err);
+        } else {
+          callback(null, results[0]);
+        }
+      });
     }
   }
 };

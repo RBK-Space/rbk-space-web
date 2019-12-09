@@ -3,7 +3,7 @@ import { GET_ALL_POSTS, ADD_POST } from './types';
 
 export const getAllPosts = () => (dispatch) => {
   axios
-    .get('http://localhost:3001/posts')
+    .get('http://localhost:4000/posts')
     .then((response) => {
       dispatch({
         type: GET_ALL_POSTS,
@@ -17,7 +17,7 @@ export const getAllPosts = () => (dispatch) => {
 
 export const addPost = (data) => (dispatch) => {
   console.log(data);
-  axios.post('http://localhost:3001/user/post/add', { data }).then(
+  axios.post('http://localhost:4000/user/post/add', { data }).then(
     (response) => {
       dispatch({ type: ADD_POST, payload: response.data });
       console.log(response.data);

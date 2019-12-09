@@ -7,18 +7,6 @@ var bodyParser = require('body-parser');
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
-router.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  next();
-});
-router.use(
-  cors({
-    origin: 'http://localhost:3000', // allow to server to accept request from different origin
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true // allow session cookie from browser to pass through
-  })
-);
-
 router.get('/', (req, res) => {
   res.status(200).send('Home Page');
 });
@@ -36,13 +24,21 @@ router.get('/user/:id', (req, res) => {
     res.json(results);
   }, id);
 });
+//Route to get user by email
+router.get('/user/email/:email', (req, res) => {
+  var email = req.params.email;
+  db.users.getUserByEmail(function(err, results) {
+    res.json(results);
+  }, email);
+});
 //Route to get user by name or part of name
-router.get('/user/:name', (req, res) => {
+router.get('/user/name/:name', (req, res) => {
   var name = req.params.name;
   db.users.getUserByName(function(err, results) {
     res.json(results);
   }, name);
 });
+
 //Route to insert new user into DB
 //Need to be Revised
 router.post('/user/login', (req, res) => {
@@ -52,12 +48,23 @@ router.post('/user/login', (req, res) => {
   var imgUrl = req.body.imgUrl;
   var email = req.body.email;
   var token = req.body.token;
-  db.users.addUser([fullName, username, email, token, github, imgUrl], function(
-    err,
-    results
-  ) {
-    res.json(results[0]);
-  });
+  var user = {};
+  db.users.getUserByEmail(function(err, results) {
+    if (results.length > 0) {
+      //Home page
+      user = results[0];
+      console.log(results[0]);
+      console.log('user already exists');
+      res.json(user);
+    } else {
+      db.users.addUser(
+        [fullName, username, email, token, github, imgUrl],
+        function(err, dbUser) {
+          res.json(dbUser[0]);
+        }
+      );
+    }
+  }, email);
 });
 
 // Route to edit user's basic info
@@ -84,7 +91,7 @@ router.post('/user/edit/basic', (req, res) => {
     });
   }
   if (userId !== null && skillId !== null) {
-    db.users.addUserSkill([userId, empStatus], function(err, dbUser) {
+    db.users.addUserSkill([userId, skillId], function(err, dbUser) {
       res.json(dbUser);
     });
   }
@@ -126,11 +133,25 @@ router.post('/user/edit/portfolio', (req, res) => {
   ) {
     db.users.addUserProject([userId, title, link, description], function(
       err,
-      dbPost
+      dbProject
     ) {
       console.log('inserted successfully');
 
-      res.json(dbPost);
+      res.json(dbProject);
+    });
+  }
+});
+
+//Route to delete project from user portfolio
+router.post('/userProject/delete', (req, res) => {
+  var projectId = req.body.projectId;
+  var userId = req.body.userId;
+  if (projectId !== null && userId !== null) {
+    db.users.deleteUserProject([userId, projectId], function(err, skill) {
+      if (skill.length > 0) {
+        console.log('Project deleted successfully');
+      }
+      res.send('Project deleted successfully');
     });
   }
 });
@@ -163,6 +184,20 @@ router.get('/skillUsers/:skill', (req, res) => {
   db.cohorts.getCohortUsers(function(err, results) {
     res.json(results);
   }, skill);
+});
+
+//Route to delete a user skill
+router.post('/skillUsers/delete', (req, res) => {
+  var skillId = req.body.skill;
+  var userId = req.body.userId;
+  if (skillId !== null && userId !== null) {
+    db.users.deleteUserSkill([userId, skillId], function(err, skill) {
+      if (skill.length > 0) {
+        console.log('Skill deleted successfully');
+      }
+      res.send('Skill deleted successfully');
+    });
+  }
 });
 
 //Employment Status functions
@@ -249,6 +284,18 @@ router.post('/user/post/add', (req, res) => {
   if (postType !== null && postBody !== null && userId !== null) {
     db.posts.addPost([postType, postBody, userId], function(err, results) {
       res.send(results);
+    });
+  }
+});
+//Route to delete a post
+router.post('/user/post/delete', (req, res) => {
+  var postId = req.body.postId;
+  if (postId !== null) {
+    db.post.deletePost([postId], function(err, skill) {
+      if (skill.length > 0) {
+        console.log('Post deleted successfully');
+      }
+      res.send('Post deleted successfully');
     });
   }
 });

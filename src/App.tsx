@@ -8,20 +8,23 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import combineReducers from './reducers/index';
 import thunk from 'redux-thunk';
+import Homepage from './components/Homepage';
 
 export const store = createStore(combineReducers, applyMiddleware(thunk));
 const App: React.FC = () => {
   return (
-    <Provider store={store}>
-      <div className='App'>
-        <Navbar />
-        <Sidebar />
-        <div className='container'>
-          <AddPost />
-          <Post />
-        </div>
-      </div>
-    </Provider>
+    <Homepage />
+    // <Provider store={store}>
+    //   <div className='App'>
+
+    //     <Navbar />
+    //     <Sidebar />
+    //     <div className='container'>
+    //       <AddPost />
+    //       <Post />
+    //     </div>
+    //   </div>
+    // </Provider>
   );
 };
 
