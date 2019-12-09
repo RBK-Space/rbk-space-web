@@ -1,8 +1,11 @@
 const passport = require('passport');
-const config = require('../config/config');
+const config = require('../../config/config');
 const axios = require('axios');
 var GitHubStrategy = require('passport-github').Strategy;
-var db = require('../database/index.js');
+var db = require('../../database/index.js');
+
+//send email
+const sendEmail = require('./email-sender');
 
 passport.use(
   new GitHubStrategy(
@@ -33,6 +36,8 @@ passport.use(
                   ],
                   function(err, user) {
                     done(null, user);
+                    //send welcome email for the new users
+                    sendEmail(profile._json.email);
                   }
                 );
               }

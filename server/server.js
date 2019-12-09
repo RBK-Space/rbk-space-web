@@ -2,7 +2,7 @@
 const express = require('express');
 //auth config
 const passport = require('passport');
-const passportSetup = require('./passport-setup');
+const passportSetup = require('./helpers/passport-setup');
 const cookieSession = require('cookie-session');
 const session = require('express-session');
 const cors = require('cors');
@@ -37,7 +37,7 @@ app.use(
     saveUninitialized: true
   })
 );
-
+// passport setup continue
 app.use(passport.initialize());
 app.use(passport.session());
 //check routes middleware
