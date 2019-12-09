@@ -12,9 +12,23 @@ router.get("/", (req, res) => {
 //users routes
 //Route to get all users
 router.get("/users", (req, res) => {
-  db.users.get(function(err, results) {
-    res.json(results);
-  });
+  var query = req.query.query;
+  if (!query) {
+    db.users.get(function(err, results) {
+      res.json(results);
+    });
+  } else {
+    db.users.getUserByName(function(err, results) {
+      res.json(results);
+    }, query);
+  }
+});
+router.get("/github", (req, res) => {
+  console.log(req);
+  res.send("req");
+  // db.users.get(function(err, results) {
+  //   res.json(results);
+  // });
 });
 //Route to get user by id
 router.get("/user/:id", (req, res) => {
