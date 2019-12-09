@@ -23,6 +23,10 @@
   "production": {
     "config_id": "production",
     "node_port": 8080,
-    "database": "rbk-space-prod"
+    "host": "us-cdbr-iron-east-05.cleardb.net",
+    "db_port": 3306,
+    "user": "b941571fecd9a1",
+    "password": "948d4615cdadca5",
+    "database": "heroku_bfaf62f6429d0aa"
   }
 }
