@@ -18,7 +18,7 @@ class AddPost extends Component<IPostProps> {
 
   handleClick() {
     const { addPost } = this.props;
-    addPost({ postType: '0', postBody: 'Hello', userId: 1 });
+    addPost({ postType: '0', postBody: 'Heeeeey?', userId: 1 });
   }
 
   render() {

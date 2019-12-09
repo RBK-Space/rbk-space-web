@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { store } from './../../App';
 import * as postActions from './../../actions/posts';
 import { getAllPosts } from './../../actions/posts';
+import TimeAgo from 'react-timeago';
 
 interface IPostProps {
   posts?: any;
@@ -51,7 +52,9 @@ class Post extends Component<IPostProps> {
                   <div className='post-data'>
                     <div className='user-time'>
                       <span className='post-writer'>{post.userName}</span>
-                      <span className='post-date'>{post.createdAt}</span>
+                      <span className='post-date'>
+                        <TimeAgo date={post.createdAt} />
+                      </span>
                     </div>
                     <div className='post-body'>
                       <p>
