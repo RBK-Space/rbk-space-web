@@ -39,7 +39,7 @@ router.get(
   '/github/callback',
   passport.authenticate('github', { failureRedirect: '/login' }),
   function(req, res) {
-    res.redirect('http://localhost:3000/');
+    res.redirect('http://localhost:3000/home');
   }
 );
 

@@ -5,17 +5,17 @@
     "app_desc": "rbk-space desc",
     "node_port": 4000,
     "json_indentation": 4,
-    "host": "localhost",
+    "host": "us-cdbr-iron-east-05.cleardb.net",
     "db_port": 3306,
-    "user": "root",
+    "user": "b941571fecd9a1",
     "sessionSecret": "rbk-space-session-secret",
     "githubClientId": "a34af9c4a1fdc8a7ef9b",
     "githubClientSecret": "8c9c4366d327e1d976f9452ef440fdf25ef8265e",
     "githubCallbackUrl": "http://localhost:4000/auth/github/callback",
     "rbkEmail": "rbk.space1@gmail.com",
     "rbkEmailPassword": "FY]u4pM~[ugG.,?}",
-    "password": "rbk-space",
-    "database": "rbk-space"
+    "password": "948d4615cdadca5",
+    "database": "heroku_bfaf62f6429d0aa"
   },
   "testing": {
     "config_id": "testing",
