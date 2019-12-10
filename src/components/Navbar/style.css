@@ -17,7 +17,6 @@ content {
   display: flex !important;
   justify-content: space-around !important;
 }
-
 .search-bar > span {
   padding-top: 15px;
   width: 350px;
@@ -38,4 +37,17 @@ content {
 }
 .ant-radio-input__placeholder {
   color: #000;
+}
+.header .user-img img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+#logout {
+  background-color: transparent;
+  border: none;
+}
+#logout i {
+  font-size: 24px;
+  color: #ffffff;
 }

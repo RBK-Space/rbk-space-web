@@ -9,7 +9,6 @@
   position: fixed;
   border-right: 1px solid #000;
 }
-
 .home-page .home-content .container {
   width: 800px;
   margin: auto;
@@ -17,6 +16,7 @@
 aside .user-img img {
   width: 80px;
   height: 80px;
+  border-radius: 50%;
 }
 aside .user-name {
   display: block;
