@@ -12,10 +12,19 @@ router.get('/', (req, res) => {
 });
 //users routes
 //Route to get all users
-router.get('/users', (req, res) => {
-  db.users.get(function(err, results) {
-    res.json(results);
-  });
+router.get("/users", (req, res) => {
+  var query = req.query.query;
+  if (!query) {
+    db.users.get(function(err, results) {
+      res.json(results);
+    });
+  } else {
+    db.users.search(function(err, results) {
+      console.log(results);
+      res.json(results);
+    }, query);
+  }
+
 });
 //Route to get user by id
 router.get('/user/:id', (req, res) => {
@@ -241,10 +250,20 @@ router.get('/project/:projectId', (req, res) => {
 
 //posts functions
 //Route to get all posts
-router.get('/posts', (req, res) => {
-  db.posts.get(function(err, results) {
-    res.json(results);
-  });
+router.get("/posts", (req, res) => {
+  var query = req.query.query;
+  console.log(query);
+  if (!query) {
+    db.posts.get(function(err, results) {
+      res.json(results);
+    });
+  } else {
+    console.log(query);
+    db.posts.search(function(err, results) {
+      console.log(results);
+      res.json(results);
+    }, query);
+  }
 });
 //Route to get posts by a specific user
 router.get('/user/posts/:userName', (req, res) => {
