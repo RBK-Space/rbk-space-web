@@ -30,17 +30,17 @@ export default class HomePage extends Component {
         'Access-Control-Allow-Credentials': true
       }
     })
-      .then(response => {
+      .then((response) => {
         if (response.status === 200) return response.json();
         throw new Error('failed to authenticate user');
       })
-      .then(responseJson => {
+      .then((responseJson) => {
         this.setState({
           authenticated: true,
           user: responseJson.user
         });
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({
           authenticated: false,
           error: 'Failed to authenticate user'
@@ -57,17 +57,6 @@ export default class HomePage extends Component {
           authenticated={authenticated}
           handleNotAuthenticated={this._handleNotAuthenticated}
         />
-        <div>
-          {!authenticated ? (
-            <h1>Welcome Stranger!</h1>
-          ) : (
-            <div>
-              <h1>You have login succcessfully!</h1>
-              <h2>Welcome {this.state.user[0].fullName}!</h2>
-              <img alt='user profilePic' src={this.state.user[0].image} />
-            </div>
-          )}
-        </div>
       </div>
     );
   }
