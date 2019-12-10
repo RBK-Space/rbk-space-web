@@ -5,6 +5,7 @@ export const getAllPosts = () => (dispatch) => {
   axios
     .get('http://localhost:4000/posts')
     .then((response) => {
+      // console.log(response);
       dispatch({
         type: GET_ALL_POSTS,
         payload: response.data
