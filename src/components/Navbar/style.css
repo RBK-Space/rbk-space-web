@@ -13,6 +13,10 @@
 content {
   height: 2000px;
 }
+.logo img {
+  height: 100%;
+  margin-left: 20px;
+}
 .menu-item {
   display: flex !important;
   justify-content: space-around !important;
@@ -39,8 +43,8 @@ content {
   color: #000;
 }
 .header .user-img img {
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
 }
 #logout {

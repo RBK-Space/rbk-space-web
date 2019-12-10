@@ -8,20 +8,15 @@ const { Search } = Input;
 
 class Navbar extends React.Component {
   state = {
-    current: 'mail'
-  };
-
-  handleClick = (e) => {
-    console.log('click ', e);
-    this.setState({
-      current: e.key
-    });
-  };
-  state = {
     user: {},
     error: null,
     authenticated: false
   };
+
+  handleClick = (e) => {
+    console.log('click ', e);
+  };
+
   _handleLogoutClick = () => {
     // Logout using Twitter passport api
     // Set authenticated state to false in the HomePage
@@ -66,7 +61,10 @@ class Navbar extends React.Component {
           <Header className='header'>
             <div className='logo'>
               <a href='#'>
-                <img src='https://via.placeholder.com/50/50' alt='' />
+                <img
+                  src='https://i.ibb.co/19WCkMF/output-onlinepngtools.png'
+                  alt=''
+                />
               </a>
             </div>
             <div className='search-wrapper'>

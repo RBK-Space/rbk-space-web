@@ -57,17 +57,6 @@ export default class HomePage extends Component {
           authenticated={authenticated}
           handleNotAuthenticated={this._handleNotAuthenticated}
         />
-        <div>
-          {!authenticated ? (
-            <h1>Welcome Stranger!</h1>
-          ) : (
-            <div>
-              <h1>You have login succcessfully!</h1>
-              <h2>Welcome {this.state.user[0].fullName}!</h2>
-              <img alt='user profilePic' src={this.state.user[0].image} />
-            </div>
-          )}
-        </div>
       </div>
     );
   }
