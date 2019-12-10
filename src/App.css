@@ -1,9 +1,7 @@
 .App {
   text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
+  height: 2000px;
+  color: #000;
 }
 
 .App-header {
@@ -17,6 +15,7 @@
   color: white;
 }
 
-.App-link {
-  color: #09d3ac;
+.container {
+  width: 900px;
+  margin: auto;
 }
