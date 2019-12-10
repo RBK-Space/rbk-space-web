@@ -1,14 +1,40 @@
 var mysql = require("mysql");
-const config = require("../config/config");
+// const config = require("../config/config");
 
 //Connect to Database using the global configuration
 
-var connection = mysql.createConnection({
-  host: global.gConfig.host,
-  user: global.gConfig.user,
-  password: global.gConfig.password,
-  database: global.gConfig.database
-});
+var connection;
+
+function handleDisconnect() {
+  connection = mysql.createConnection({
+    host: global.gConfig.host,
+    user: global.gConfig.user,
+    password: global.gConfig.password,
+    database: global.gConfig.database
+  });
+
+  connection.connect(function(err) {
+    // The server is either down
+    if (err) {
+      // or restarting (takes a while sometimes).
+      console.log("error when connecting to db:", err);
+      setTimeout(handleDisconnect, 2000); // We introduce a delay before attempting to reconnect,
+    } // to avoid a hot loop, and to allow our node script to
+  }); // process asynchronous requests in the meantime.
+  // If you're also serving http, display a 503 error.
+  connection.on("error", function(err) {
+    console.log("db error", err);
+    if (err.code === "PROTOCOL_CONNECTION_LOST") {
+      // Connection to the MySQL server is usually
+      handleDisconnect(); // lost due to either server restart, or a
+    } else {
+      // connnection idle timeout (the wait_timeout
+      throw err; // server variable configures this)
+    }
+  });
+}
+
+handleDisconnect();
 var someVal = [];
 var setValue = function(value) {
   someVal = value;
@@ -29,7 +55,20 @@ module.exports = {
         }
       });
     },
-    //static = refactor to dynamic
+    //search users
+    search: function(callback, query) {
+      try {
+        connection.query("call searchUser(?)", query, function(err, results) {
+          if (err) {
+            console.log("Can not fetch user", err);
+          } else {
+            callback(err, results);
+          }
+        });
+      } catch (err) {
+        console.log("err ", err);
+      }
+    },
     getUserById: function(callback, userId) {
       connection.query(" call getUserById(?)", userId, function(err, results) {
         if (err) {
@@ -69,6 +108,17 @@ module.exports = {
         err,
         results
       ) {
+        if (err) {
+          console.log("Can not insert user", err);
+        } else {
+          console.log("Added Successfully");
+          //console.log(someVal);
+          callback(err, results[0]);
+        }
+      });
+    },
+    editUserImg: function(x, callback) {
+      connection.query(" call editUserImg(?, ?) ", x, function(err, results) {
         if (err) {
           console.log("Can not insert user", err);
         } else {
@@ -161,6 +211,15 @@ module.exports = {
         err,
         results
       ) {
+        if (err) {
+          console.log("Can not edit user", err);
+        } else {
+          callback(err, results[0]);
+        }
+      });
+    },
+    deleteUserProject: function(x, callback) {
+      connection.query("call deleteProject(?, ?)", x, function(err, results) {
         if (err) {
           console.log("Can not edit user", err);
         } else {
@@ -313,6 +372,20 @@ module.exports = {
           callback(err, results);
         }
       });
+    },
+    //search posts
+    search: function(callback, query) {
+      try {
+        connection.query("call searchPost(?)", query, function(err, results) {
+          if (err) {
+            console.log("Can not fetch post", err);
+          } else {
+            callback(err, results);
+          }
+        });
+      } catch (err) {
+        console.log("err ", err);
+      }
     },
     // get all posts published by users in a specific user
     getPostsByCohort: function(callback, cohort) {
