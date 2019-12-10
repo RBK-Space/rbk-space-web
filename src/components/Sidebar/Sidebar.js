@@ -62,12 +62,20 @@ class Sidebar extends Component {
             <span className='user-name'>{this.state.user[0].fullName}</span>
             <ul className='social-links'>
               <li className='social-item'>
-                <a href={this.state.user[0].gh} target='_blank'>
+                <a
+                  href={this.state.user[0].gh}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                >
                   <FontAwesomeIcon icon={faGithub} color='#211F1F' size='2x' />
                 </a>
               </li>
               <li className='social-item'>
-                <a href={this.state.user[0].fb} target='_blank'>
+                <a
+                  href={this.state.user[0].fb}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                >
                   <FontAwesomeIcon
                     icon={faFacebookF}
                     color='#3b5998'
@@ -76,7 +84,11 @@ class Sidebar extends Component {
                 </a>
               </li>
               <li className='social-item'>
-                <a href={this.state.user[0].li} target='_blank'>
+                <a
+                  href={this.state.user[0].li}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                >
                   <FontAwesomeIcon
                     icon={faLinkedin}
                     color='#0e76a8'
@@ -85,7 +97,11 @@ class Sidebar extends Component {
                 </a>
               </li>
               <li className='social-item'>
-                <a href={this.state.user[0].tw} target='_blank'>
+                <a
+                  href={this.state.user[0].tw}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                >
                   <FontAwesomeIcon icon={faTwitter} color='#1da1f2' size='2x' />
                 </a>
               </li>
@@ -95,10 +111,10 @@ class Sidebar extends Component {
               {this.state.user[0].empStat}
             </span>
             <span className='edit-profile'>
-              <a href='#'>
-                <FontAwesomeIcon icon={faUserEdit} color='#000' size='lg' />
-                <span className='edit-profile-text'>Edit Profile</span>
-              </a>
+              {/* <a href='#'> */}
+              <FontAwesomeIcon icon={faUserEdit} color='#000' size='lg' />
+              <span className='edit-profile-text'>Edit Profile</span>
+              {/* </a> */}
             </span>
           </aside>
         )}

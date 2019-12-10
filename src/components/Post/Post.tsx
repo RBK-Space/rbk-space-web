@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { bindActionCreators } from 'redux';
+// import { bindActionCreators } from 'redux';
 import './style.css';
 import { Button } from 'antd';
 import { connect } from 'react-redux';
 import { store } from './../../App';
-import * as postActions from './../../actions/posts';
+// import * as postActions from './../../actions/posts';
 import { getAllPosts } from './../../actions/posts';
 import TimeAgo from 'react-timeago';
 

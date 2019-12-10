@@ -60,12 +60,12 @@ class Navbar extends React.Component {
         {!authenticated ? null : (
           <Header className='header'>
             <div className='logo'>
-              <a href='#'>
-                <img
-                  src='https://i.ibb.co/19WCkMF/output-onlinepngtools.png'
-                  alt=''
-                />
-              </a>
+              {/* <a href='#'> */}
+              <img
+                src='https://i.ibb.co/19WCkMF/output-onlinepngtools.png'
+                alt=''
+              />
+              {/* </a> */}
             </div>
             <div className='search-wrapper'>
               <Menu
@@ -101,9 +101,9 @@ class Navbar extends React.Component {
             </div>
 
             <div className='user-img'>
-              <a href='#'>
-                <img src={this.state.user[0].image} alt='' />
-              </a>
+              {/* <a href='#'> */}
+              <img src={this.state.user[0].image} alt='' />
+              {/* </a> */}
               <Button id='logout' onClick={this._handleLogoutClick.bind(this)}>
                 <Icon type='export' />
               </Button>
