@@ -2,9 +2,11 @@ import axios from 'axios';
 import { GET_ALL_POSTS, ADD_POST } from './types';
 
 export const getAllPosts = () => (dispatch) => {
+  console.log('called');
   axios
     .get('http://localhost:4000/posts')
     .then((response) => {
+      // console.log(response);
       dispatch({
         type: GET_ALL_POSTS,
         payload: response.data
@@ -16,10 +18,11 @@ export const getAllPosts = () => (dispatch) => {
 };
 
 export const addPost = (data) => (dispatch) => {
-  console.log(data);
+  // console.log(data);
   axios.post('http://localhost:4000/user/post/add', { data }).then(
     (response) => {
       dispatch({ type: ADD_POST, payload: response.data });
+      dispatch(getAllPosts());
       console.log(response.data);
     },
     (error) => {
