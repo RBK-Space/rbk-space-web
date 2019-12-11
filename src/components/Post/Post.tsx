@@ -37,8 +37,8 @@ class Post extends Component<IPostProps> {
 
   render() {
     const { posts } = this.props;
-    console.log(posts);
     console.log(store.getState());
+    if (posts.length > 0) console.log(posts[0][0].createdAt);
     return (
       <>
         {posts.length > 0 ? (
@@ -53,7 +53,9 @@ class Post extends Component<IPostProps> {
                     <div className='user-time'>
                       <span className='post-writer'>{post.userName}</span>
                       <span className='post-date'>
-                        <TimeAgo date={post.createdAt} />
+                        <TimeAgo
+                          date={`${post.createdAt.substring(0, 19)}-0200`}
+                        />
                       </span>
                     </div>
                     <div className='post-body'>
