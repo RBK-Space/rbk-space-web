@@ -72,6 +72,8 @@ CREATE TABLE `portfolio`
 (11) NOT NULL,
   `projectId` int
 (11) NOT NULL,
+  `deleted` varchar
+(45) DEFAULT '0',
   KEY `userId_idx`
 (`userId`),
   KEY `projectId_idx`
@@ -102,6 +104,8 @@ CREATE TABLE `posts`
   `userId` int
 (11) NOT NULL,
   `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `deleted` varchar
+(45) DEFAULT '0',
   PRIMARY KEY
 (`postId`),
   UNIQUE KEY `postId_UNIQUE`
@@ -377,6 +381,84 @@ BEGIN
 
 END
 ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `deletePost` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deletePost`
+(IN id int)
+BEGIN
+  UPDATE `rbk-space
+  `.posts p
+  set p
+  .deleted = 1 WHERE p.postId = id;
+SELECT p.postId
+FROM `rbk
+-space`.posts p WHERE p.postId = id AND p.deleted = 1;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `deleteProject` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteProject`
+(IN userId int, IN projectId int)
+BEGIN
+  UPDATE `rbk-space
+  `.portfolio pt
+  SET pt
+  .deleted = 1 where pt.projectId = projectId AND pt.userId = userId;
+SELECT pt.projectId
+FROM `rbk
+-space`.portfolio pt WHERE pt.projectId = projectId AND pt.userId = userId AND pr.deleted = 1 ;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `deleteUserSkill` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteUserSkill`
+(IN userId int, IN skillId int)
+BEGIN
+  UPDATE `rbk-space
+  `.userSkills us
+  SET us
+  .deleted = 1 WHERE us.userId = userId AND us.skillId = skillId;
+SELECT us.skillId
+from `rbk
+-space`.userSkills WHERE us.userId = userId AND us.skillId = skillId AND us.deleted = 1;
+END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -733,8 +815,8 @@ BEGIN
     left join `rbk-space`.userDetails ud on
   (u.userID = ud.userId)
 	left join `rbk-space`.posts p on
-  (u.userID = p.userId)
-;
+  (u.userID = p.userId) 
+    WHERE p.deleted = 0;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -763,7 +845,7 @@ BEGIN
   (u.useriD = ud.userId)
 	left join `rbk-space`.posts p on
   (u.userID = p.userId) 
-	where p.postBody REGEXP body;
+	where p.postBody REGEXP body AND p.deleted = 0;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -794,8 +876,8 @@ BEGIN
   (u.userID = ud.userId)
     left join `rbk-space`.cohorts as c on
   (ud.cohortId = c.cohortId)
-	where c.cohortName REGEXP cohort;
-END;;
+	where c.cohortName REGEXP cohort AND p.deleted = 0;
+END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -822,7 +904,7 @@ BEGIN
   (u.userID = ud.userId)
 	left join `rbk-space`.posts p on
   (u.userID = p.userId) 
-	where p.postType = type;
+	where p.postType = type AND p.deleted = 0;
 
 END ;;
 DELIMITER ;
@@ -852,7 +934,7 @@ BEGIN
   (u.userID = ud.userId)
 	left join `rbk-space`.posts p on
   (u.userID = p.userId) 
-	where u.fullName REGEXP user;
+	where u.fullName REGEXP user AND p.deleted = 0;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -880,7 +962,7 @@ left join `rbk-space`.portfolio pt on
   (pt.userId = u.userID)
 left join `rbk-space`.projects pr on
   (pt.projectId = pr.projectId)
-where pt.projectId = id;
+where pt.projectId = id AND p.deleted = 0;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -901,13 +983,14 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getProjects`
 (IN id int)
 BEGIN
   select u.userID as userId, u.fullName, pr.projectId as projectId,
-    pr.title as projectTitle, pr.link as projectLink, pr.desc as projectDesc
+    pr.title as projectTitle, pr.link as projectLink, pr.description as projectDesc
   from `rbk
   -space`.users u
 	left join `rbk-space`.portfolio pt on
   (pt.userId = u.userID)
 	left join `rbk-space`.projects pr on
-  (pt.projectId = pr.projectId);
+  (pt.projectId = pr.projectId)
+    WHERE pt.userId = id and pr.deleted = 0;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1063,7 +1146,7 @@ BEGIN
   (u.userId = us.userId)
     left join `rbk-space`.skills s on
   (us.skillId = s.skillId)
-	where s.skillName REGEXP skill;
+	where s.skillName REGEXP skill AND  us.deleted = 0;
 
 END ;;
 DELIMITER ;
@@ -1093,7 +1176,7 @@ left join `rbk-space`.portfolio pt on
   (pt.userId = u.userID)
 left join `rbk-space`.projects pr on
   (pt.projectId = pr.projectId)
-where u.fullName REGEXP userName;
+where u.fullName REGEXP userName AND pr.deleted = 0;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1172,5 +1255,3 @@ DELIMITER ;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2019-12-05 17:57:56

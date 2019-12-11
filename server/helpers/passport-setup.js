@@ -22,36 +22,29 @@ passport.use(
         } else {
           //Create new user
           //Check if the user is a member in rbk-org organization
-          axios
-            .get(profile._json.organizations_url)
-            .then(function(orgz) {
-              orgz.data.forEach(org => {
-                if (org.login === 'rbk-org') {
-                  db.users.addUser(
-                    [
-                      profile._json.name,
-                      profile._json.login,
-                      profile._json.email,
-                      accessToken,
-                      profile.profileUrl,
-                      profile.photos[0].value
-                    ],
-                    function(err, user) {
-                      done(null, user);
-                      //send welcome email for the new users
-                      sendEmail(profile._json.email);
-                    }
-                  );
-                }
-                //  else {
-                //   console.log('i reached here first');
-                //   done(err, null);
-                // }
-              });
-            })
-            .catch(function(err) {
-              done(err, null);
+          axios.get(profile._json.organizations_url).then(function(orgz) {
+            orgz.data.forEach(org => {
+              if (org.login === 'hackreactor') {
+                db.users.addUser(
+                  [
+                    profile._json.name,
+                    profile._json.login,
+                    profile._json.email,
+                    accessToken,
+                    profile.profileUrl,
+                    profile.photos[0].value
+                  ],
+                  function(err, user) {
+                    console.log(user);
+                    done(null, user);
+
+                    //send welcome email for the new users
+                    sendEmail(profile._json.email);
+                  }
+                );
+              }
             });
+          });
         }
       }, profile._json.email);
     }
