@@ -37,10 +37,11 @@ app.use(
     saveUninitialized: true
   })
 );
-// passport setup continue
+// passport initialize
 app.use(passport.initialize());
 app.use(passport.session());
-//check routes middleware
+
+//use this middleware for protected routes.
 const authCheck = (req, res, next) => {
   if (!req.user) {
     res.status(401).json({
@@ -51,6 +52,7 @@ const authCheck = (req, res, next) => {
     next();
   }
 };
+
 app.get('/', authCheck, (req, res) => {
   res.status(200).json({
     authenticated: true,
