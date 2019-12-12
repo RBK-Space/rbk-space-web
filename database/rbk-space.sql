@@ -16,6 +16,31 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `users`
+--
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users`
+(
+  `userID` int
+(11) NOT NULL AUTO_INCREMENT,
+  `fullName` varchar
+(100) NOT NULL,
+  `username` varchar
+(45) NOT NULL,
+  `email` varchar
+(45) NOT NULL,
+  `token` varchar
+(45) DEFAULT NULL,
+  PRIMARY KEY
+(`userID`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+
+--
+
+/*!40101 SET character_set_client = @saved_cs_client */;
+--
 -- Table structure for table `cohorts`
 --
 
@@ -58,66 +83,6 @@ CREATE TABLE `empStatus`
 (`empStatus`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `portfolio`
---
-
-DROP TABLE IF EXISTS `portfolio`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `portfolio`
-(
-  `userId` int
-(11) NOT NULL,
-  `projectId` int
-(11) NOT NULL,
-  `deleted` varchar
-(45) DEFAULT '0',
-  KEY `userId_idx`
-(`userId`),
-  KEY `projectId_idx`
-(`projectId`),
-  CONSTRAINT `projectId` FOREIGN KEY
-(`projectId`) REFERENCES `projects`
-(`projectId`),
-  CONSTRAINT `userIdPtFk` FOREIGN KEY
-(`userId`) REFERENCES `users`
-(`userID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `posts`
---
-
-DROP TABLE IF EXISTS `posts`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `posts`
-(
-  `postId` int
-(11) NOT NULL AUTO_INCREMENT,
-  `postType` tinyint
-(4) NOT NULL DEFAULT '0' COMMENT '0: Text (default value)\n1: Image ',
-  `postBody` longtext,
-  `userId` int
-(11) NOT NULL,
-  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `deleted` varchar
-(45) DEFAULT '0',
-  PRIMARY KEY
-(`postId`),
-  UNIQUE KEY `postId_UNIQUE`
-(`postId`),
-  KEY `userId_idx`
-(`userId`),
-  CONSTRAINT `userId` FOREIGN KEY
-(`userId`) REFERENCES `users`
-(`userID`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
 --
 -- Table structure for table `projects`
 --
@@ -138,7 +103,6 @@ CREATE TABLE `projects`
 (`projectId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
 --
 -- Table structure for table `skills`
 --
@@ -204,31 +168,7 @@ CREATE TABLE `userDetails`
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `users`
---
 
-DROP TABLE IF EXISTS `users`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `users`
-(
-  `userID` int
-(11) NOT NULL AUTO_INCREMENT,
-  `fullName` varchar
-(100) NOT NULL,
-  `username` varchar
-(45) NOT NULL,
-  `email` varchar
-(45) NOT NULL,
-  `token` varchar
-(45) DEFAULT NULL,
-  PRIMARY KEY
-(`userID`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `userSkills`
 --
 
@@ -252,6 +192,65 @@ CREATE TABLE `userSkills`
 (`userId`) REFERENCES `users`
 (`userID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `portfolio`
+--
+
+DROP TABLE IF EXISTS `portfolio`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `portfolio`
+(
+  `userId` int
+(11) NOT NULL,
+  `projectId` int
+(11) NOT NULL,
+  `deleted` varchar
+(45) DEFAULT '0',
+  KEY `userId_idx`
+(`userId`),
+  KEY `projectId_idx`
+(`projectId`),
+  CONSTRAINT `projectId` FOREIGN KEY
+(`projectId`) REFERENCES `projects`
+(`projectId`),
+  CONSTRAINT `userIdPtFk` FOREIGN KEY
+(`userId`) REFERENCES `users`
+(`userID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `posts`
+--
+
+DROP TABLE IF EXISTS `posts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `posts`
+(
+  `postId` int
+(11) NOT NULL AUTO_INCREMENT,
+  `postType` tinyint
+(4) NOT NULL DEFAULT '0' COMMENT '0: Text (default value)\n1: Image ',
+  `postBody` longtext,
+  `userId` int
+(11) NOT NULL,
+  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `deleted` varchar
+(45) DEFAULT '0',
+  PRIMARY KEY
+(`postId`),
+  UNIQUE KEY `postId_UNIQUE`
+(`postId`),
+  KEY `userId_idx`
+(`userId`),
+  CONSTRAINT `userId` FOREIGN KEY
+(`userId`) REFERENCES `users`
+(`userID`)
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
