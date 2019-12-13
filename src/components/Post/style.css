@@ -24,3 +24,6 @@
 .hide {
   display: none;
 }
+.post-writer {
+  cursor: pointer;
+}

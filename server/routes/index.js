@@ -4,6 +4,8 @@ const cors = require('cors');
 var request = require('request');
 var db = require('../../database/index.js');
 var bodyParser = require('body-parser');
+var _ = require('underscore');
+
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
@@ -16,12 +18,20 @@ router.get('/users', (req, res) => {
   var query = req.query.query;
   if (!query) {
     db.users.get(function(err, results) {
-      res.json(results);
+      if (results[0].length > 0) {
+        res.json(formatUser(results));
+      } else {
+        res.json([]);
+      }
     });
   } else {
     db.users.search(function(err, results) {
       console.log(results);
-      res.json(results);
+      if (results[0].length > 0) {
+        res.json(formatUser(results));
+      } else {
+        res.json([]);
+      }
     }, query);
   }
 });
@@ -29,28 +39,52 @@ router.get('/users', (req, res) => {
 router.get('/user/:id', (req, res) => {
   var id = req.params.id;
   db.users.getUserById(function(err, results) {
-    res.json(results);
+    if (results[0].length > 0) {
+      console.log(formatUser(results));
+      res.json(formatUser(results));
+    } else {
+      res.json([]);
+    }
   }, id);
 });
 //Route to get user by email
 router.get('/user/email/:email', (req, res) => {
   var email = req.params.email;
   db.users.getUserByEmail(function(err, results) {
-    res.json(results);
+    if (results[0].length > 0) {
+      res.json(formatUser(results));
+    } else {
+      res.json({ success: false, message: 'User Not Found' });
+    }
   }, email);
 });
 //Route to get user by name or part of name
 router.get('/user/name/:name', (req, res) => {
   var name = req.params.name;
   db.users.getUserByName(function(err, results) {
-    res.json(results);
+    if (results[0].length > 0) {
+      res.json(formatUser(results));
+    } else {
+      res.json({ success: false, message: 'User Not Found' });
+    }
   }, name);
+});
+
+router.get('/user/skill/:userId', (req, res) => {
+  var userId = req.params.userId;
+  db.users.getUserSkills(function(err, results) {
+    if (results[0].length > 0) {
+      res.json(formatUser(results));
+    } else {
+      res.json({ success: false, message: 'User Not Found' });
+    }
+  }, userId);
 });
 
 //Route to insert new user into DB
 //Need to be Revised
 router.post('/user/login', (req, res) => {
-  var fullName = req.body.fullName;
+  var fullName = req.body.fullName || req.body.username;
   var username = req.body.username;
   var github = req.body.github;
   var imgUrl = req.body.imgUrl;
@@ -63,7 +97,7 @@ router.post('/user/login', (req, res) => {
       user = results[0];
       console.log(results[0]);
       console.log('user already exists');
-      res.json(user);
+      res.json(formatUser(user));
     } else {
       db.users.addUser(
         [fullName, username, email, token, github, imgUrl],
@@ -81,26 +115,34 @@ router.post('/user/edit/basic', (req, res) => {
   var bio = req.body.bio || null;
   var empStatus = req.body.empStatus || null;
   var userId = req.body.userId || null;
+  var cohortId = req.body.cohortId || null;
+  var fullName = req.body.fullName || null;
   //check if skills are array
-  var skillId = req.body.skillId || null;
-  if (imgUrl !== null) {
-    db.users.editUserImg([userId, imgUrl], function(err, dbUser) {
-      res.json(dbUser);
-    });
+  // console.log(req.body);
+  if (
+    userId !== null &&
+    cohortId != null &&
+    fullName != null &&
+    imgUrl !== null &&
+    bio !== null &&
+    empStatus !== null
+  ) {
+    db.users.editUserDetails(
+      [userId, imgUrl, bio, empStatus, cohortId, fullName],
+      function(err, dbUser) {
+        res.json(formatUser(dbUser));
+      }
+    );
   }
-  if (bio !== null) {
-    db.users.editUserBio([userId, bio], function(err, dbUser) {
-      res.json(dbUser);
-    });
-  }
-  if (empStatus !== null) {
-    db.users.editUserEmpStatus([userId, empStatus], function(err, dbUser) {
-      res.json(dbUser);
-    });
-  }
-  if (userId !== null && skillId !== null) {
-    db.users.addUserSkill([userId, skillId], function(err, dbUser) {
-      res.json(dbUser);
+});
+
+router.post('/user/edit/skill', (req, res) => {
+  var skillId = req.body.skillId || [];
+  if (userId !== null && skillId.length > 0) {
+    skillId.forEach((element) => {
+      db.users.addUserSkill([userId, element], function(err, dbUser) {
+        res.json(formatUser(dbUser));
+      });
     });
   }
 });
@@ -109,20 +151,20 @@ router.post('/user/edit/contact', (req, res) => {
   var facebook = req.body.facebook || null;
   var twitter = req.body.twitter || null;
   var linkedin = req.body.linkedin || null;
+  var github = req.body.github || null;
   var userId = req.body.userId || null;
-  if (facebook !== null) {
-    db.users.editFacebook([userId, facebook], function(err, dbUser) {
-      res.json(dbUser);
-    });
-  }
-  if (twitter !== null) {
-    db.users.editTwitter([userId, twitter], function(err, dbUser) {
-      res.json(dbUser);
-    });
-  }
-  if (linkedin !== null) {
-    db.users.editLinkedin([userId, linkedin], function(err, dbUser) {
-      res.json(dbUser);
+  if (
+    userId !== null &&
+    facebook !== null &&
+    github !== null &&
+    twitter !== null &&
+    linkedin !== null
+  ) {
+    db.users.editUserSM([userId, facebook, twitter, linkedin, github], function(
+      err,
+      dbUser
+    ) {
+      res.json(formatUser(dbUser));
     });
   }
 });
@@ -175,7 +217,7 @@ router.get('/cohorts', (req, res) => {
 router.get('/cohortUsers/:cohort', (req, res) => {
   var cohort = req.params.cohort;
   db.cohorts.getCohortUsers(function(err, results) {
-    res.json(results);
+    res.json(formatUser(results));
   }, cohort);
 });
 
@@ -254,13 +296,17 @@ router.get('/posts', (req, res) => {
   console.log(query);
   if (!query) {
     db.posts.get(function(err, results) {
-      res.json(results);
+      res.json(results[0]);
     });
   } else {
     console.log(query);
     db.posts.search(function(err, results) {
-      console.log(results);
-      res.json(results);
+      if (results[0].length > 0) {
+        console.log(results);
+        res.json(results[0]);
+      } else {
+        res.json([]);
+      }
     }, query);
   }
 });
@@ -294,11 +340,11 @@ router.get('/user/posts/body/:text', (req, res) => {
 });
 //Route to add a post
 router.post('/user/post/add', (req, res) => {
-  const { data } = req.body;
+  console.log(req.body);
+  const data = req.body;
   var postType = data.postType;
   var postBody = data.postBody;
   var userId = data.userId;
-  //console.log(postType !== null && postBody !== null && userId !== null);
   if (postType !== null && postBody !== null && userId !== null) {
     db.posts.addPost([postType, postBody, userId], function(err, results) {
       res.send(results);
@@ -317,4 +363,69 @@ router.post('/user/post/delete', (req, res) => {
     });
   }
 });
+// router.getConstants("/constants", (req, res) => {
+//   var skills =
+// });
+
+formatUser = function(results) {
+  var users = [];
+  var ids = [];
+  var skills = [];
+  var projects = [];
+  for (var i = 0; i < results[0].length; i++) {
+    var user = {};
+    user.userId = results[0][i].userId;
+    user.fullName = results[0][i].fullName;
+    user.username = results[0][i].username;
+    user.image = results[0][i].image;
+    user.email = results[0][i].email;
+    user.bio = results[0][i].bio;
+    user.fb = results[0][i].fb;
+    user.gh = results[0][i].gh;
+    user.li = results[0][i].li;
+    user.tw = results[0][i].tw;
+    user.cohort = results[0][i].cohort;
+    user.empStat = results[0][i].empStat;
+
+    var skillId = results[0][i].skillId;
+    var skill = {};
+    skill.skillId = skillId;
+    skill.skillName = results[0][i].skillName;
+    if (_.findWhere(skills, skill) == null && skillId !== null) {
+      skills.push(skill);
+    }
+    user.skills = skills;
+
+    var projectId = results[0][i].projectId;
+    var project = {};
+    project.projectId = projectId;
+    project.projectTitle = results[0][i].projectTitle;
+    project.projectLink = results[0][i].projectLink;
+    project.projectDesc = results[0][i].projectDesc;
+    if (_.findWhere(projects, project) == null && projectId !== null) {
+      projects.push(project);
+    }
+    user.projects = projects;
+
+    //console.log(user);
+    if (!ids.includes(user.userId)) {
+      users.push(user);
+      ids.push(user.userId);
+    }
+  }
+  //console.log(results[0].length);
+  return users;
+};
+getUserSkills = function(userId) {
+  return new Promise(function(resolve, reject) {
+    db.users.getUserSkills(function(err, results) {
+      if (results === undefined) {
+        reject(new Error('Error resuls is undefined'));
+      } else {
+        resolve(results);
+      }
+    }, userId);
+  });
+};
+
 module.exports = router;

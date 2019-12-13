@@ -16,5 +16,7 @@
 
 .tabs-wrapper .tabs .post-btn,
 .tabs-wrapper .tabs .img-btn {
-  margin-top: 10px;
+  display: block;
+  margin: auto;
+  margin-top: 15px;
 }
