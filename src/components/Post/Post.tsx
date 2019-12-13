@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import './style.css';
 import { Button } from 'antd';
 import { connect } from 'react-redux';
 import { getAllPosts } from './../../actions/posts';
 import TimeAgo from 'react-timeago';
+import './style.css';
 
 interface IPostProps {
   posts?: any;
@@ -40,7 +40,7 @@ class Post extends Component<IPostProps> {
         {posts && posts.length > 0 ? (
           <div>
             <div className='post-wrapper'>
-              {posts[0].map((post: any, index: any) => (
+              {posts.map((post: any, index: any) => (
                 <div className='post' key={index}>
                   <div className='user-img'>
                     <img src={post.imgUrl} alt='' />

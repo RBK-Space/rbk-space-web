@@ -27,7 +27,6 @@ export class Profile extends Component {
   getData = (props) => {
     const { id } = props.match.params;
     axios(`http://localhost:4000/user/${id}`).then((result) => {
-      console.log(result.data[0]);
       this.setState({
         user: result.data[0]
       });
@@ -128,8 +127,9 @@ export class Profile extends Component {
                   <span className='skills-id'>Skills</span>
                   {/* map skills array */}
                   <div className='skills-tags'>
-                    <Tag>React</Tag>
-                    <Tag>Angular</Tag>
+                    {this.state.user.skills.map((skill, index) => (
+                      <Tag key={index}>{skill.skillName}</Tag>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -144,48 +144,30 @@ export class Profile extends Component {
                     <Icon type='caret-right' rotate={isActive ? 90 : 0} />
                   )}
                 >
-                  <Panel
-                    header='This is panel header 1'
-                    key='1'
-                    style={customPanelStyle}
-                    className='project-item'
-                  >
-                    <div className='panel-content-wrapper'>
-                      <p className='project-decription'>
-                        Lorem ipsum dolor sit, amet consectetur adipisicing
-                        elit. Cupiditate inventore quisquam fugit deleniti illo
-                        ratione, non illum accusantium id exercitationem nihil
-                        dolorem, consequatur quas quis! Odio praesentium quasi
-                        quas placeat!
-                      </p>
-                      <span>
-                        {/* <a href='#' target='_blank' rel='noopener noreferrer'> */}
-                        Project Link
-                        {/* </a> */}
-                      </span>
-                    </div>
-                  </Panel>
-                  <Panel
-                    header='This is panel header 2'
-                    key='2'
-                    style={customPanelStyle}
-                    className='project-item'
-                  >
-                    <div className='panel-content-wrapper'>
-                      <p className='project-decription'>
-                        Lorem ipsum dolor sit, amet consectetur adipisicing
-                        elit. Cupiditate inventore quisquam fugit deleniti illo
-                        ratione, non illum accusantium id exercitationem nihil
-                        dolorem, consequatur quas quis! Odio praesentium quasi
-                        quas placeat!
-                      </p>
-                      <span>
-                        {/* <a href='#' target='_blank' rel='noopener noreferrer'> */}
-                        Project Link
-                        {/* </a> */}
-                      </span>
-                    </div>
-                  </Panel>
+                  {/* map projects array */}
+                  {this.state.user.projects.map((project, index) => (
+                    <Panel
+                      header={project.projectTitle}
+                      key={index + 1}
+                      style={customPanelStyle}
+                      className='project-item'
+                    >
+                      <div className='panel-content-wrapper'>
+                        <p className='project-decription'>
+                          {project.projectDesc}
+                        </p>
+                        <span>
+                          <a
+                            href={project.projectLink}
+                            target='_blank'
+                            rel='noopener noreferrer'
+                          >
+                            Project Link
+                          </a>
+                        </span>
+                      </div>
+                    </Panel>
+                  ))}
                 </Collapse>
               </div>
             </div>

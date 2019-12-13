@@ -1,9 +1,8 @@
 import React from 'react';
-import { Layout, Menu, Input, Radio, Icon } from 'antd';
+import { Layout, Menu, Radio, Icon } from 'antd';
 import { Button } from 'antd';
 import { Link } from 'react-router-dom';
 import './style.css';
-import axios from 'axios';
 const { Header } = Layout;
 
 class Navbar extends React.Component {
@@ -64,7 +63,6 @@ class Navbar extends React.Component {
       });
   }
   handleChange(e) {
-    // console.log(e.target.value);
     this.setState({ searchWord: e.target.value });
   }
 

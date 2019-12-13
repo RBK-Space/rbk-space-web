@@ -15,7 +15,6 @@ export class SearchPeople extends Component {
   getData = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const query = urlParams.get('query');
-    console.log(query);
     var that = this;
     axios(`http://localhost:4000/posts/?query=${query}`).then((result) => {
       that.setState({
@@ -51,10 +50,6 @@ export class SearchPeople extends Component {
       <div>
         {this.state.postsSearchResult.length === 0 ? (
           <div>
-            {/* <img
-              src='https://flevix.com/wp-content/uploads/2019/07/Ring-Preloader.gif'
-              alt=''
-            /> */}
             <h1>No Posts found</h1>
           </div>
         ) : (

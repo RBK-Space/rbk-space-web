@@ -6,7 +6,6 @@ import './style.css';
 export default class Header extends Component {
   render() {
     const { authenticated } = this.props;
-    // console.log(authenticated);
     return (
       <div className='loginPage'>
         <div className='opacity'>
