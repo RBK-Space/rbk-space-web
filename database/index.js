@@ -136,6 +136,20 @@ module.exports = {
         }
       });
     },
+    editUserSM: function(x, callback) {
+      connection.query(" call editSocialMedia(?, ?, ?, ?, ?) ", x, function(
+        err,
+        results
+      ) {
+        if (err) {
+          console.log("Can not edit user", err);
+        } else {
+          console.log("Updated Successfully");
+          //console.log(someVal);
+          callback(err, results[0]);
+        }
+      });
+    },
     editUserImg: function(x, callback) {
       connection.query(" call editUserImg(?, ?) ", x, function(err, results) {
         if (err) {

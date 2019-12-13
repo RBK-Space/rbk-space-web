@@ -21,7 +21,7 @@ router.get("/users", (req, res) => {
       if (results[0].length > 0) {
         res.json(formatUser(results));
       } else {
-        res.json({ success: "User Not Found" });
+        res.json({ success: false, message: "User Not Found" });
       }
     });
   } else {
@@ -83,7 +83,7 @@ router.get("/user/skill/:userId", (req, res) => {
 //Route to insert new user into DB
 //Need to be Revised
 router.post("/user/login", (req, res) => {
-  var fullName = req.body.fullName;
+  var fullName = req.body.fullName || req.body.username;
   var username = req.body.username;
   var github = req.body.github;
   var imgUrl = req.body.imgUrl;
@@ -142,21 +142,39 @@ router.post("/user/edit/contact", (req, res) => {
   var facebook = req.body.facebook || null;
   var twitter = req.body.twitter || null;
   var linkedin = req.body.linkedin || null;
+  var github = req.body.github || null;
   var userId = req.body.userId || null;
-  if (facebook !== null) {
-    db.users.editFacebook([userId, facebook], function(err, dbUser) {
+  if (
+    userId !== null &&
+    facebook !== null &&
+    github !== null &&
+    twitter !== null &&
+    linkedin !== null
+  ) {
+    db.users.editUserSM([userId, facebook, twitter, linkedin, github], function(
+      err,
+      dbUser
+    ) {
       res.json(dbUser);
     });
-  }
-  if (twitter !== null) {
-    db.users.editTwitter([userId, twitter], function(err, dbUser) {
-      res.json(dbUser);
-    });
-  }
-  if (linkedin !== null) {
-    db.users.editLinkedin([userId, linkedin], function(err, dbUser) {
-      res.json(dbUser);
-    });
+    //   db.users.editFacebook([userId, facebook], function(err, dbUser) {
+    //     // res.json(dbUser);
+    //   });
+    // }
+    // if (github !== null) {
+    //   db.users.editGithub([userId, github], function(err, dbUser) {
+    //     // res.json(dbUser);
+    //   });
+    // }
+    // if (twitter !== null) {
+    //   db.users.editTwitter([userId, twitter], function(err, dbUser) {
+    //     // res.json(dbUser);
+    //   });
+    // }
+    // if (linkedin !== null) {
+    //   db.users.editLinkedin([userId, linkedin], function(err, dbUser) {
+    //     // res.json(dbUser);
+    //   });
   }
 });
 //Route to edit user's portfolio
@@ -351,32 +369,32 @@ router.post("/user/post/delete", (req, res) => {
 });
 
 formatUser = function(results) {
-  var user = {};
-  user.userId = results[0][0].userId;
-  user.fullName = results[0][0].fullName;
-  user.username = results[0][0].username;
-  user.image = results[0][0].image;
-  user.email = results[0][0].email;
-  user.bio = results[0][0].bio;
-  user.fb = results[0][0].fb;
-  user.gh = results[0][0].gh;
-  user.li = results[0][0].li;
-  user.tw = results[0][0].tw;
-  user.cohort = results[0][0].cohort;
-  user.empStat = results[0][0].empStat;
-  var skills = [];
+  var users = [];
+  var ids = [];
   for (var i = 0; i < results[0].length; i++) {
+    var user = {};
+    user.userId = results[0][i].userId;
+    user.fullName = results[0][i].fullName;
+    user.username = results[0][i].username;
+    user.image = results[0][i].image;
+    user.email = results[0][i].email;
+    user.bio = results[0][i].bio;
+    user.fb = results[0][i].fb;
+    user.gh = results[0][i].gh;
+    user.li = results[0][i].li;
+    user.tw = results[0][i].tw;
+    user.cohort = results[0][i].cohort;
+    user.empStat = results[0][i].empStat;
+    var skills = [];
     var skillId = results[0][i].skillId;
     var skill = {};
-    skill.skillId = results[0][i].skillId;
+    skill.skillId = skillId;
     skill.skillName = results[0][i].skillName;
     if (_.findWhere(skills, skill) == null) {
       skills.push(skill);
     }
-  }
-  user.skills = skills;
-  var projects = [];
-  for (var i = 0; i < results[0].length; i++) {
+    user.skills = skills;
+    var projects = [];
     var projectId = results[0][i].projectId;
     var project = {};
     project.projectId = projectId;
@@ -386,9 +404,17 @@ formatUser = function(results) {
     if (_.findWhere(projects, project) == null) {
       projects.push(project);
     }
+    user.projects = projects;
+    console.log(users);
+
+    //console.log(user);
+    if (!ids.includes(user.userId)) {
+      users.push(user);
+      ids.push(user.userId);
+    }
   }
-  user.projects = projects;
-  return user;
+  //console.log(results[0].length);
+  return users;
 };
 getUserSkills = function(userId) {
   return new Promise(function(resolve, reject) {
