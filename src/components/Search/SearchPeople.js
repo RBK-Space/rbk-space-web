@@ -34,13 +34,41 @@ export class SearchPeople extends Component {
       <div>
         {this.state.peopleSearchResult.length === 0 ? (
           <div>
-            <img
+            {/* <img
               src='https://flevix.com/wp-content/uploads/2019/07/Ring-Preloader.gif'
               alt=''
-            />
+            /> */}
+            <h1>No People found</h1>
           </div>
         ) : (
-          <h1>asdfasdf</h1>
+          <div className='general-wrapper'>
+            <h1 id='user-profile-heading'>Users Result</h1>
+            {this.state.peopleSearchResult.map((user, index) => (
+              <>
+                <div className='general' key={index}>
+                  <div className='general-border'>
+                    <div className='img-social-wrapper'>
+                      <div className='user-img'>
+                        <img src={user.image} alt='' />
+                      </div>
+                    </div>
+                    <div className='general-info'>
+                      <p>
+                        Hello! My name is {user.fullName} &amp; I'm from cohort
+                        {user.cohort}
+                      </p>
+                      <p>Employment status: {user.empStat} </p>
+                      <Link to={`/profile/${user.userId}`}>
+                        <span className='search-profile-link'>
+                          Profile Link
+                        </span>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </>
+            ))}
+          </div>
         )}
       </div>
     );

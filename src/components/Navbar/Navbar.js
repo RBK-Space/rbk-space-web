@@ -101,13 +101,13 @@ class Navbar extends React.Component {
                       <Link
                         to={`/search/users/?query=${this.state.searchWord}`}
                       >
-                        <button>search</button>
+                        <button className='search-btn'>Search</button>
                       </Link>
                     ) : (
                       <Link
                         to={`/search/posts/?query=${this.state.searchWord}`}
                       >
-                        <button>search</button>
+                        <button className='search-btn'>Search</button>
                       </Link>
                     )}
                   </div>
