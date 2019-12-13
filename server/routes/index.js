@@ -43,7 +43,7 @@ router.get("/user/:id", (req, res) => {
       console.log(formatUser(results));
       res.json(formatUser(results));
     } else {
-      res.json({ success: false, message: "User Not Found" });
+      res.json([]);
     }
   }, id);
 });
@@ -115,24 +115,29 @@ router.post("/user/edit/basic", (req, res) => {
   var bio = req.body.bio || null;
   var empStatus = req.body.empStatus || null;
   var userId = req.body.userId || null;
+  var cohortId = req.body.cohortId || null;
+  var fullName = req.body.fullName || null;
   //check if skills are array
-  console.log(req.body);
+  // console.log(req.body);
+  if (
+    userId !== null &&
+    cohortId != null &&
+    fullName != null &&
+    imgUrl !== null &&
+    bio !== null &&
+    empStatus !== null
+  ) {
+    db.users.editUserDetails(
+      [userId, imgUrl, bio, empStatus, cohortId, fullName],
+      function(err, dbUser) {
+        res.json(formatUser(dbUser));
+      }
+    );
+  }
+});
+
+router.post("/user/edit/skill", (req, res) => {
   var skillId = req.body.skillId || [];
-  if (imgUrl !== null) {
-    db.users.editUserImg([userId, imgUrl], function(err, dbUser) {
-      res.json(dbUser);
-    });
-  }
-  if (bio !== null) {
-    db.users.editUserBio([userId, bio], function(err, dbUser) {
-      res.json(dbUser);
-    });
-  }
-  if (empStatus !== null) {
-    db.users.editUserEmpStatus([userId, empStatus], function(err, dbUser) {
-      res.json(dbUser);
-    });
-  }
   if (userId !== null && skillId.length > 0) {
     skillId.forEach(element => {
       db.users.addUserSkill([userId, element], function(err, dbUser) {
@@ -296,8 +301,12 @@ router.get("/posts", (req, res) => {
   } else {
     console.log(query);
     db.posts.search(function(err, results) {
-      console.log(results);
-      res.json(results);
+      if (results[0].length > 0) {
+        console.log(results);
+        res.json(formatUser(results));
+      } else {
+        res.json([]);
+      }
     }, query);
   }
 });
