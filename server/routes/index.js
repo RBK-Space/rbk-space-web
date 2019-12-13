@@ -83,7 +83,7 @@ router.get("/user/skill/:userId", (req, res) => {
 //Route to insert new user into DB
 //Need to be Revised
 router.post("/user/login", (req, res) => {
-  var fullName = req.body.fullName;
+  var fullName = req.body.fullName || req.body.username;
   var username = req.body.username;
   var github = req.body.github;
   var imgUrl = req.body.imgUrl;
