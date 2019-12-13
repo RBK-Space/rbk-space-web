@@ -303,7 +303,7 @@ router.get("/posts", (req, res) => {
     db.posts.search(function(err, results) {
       if (results[0].length > 0) {
         console.log(results);
-        res.json(formatUser(results));
+        res.json(results);
       } else {
         res.json([]);
       }
