@@ -1,0 +1,59 @@
+@import '~antd/dist/antd.css';
+.user-profile {
+  text-align: left !important;
+}
+#user-profile-heading {
+  font-family: unset;
+  text-align: center;
+}
+
+.general-border {
+  display: flex;
+  padding: 20px 20px 0px 20px;
+  border: 1px solid #000;
+}
+.bio-info,
+.portfolio-info {
+  border: 1px solid #000;
+  padding: 20px;
+}
+.general .user-img img {
+  width: 150px;
+  height: 150px;
+}
+.general .user-name {
+  display: block;
+  margin-top: 10px;
+}
+.general .social-links {
+  list-style: none;
+  padding: 0px;
+  justify-content: space-around;
+  padding: 0px 5px;
+  margin-top: 10px;
+}
+.general .social-links .social-item {
+  font-size: 20px;
+}
+.general-info {
+  /* font-family: monospace; */
+  margin-left: 20px;
+  padding-top: 20px;
+  color: gray;
+  /* font-size: 18px; */
+}
+.skills-id {
+  display: block;
+  font-weight: bold;
+  color: #000;
+}
+.skills-tags {
+  margin-top: 10px;
+}
+.project-item {
+  border-bottom: 1px solid #d9d9d9 !important;
+  margin-bottom: 12px;
+}
+.project-item .ant-collapse-content-box {
+  background-color: #ffffff;
+}
