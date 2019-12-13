@@ -142,21 +142,39 @@ router.post("/user/edit/contact", (req, res) => {
   var facebook = req.body.facebook || null;
   var twitter = req.body.twitter || null;
   var linkedin = req.body.linkedin || null;
+  var github = req.body.github || null;
   var userId = req.body.userId || null;
-  if (facebook !== null) {
-    db.users.editFacebook([userId, facebook], function(err, dbUser) {
+  if (
+    userId !== null &&
+    facebook !== null &&
+    github !== null &&
+    twitter !== null &&
+    linkedin !== null
+  ) {
+    db.users.editUserSM([userId, facebook, twitter, linkedin, github], function(
+      err,
+      dbUser
+    ) {
       res.json(dbUser);
     });
-  }
-  if (twitter !== null) {
-    db.users.editTwitter([userId, twitter], function(err, dbUser) {
-      res.json(dbUser);
-    });
-  }
-  if (linkedin !== null) {
-    db.users.editLinkedin([userId, linkedin], function(err, dbUser) {
-      res.json(dbUser);
-    });
+    //   db.users.editFacebook([userId, facebook], function(err, dbUser) {
+    //     // res.json(dbUser);
+    //   });
+    // }
+    // if (github !== null) {
+    //   db.users.editGithub([userId, github], function(err, dbUser) {
+    //     // res.json(dbUser);
+    //   });
+    // }
+    // if (twitter !== null) {
+    //   db.users.editTwitter([userId, twitter], function(err, dbUser) {
+    //     // res.json(dbUser);
+    //   });
+    // }
+    // if (linkedin !== null) {
+    //   db.users.editLinkedin([userId, linkedin], function(err, dbUser) {
+    //     // res.json(dbUser);
+    //   });
   }
 });
 //Route to edit user's portfolio
@@ -392,7 +410,7 @@ formatUser = function(results) {
     //console.log(user);
     if (!ids.includes(user.userId)) {
       users.push(user);
-      ids.push(user.userId)
+      ids.push(user.userId);
     }
   }
   //console.log(results[0].length);
