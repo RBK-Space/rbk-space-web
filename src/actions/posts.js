@@ -2,7 +2,6 @@ import axios from 'axios';
 import { GET_ALL_POSTS, ADD_POST } from './types';
 
 export const getAllPosts = () => (dispatch) => {
-  console.log('called');
   axios
     .get('http://localhost:4000/posts')
     .then((response) => {

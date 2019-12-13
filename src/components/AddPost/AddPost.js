@@ -39,7 +39,6 @@ class AddPost extends Component {
         throw new Error('failed to authenticate user');
       })
       .then((responseJson) => {
-        console.log(responseJson.user);
         this.setState({
           authenticated: true,
           user: responseJson.user

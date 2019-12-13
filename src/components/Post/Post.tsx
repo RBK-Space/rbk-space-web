@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-// import { bindActionCreators } from 'redux';
+import { Link } from 'react-router-dom';
 import './style.css';
 import { Button } from 'antd';
 import { connect } from 'react-redux';
-import { store } from './../../App';
-// import * as postActions from './../../actions/posts';
 import { getAllPosts } from './../../actions/posts';
 import TimeAgo from 'react-timeago';
 
@@ -37,11 +35,9 @@ class Post extends Component<IPostProps> {
 
   render() {
     const { posts } = this.props;
-    console.log(store.getState());
-    if (posts.length > 0) console.log(posts[0][0].createdAt);
     return (
       <>
-        {posts.length > 0 ? (
+        {posts && posts.length > 0 ? (
           <div>
             <div className='post-wrapper'>
               {posts[0].map((post: any, index: any) => (
@@ -51,7 +47,9 @@ class Post extends Component<IPostProps> {
                   </div>
                   <div className='post-data'>
                     <div className='user-time'>
-                      <span className='post-writer'>{post.userName}</span>
+                      <Link to={`/profile/${post.userId}`}>
+                        <span className='post-writer'>{post.userName}</span>
+                      </Link>
                       <span className='post-date'>
                         <TimeAgo
                           date={`${post.createdAt.substring(0, 19)}-0200`}
@@ -97,15 +95,11 @@ class Post extends Component<IPostProps> {
     );
   }
 }
+
 const mapStateToProps = (state: any) => ({
   posts: state.allPostsReducer.posts
 });
 
-// const mapDispatchToProps = (dispatch: any) => {
-//   return bindActionCreators(postActions, dispatch);
-// };
-
-// Actions
 const mapDispatchToProps = {
   getAllPosts
 };

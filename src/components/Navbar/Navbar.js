@@ -1,7 +1,7 @@
 import React from 'react';
 import { Layout, Menu, Input, Radio, Icon } from 'antd';
 import { Button } from 'antd';
-
+import { Link } from 'react-router-dom';
 import './style.css';
 const { Header } = Layout;
 const { Search } = Input;
@@ -39,7 +39,6 @@ class Navbar extends React.Component {
         throw new Error('failed to authenticate user');
       })
       .then((responseJson) => {
-        console.log(responseJson.user);
         this.setState({
           authenticated: true,
           user: responseJson.user
@@ -60,12 +59,12 @@ class Navbar extends React.Component {
         {!authenticated ? null : (
           <Header className='header'>
             <div className='logo'>
-              {/* <a href='#'> */}
-              <img
-                src='https://i.ibb.co/19WCkMF/output-onlinepngtools.png'
-                alt=''
-              />
-              {/* </a> */}
+              <Link to='/home'>
+                <img
+                  src='https://i.ibb.co/19WCkMF/output-onlinepngtools.png'
+                  alt=''
+                />
+              </Link>
             </div>
             <div className='search-wrapper'>
               <Menu
@@ -101,9 +100,10 @@ class Navbar extends React.Component {
             </div>
 
             <div className='user-img'>
-              {/* <a href='#'> */}
-              <img src={this.state.user[0].image} alt='' />
-              {/* </a> */}
+              <Link to={`/profile/${this.state.user[0].userId}`}>
+                <img src={this.state.user[0].image} alt='' />
+              </Link>
+
               <Button id='logout' onClick={this._handleLogoutClick.bind(this)}>
                 <Icon type='export' />
               </Button>
