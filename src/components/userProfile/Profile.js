@@ -50,11 +50,7 @@ export class Profile extends Component {
       border: 0,
       overflow: 'hidden'
     };
-    const text = `
-  A dog is a type of domesticated animal.
-  Known for its loyalty and faithfulness,
-  it can be found:a welcome guest in many households across the world.
-`;
+
     return (
       <div className='user-profile'>
         {!this.state.user.hasOwnProperty('userId') ? (
@@ -164,9 +160,9 @@ export class Profile extends Component {
                         quas placeat!
                       </p>
                       <span>
-                        <a href='#' target='_blank' rel='noopener noreferrer'>
-                          Project Link
-                        </a>
+                        {/* <a href='#' target='_blank' rel='noopener noreferrer'> */}
+                        Project Link
+                        {/* </a> */}
                       </span>
                     </div>
                   </Panel>
@@ -185,9 +181,9 @@ export class Profile extends Component {
                         quas placeat!
                       </p>
                       <span>
-                        <a href='#' target='_blank' rel='noopener noreferrer'>
-                          Project Link
-                        </a>
+                        {/* <a href='#' target='_blank' rel='noopener noreferrer'> */}
+                        Project Link
+                        {/* </a> */}
                       </span>
                     </div>
                   </Panel>

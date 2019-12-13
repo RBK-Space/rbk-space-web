@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-// import { bindActionCreators } from 'redux';
 import './style.css';
 import { Button } from 'antd';
 import { connect } from 'react-redux';
-import { store } from './../../App';
-// import * as postActions from './../../actions/posts';
 import { getAllPosts } from './../../actions/posts';
 import TimeAgo from 'react-timeago';
 
@@ -38,7 +35,6 @@ class Post extends Component<IPostProps> {
 
   render() {
     const { posts } = this.props;
-    // console.log(store.getState());
     return (
       <>
         {posts && posts.length > 0 ? (
@@ -99,15 +95,11 @@ class Post extends Component<IPostProps> {
     );
   }
 }
+
 const mapStateToProps = (state: any) => ({
   posts: state.allPostsReducer.posts
 });
 
-// const mapDispatchToProps = (dispatch: any) => {
-//   return bindActionCreators(postActions, dispatch);
-// };
-
-// Actions
 const mapDispatchToProps = {
   getAllPosts
 };
