@@ -296,14 +296,14 @@ router.get('/posts', (req, res) => {
   console.log(query);
   if (!query) {
     db.posts.get(function(err, results) {
-      res.json(results);
+      res.json(results[0]);
     });
   } else {
     console.log(query);
     db.posts.search(function(err, results) {
       if (results[0].length > 0) {
         console.log(results);
-        res.json(results);
+        res.json(results[0]);
       } else {
         res.json([]);
       }
