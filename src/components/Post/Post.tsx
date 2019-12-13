@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 // import { bindActionCreators } from 'redux';
 import './style.css';
 import { Button } from 'antd';
@@ -37,11 +38,10 @@ class Post extends Component<IPostProps> {
 
   render() {
     const { posts } = this.props;
-    console.log(store.getState());
-    if (posts.length > 0) console.log(posts[0][0].createdAt);
+    // console.log(store.getState());
     return (
       <>
-        {posts.length > 0 ? (
+        {posts && posts.length > 0 ? (
           <div>
             <div className='post-wrapper'>
               {posts[0].map((post: any, index: any) => (
@@ -51,7 +51,9 @@ class Post extends Component<IPostProps> {
                   </div>
                   <div className='post-data'>
                     <div className='user-time'>
-                      <span className='post-writer'>{post.userName}</span>
+                      <Link to={`/profile/${post.userId}`}>
+                        <span className='post-writer'>{post.userName}</span>
+                      </Link>
                       <span className='post-date'>
                         <TimeAgo
                           date={`${post.createdAt.substring(0, 19)}-0200`}
