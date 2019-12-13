@@ -24,19 +24,18 @@ export class Profile extends Component {
     };
   }
 
-  componentDidMount() {
-    this.getData(this.props);
-  }
   getData = (props) => {
     const { id } = props.match.params;
     axios(`http://localhost:4000/user/${id}`).then((result) => {
-      console.log(result.data[0][0]);
+      console.log(result.data[0]);
       this.setState({
-        user: result.data[0][0]
+        user: result.data[0]
       });
     });
   };
-
+  componentDidMount() {
+    this.getData(this.props);
+  }
   componentWillReceiveProps(props) {
     this.getData(props);
   }

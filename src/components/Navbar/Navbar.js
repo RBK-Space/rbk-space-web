@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import './style.css';
 import axios from 'axios';
 const { Header } = Layout;
-const { Search } = Input;
 
 class Navbar extends React.Component {
   constructor(props) {
@@ -16,25 +15,11 @@ class Navbar extends React.Component {
       error: null,
       authenticated: false,
       searchToggle: 1,
+      searchWord: '',
       searchResult: []
     };
     this.toggleClick = this.toggleClick.bind(this);
-  }
-
-  handleClick(val) {
-    var that = this;
-    let url = 'http://localhost:4000';
-    console.log(this.state.searchToggle);
-    this.state.searchToggle === 1
-      ? (url = `${url}/users/?query=${val}`)
-      : (url = `${url}/posts/?query=${val}`);
-    console.log(url);
-    axios(url).then((result) => {
-      console.log(result.data);
-      that.setState({
-        searchResult: result.data
-      });
-    });
+    this.handleChange = this.handleChange.bind(this);
   }
 
   toggleClick(e) {
@@ -78,10 +63,13 @@ class Navbar extends React.Component {
         });
       });
   }
+  handleChange(e) {
+    // console.log(e.target.value);
+    this.setState({ searchWord: e.target.value });
+  }
 
   render() {
     const { authenticated } = this.state;
-    console.log(this.state.searchResult);
     return (
       <Layout className='header-layout'>
         {!authenticated ? null : (
@@ -102,11 +90,26 @@ class Navbar extends React.Component {
               >
                 <Menu.Item key='1' className='menu-item'>
                   <div className='search-bar'>
-                    <Search
-                      placeholder='Search...'
-                      onSearch={(value) => this.handleClick(value)}
-                      enterButton
+                    <input
+                      type='text'
+                      name='search-bar'
+                      onChange={this.handleChange}
+                      value={this.state.searchWord}
+                      className='search-input'
                     />
+                    {this.state.searchToggle === 1 ? (
+                      <Link
+                        to={`/search/users/?query=${this.state.searchWord}`}
+                      >
+                        <button>search</button>
+                      </Link>
+                    ) : (
+                      <Link
+                        to={`/search/posts/?query=${this.state.searchWord}`}
+                      >
+                        <button>search</button>
+                      </Link>
+                    )}
                   </div>
                   <div className='radio-group-wrapper'>
                     <Radio.Group
@@ -134,7 +137,6 @@ class Navbar extends React.Component {
                 </Menu.Item>
               </Menu>
             </div>
-
             <div className='user-img'>
               <Link to={`/profile/${this.state.user[0].userId}`}>
                 <img src={this.state.user[0].image} alt='' />
