@@ -3,19 +3,44 @@ import { Layout, Menu, Input, Radio, Icon } from 'antd';
 import { Button } from 'antd';
 import { Link } from 'react-router-dom';
 import './style.css';
+import axios from 'axios';
 const { Header } = Layout;
 const { Search } = Input;
 
 class Navbar extends React.Component {
-  state = {
-    user: {},
-    error: null,
-    authenticated: false
-  };
+  constructor(props) {
+    super(props);
 
-  handleClick = (e) => {
-    console.log('click ', e);
-  };
+    this.state = {
+      user: {},
+      error: null,
+      authenticated: false,
+      searchToggle: 1,
+      searchResult: []
+    };
+    this.toggleClick = this.toggleClick.bind(this);
+  }
+
+  handleClick(val) {
+    var that = this;
+    let url = 'http://localhost:4000';
+    console.log(this.state.searchToggle);
+    this.state.searchToggle === 1
+      ? (url = `${url}/users/?query=${val}`)
+      : (url = `${url}/posts/?query=${val}`);
+    console.log(url);
+    axios(url).then((result) => {
+      console.log(result.data);
+      that.setState({
+        searchResult: result.data
+      });
+    });
+  }
+
+  toggleClick(e) {
+    const { value } = e.target;
+    this.setState({ searchToggle: value });
+  }
 
   _handleLogoutClick = () => {
     // Logout using Twitter passport api
@@ -23,7 +48,9 @@ class Navbar extends React.Component {
     window.open('http://localhost:4000/auth/logout', '_self');
     this.props.handleNotAuthenticated();
   };
+
   componentDidMount() {
+    var that = this;
     // Fetch does not send cookies. So you should add credentials: 'include'
     fetch('http://localhost:4000/auth/login/success', {
       method: 'GET',
@@ -39,21 +66,22 @@ class Navbar extends React.Component {
         throw new Error('failed to authenticate user');
       })
       .then((responseJson) => {
-        this.setState({
+        that.setState({
           authenticated: true,
           user: responseJson.user
         });
       })
       .catch((error) => {
-        this.setState({
+        that.setState({
           authenticated: false,
           error: 'Failed to authenticate user'
         });
       });
   }
+
   render() {
     const { authenticated } = this.state;
-
+    console.log(this.state.searchResult);
     return (
       <Layout className='header-layout'>
         {!authenticated ? null : (
@@ -76,7 +104,7 @@ class Navbar extends React.Component {
                   <div className='search-bar'>
                     <Search
                       placeholder='Search...'
-                      onSearch={(value) => console.log(value)}
+                      onSearch={(value) => this.handleClick(value)}
                       enterButton
                     />
                   </div>
@@ -87,10 +115,18 @@ class Navbar extends React.Component {
                       defaultValue={1}
                       style={{ lineHeight: '64px' }}
                     >
-                      <Radio className='radio-button' value={1}>
+                      <Radio
+                        className='radio-button'
+                        value={1}
+                        onChange={this.toggleClick}
+                      >
                         People
                       </Radio>
-                      <Radio className='radio-button' value={2}>
+                      <Radio
+                        className='radio-button'
+                        value={2}
+                        onChange={this.toggleClick}
+                      >
                         Posts
                       </Radio>
                     </Radio.Group>
