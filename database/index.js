@@ -12,7 +12,8 @@ function handleDisconnect() {
     user: global.gConfig.user,
     password: global.gConfig.password,
     database: global.gConfig.database,
-    charset: "utf8mb4"
+    charset: "utf8mb4", //correct charset for emojis
+    collation: "utf8mb4_unicode_ci"
   });
   //connection.set_charset("utf8mb4");
 
