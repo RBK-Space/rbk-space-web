@@ -5,7 +5,6 @@ export const getAllPosts = () => (dispatch) => {
   axios
     .get('http://localhost:4000/posts')
     .then((response) => {
-      // console.log(response);
       dispatch({
         type: GET_ALL_POSTS,
         payload: response.data
@@ -17,16 +16,19 @@ export const getAllPosts = () => (dispatch) => {
 };
 
 export const addPost = (data) => (dispatch) => {
-  // console.log(data);
-  axios.post('http://localhost:4000/user/post/add', { data }).then(
-    (response) => {
-      dispatch({ type: ADD_POST, payload: response.data });
-      dispatch(getAllPosts());
-      console.log(response.data);
-    },
-    (error) => {
-      dispatch({ type: ADD_POST, error: error });
-      console.log(error);
-    }
-  );
+  axios
+    .post('http://localhost:4000/user/post/add', data)
+    .then(
+      (response) => {
+        dispatch({ type: ADD_POST, payload: response.data[0] });
+        dispatch(getAllPosts());
+      },
+      (error) => {
+        dispatch({ type: ADD_POST, error: error });
+        console.log(error);
+      }
+    )
+    .catch((err) => {
+      console.log(err);
+    });
 };

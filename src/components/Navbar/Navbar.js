@@ -1,21 +1,30 @@
 import React from 'react';
-import { Layout, Menu, Input, Radio, Icon } from 'antd';
+import { Layout, Menu, Radio, Icon } from 'antd';
 import { Button } from 'antd';
 import { Link } from 'react-router-dom';
 import './style.css';
 const { Header } = Layout;
-const { Search } = Input;
 
 class Navbar extends React.Component {
-  state = {
-    user: {},
-    error: null,
-    authenticated: false
-  };
+  constructor(props) {
+    super(props);
 
-  handleClick = (e) => {
-    console.log('click ', e);
-  };
+    this.state = {
+      user: {},
+      error: null,
+      authenticated: false,
+      searchToggle: 1,
+      searchWord: '',
+      searchResult: []
+    };
+    this.toggleClick = this.toggleClick.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  toggleClick(e) {
+    const { value } = e.target;
+    this.setState({ searchToggle: value });
+  }
 
   _handleLogoutClick = () => {
     // Logout using Twitter passport api
@@ -23,7 +32,9 @@ class Navbar extends React.Component {
     window.open('http://localhost:4000/auth/logout', '_self');
     this.props.handleNotAuthenticated();
   };
+
   componentDidMount() {
+    var that = this;
     // Fetch does not send cookies. So you should add credentials: 'include'
     fetch('http://localhost:4000/auth/login/success', {
       method: 'GET',
@@ -39,21 +50,24 @@ class Navbar extends React.Component {
         throw new Error('failed to authenticate user');
       })
       .then((responseJson) => {
-        this.setState({
+        that.setState({
           authenticated: true,
           user: responseJson.user
         });
       })
       .catch((error) => {
-        this.setState({
+        that.setState({
           authenticated: false,
           error: 'Failed to authenticate user'
         });
       });
   }
+  handleChange(e) {
+    this.setState({ searchWord: e.target.value });
+  }
+
   render() {
     const { authenticated } = this.state;
-
     return (
       <Layout className='header-layout'>
         {!authenticated ? null : (
@@ -74,11 +88,26 @@ class Navbar extends React.Component {
               >
                 <Menu.Item key='1' className='menu-item'>
                   <div className='search-bar'>
-                    <Search
-                      placeholder='Search...'
-                      onSearch={(value) => console.log(value)}
-                      enterButton
+                    <input
+                      type='text'
+                      name='search-bar'
+                      onChange={this.handleChange}
+                      value={this.state.searchWord}
+                      className='search-input'
                     />
+                    {this.state.searchToggle === 1 ? (
+                      <Link
+                        to={`/search/users/?query=${this.state.searchWord}`}
+                      >
+                        <button className='search-btn'>Search</button>
+                      </Link>
+                    ) : (
+                      <Link
+                        to={`/search/posts/?query=${this.state.searchWord}`}
+                      >
+                        <button className='search-btn'>Search</button>
+                      </Link>
+                    )}
                   </div>
                   <div className='radio-group-wrapper'>
                     <Radio.Group
@@ -87,10 +116,18 @@ class Navbar extends React.Component {
                       defaultValue={1}
                       style={{ lineHeight: '64px' }}
                     >
-                      <Radio className='radio-button' value={1}>
+                      <Radio
+                        className='radio-button'
+                        value={1}
+                        onChange={this.toggleClick}
+                      >
                         People
                       </Radio>
-                      <Radio className='radio-button' value={2}>
+                      <Radio
+                        className='radio-button'
+                        value={2}
+                        onChange={this.toggleClick}
+                      >
                         Posts
                       </Radio>
                     </Radio.Group>
@@ -98,7 +135,6 @@ class Navbar extends React.Component {
                 </Menu.Item>
               </Menu>
             </div>
-
             <div className='user-img'>
               <Link to={`/profile/${this.state.user[0].userId}`}>
                 <img src={this.state.user[0].image} alt='' />
