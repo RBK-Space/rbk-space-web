@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
-import { Tabs, Input, Button, Upload, Icon, message } from 'antd';
+import { Tabs, Input, Button, Icon, message } from 'antd';
 import { connect } from 'react-redux';
 import { addPost, getAllPosts } from '../../actions/posts';
-
+import ImageUploader from 'react-images-upload';
 import './style.css';
+import axios from 'axios';
 const { TextArea } = Input;
 const { TabPane } = Tabs;
-const { Dragger } = Upload;
-
 class AddPost extends Component {
   constructor(props) {
     super(props);
@@ -16,8 +15,9 @@ class AddPost extends Component {
       error: null,
       authenticated: false,
       text: '',
-      image: null
+      pictures: []
     };
+    this.onDrop = this.onDrop.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handlePostTextClick = this.handlePostTextClick.bind(this);
     this.handlePostImageClick = this.handlePostImageClick.bind(this);
@@ -34,18 +34,18 @@ class AddPost extends Component {
         'Access-Control-Allow-Credentials': true
       }
     })
-      .then((response) => {
+      .then(response => {
         if (response.status === 200) return response.json();
         throw new Error('failed to authenticate user');
       })
-      .then((responseJson) => {
+      .then(responseJson => {
         console.log(responseJson.user);
         this.setState({
           authenticated: true,
           user: responseJson.user
         });
       })
-      .catch((error) => {
+      .catch(error => {
         this.setState({
           authenticated: false,
           error: 'Failed to authenticate user'
@@ -66,18 +66,28 @@ class AddPost extends Component {
     const { getAllPosts } = this.props;
     getAllPosts();
   }
-  handlePostImageClick() {
-    const { addPost } = this.props;
-    addPost({
-      postType: '1',
-      postBody: null,
-      userId: this.state.user[0].userId
+  onDrop(pictureFiles, pictureDataURLs) {
+    this.setState({
+      pictures: this.state.pictures.concat(pictureFiles)
     });
   }
 
+  handlePostImageClick() {
+    let uploadPhotosPromises = this.state.pictures.map(image => {
+      let data = new FormData();
+
+      data.append('image', image, image.name);
+      return axios.post('http://localhost:4000/uploadImage', data);
+    });
+    axios
+      .all(uploadPhotosPromises)
+      .then(function(values) {
+        console.log(values);
+      })
+      .catch(err => console.log(err));
+  }
   handleInputChange(e) {
     const value = e.target.value;
-    console.log(value);
     this.setState({
       text: value
     });
@@ -87,22 +97,6 @@ class AddPost extends Component {
   }
 
   render() {
-    const props = {
-      name: 'file',
-      multiple: true,
-      action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-      onChange(info) {
-        const { status } = info.file;
-        if (status !== 'uploading') {
-          console.log(info.file, info.fileList);
-        }
-        if (status === 'done') {
-          message.success(`${info.file.name} file uploaded successfully.`);
-        } else if (status === 'error') {
-          message.error(`${info.file.name} file upload failed.`);
-        }
-      }
-    };
     return (
       <div className='tabs-wrapper'>
         <Tabs className='tabs' defaultActiveKey='1' onChange={this.callback}>
@@ -120,32 +114,30 @@ class AddPost extends Component {
             </Button>
           </TabPane>
           <TabPane className='tab' tab='Add Image' key='2'>
-            <Dragger className='dragger' {...props}>
-              <p className='ant-upload-drag-icon'>
-                <Icon type='inbox' />
-              </p>
-              <p className='ant-upload-text'>
-                Click or drag file to this area to upload
-              </p>
-              <p className='ant-upload-hint'>
-                Support for a single or bulk upload. Strictly prohibit from
-                uploading company data or other band files
-              </p>
-            </Dragger>
-            <Button
-              type='primary'
-              className='img-btn'
-              onClick={this.handlePostImageClick.bind(this)}
-            >
-              Add Image
-            </Button>
+            <ImageUploader
+              withIcon={true}
+              buttonText='Choose images'
+              onChange={this.onDrop}
+              imgExtension={['.jpg', '.png', '.gif']}
+              maxFileSize={5242880}
+              withPreview={true}
+            />
+            {this.state.pictures && this.state.pictures.length > 0 ? (
+              <Button
+                type='primary'
+                className='post-btn'
+                onClick={this.handlePostImageClick}
+              >
+                Upload
+              </Button>
+            ) : null}
           </TabPane>
         </Tabs>
       </div>
     );
   }
 }
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   posts: state.allPostsReducer.posts
 });
 

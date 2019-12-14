@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const cors = require('cors');
+const uploadImageToS3 = require('../helpers/uploadToS3');
 var request = require('request');
 var db = require('../../database/index.js');
 var bodyParser = require('body-parser');
@@ -293,12 +294,12 @@ router.get('/user/posts/body/:text', (req, res) => {
   }, text);
 });
 //Route to add a post
+router.post('/uploadImage', uploadImageToS3.uploadImageToS3);
 router.post('/user/post/add', (req, res) => {
   const { data } = req.body;
   var postType = data.postType;
   var postBody = data.postBody;
   var userId = data.userId;
-  //console.log(postType !== null && postBody !== null && userId !== null);
   if (postType !== null && postBody !== null && userId !== null) {
     db.posts.addPost([postType, postBody, userId], function(err, results) {
       res.send(results);
