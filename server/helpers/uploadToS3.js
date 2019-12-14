@@ -2,7 +2,6 @@ const aws = require('aws-sdk');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
 const uuid = require('uuid/v4');
-const fetch = require('node-fetch');
 aws.config.update({
   accessKeyId: 'AKIAJASNVLXKPNNIV6YQ',
   secretAccessKey: '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',
@@ -28,11 +27,13 @@ const singleFileUpload = upload.single('image');
 function uploadToS3(req, res) {
   req.s3Key = uuid();
   let downloadURL = `https://s3-eu-central-1.amazonaws.com/rbk-space/${req.s3Key}`;
+
   return new Promise((resolve, reject) => {
     return singleFileUpload(req, res, err => {
+      const { user } = req.body;
       if (err) reject(err);
       else {
-        return resolve(downloadURL);
+        return resolve({ downloadURL, user });
       }
     });
   });
@@ -40,21 +41,9 @@ function uploadToS3(req, res) {
 module.exports = {
   uploadImageToS3: (req, res) => {
     uploadToS3(req, res)
-      .then(downloadURL => {
+      .then((downloadURL, user) => {
         //TODO: save to DB
-        fetch('http://localhost:4000/auth/login/success', {
-          method: 'GET',
-          credentials: 'include',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Credentials': true
-          }
-        }).then(user => {
-          console.log(user.user);
-        });
-
-        return res.status(200).send({ downloadURL });
+        return res.status(200).send({ downloadURL, user });
       })
       .catch(err => {
         console.log(err);

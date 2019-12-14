@@ -1,21 +1,37 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Button } from 'antd';
-import { connect } from 'react-redux';
-import { getAllPosts } from './../../actions/posts';
+import axios from 'axios';
 import TimeAgo from 'react-timeago';
-import './style.css';
+import { Button } from 'antd';
 
-interface IPostProps {
-  posts?: any;
-  getAllPosts?: any;
-}
+export class SearchPeople extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      postsSearchResult: []
+    };
+  }
 
-class Post extends Component<IPostProps> {
-  myFunction(e: any) {
-    let dots: HTMLElement = document.getElementById('dots' + e)!;
-    let moreText: HTMLElement = document.getElementById('more' + e)!;
-    let btnText: HTMLElement = document.getElementById('myBtn' + e)!;
+  getData = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const query = urlParams.get('query');
+    var that = this;
+    axios(`http://localhost:4000/posts/?query=${query}`).then(result => {
+      that.setState({
+        postsSearchResult: result.data
+      });
+    });
+  };
+  componentDidMount() {
+    this.getData(this.props);
+  }
+  componentWillReceiveProps(props) {
+    this.getData(props);
+  }
+  myFunction(e) {
+    let dots = document.getElementById('dots' + e);
+    let moreText = document.getElementById('more' + e);
+    let btnText = document.getElementById('myBtn' + e);
 
     if (dots.style.display === 'none') {
       dots.style.display = 'inline';
@@ -28,19 +44,18 @@ class Post extends Component<IPostProps> {
     }
   }
 
-  componentDidMount = async () => {
-    const { getAllPosts } = this.props;
-    getAllPosts();
-  };
-
   render() {
-    const { posts } = this.props;
+    console.log(this.state.postsSearchResult);
     return (
-      <>
-        {posts && posts.length > 0 ? (
+      <div>
+        {this.state.postsSearchResult.length === 0 ? (
           <div>
-            <div className='post-wrapper'>
-              {posts.map((post: any, index: any) => (
+            <h1>No Posts found</h1>
+          </div>
+        ) : (
+          <div className='post-wrapper'>
+            {this.state.postsSearchResult.map((post, index) => (
+              <>
                 <div className='post' key={index}>
                   <div className='user-img'>
                     <img src={post.imgUrl} alt='' />
@@ -72,10 +87,8 @@ class Post extends Component<IPostProps> {
                       </p>
                       {post.postBody.split(' ').length > 30 ? (
                         <Button
-                          onClick={(event: React.MouseEvent<HTMLElement>) => {
-                            this.myFunction(
-                              (event.target as HTMLElement).id.substring(5)
-                            );
+                          onClick={event => {
+                            this.myFunction(event.target.id.substring(5));
                           }}
                           id={`myBtn${post.postId}`}
                         >
@@ -85,23 +98,13 @@ class Post extends Component<IPostProps> {
                     </div>
                   </div>
                 </div>
-              ))}
-            </div>
+              </>
+            ))}
           </div>
-        ) : (
-          <div>Nothing to show</div>
         )}
-      </>
+      </div>
     );
   }
 }
 
-const mapStateToProps = (state: any) => ({
-  posts: state.allPostsReducer.posts
-});
-
-const mapDispatchToProps = {
-  getAllPosts
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Post);
+export default SearchPeople;

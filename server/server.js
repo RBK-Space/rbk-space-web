@@ -6,6 +6,8 @@ const passportSetup = require('./helpers/passport-setup');
 const cookieSession = require('cookie-session');
 const session = require('express-session');
 const cors = require('cors');
+var bodyParser = require('body-parser');
+
 const cookieParser = require('cookie-parser'); // parse cookie header
 
 //environment variables
@@ -18,6 +20,7 @@ const config = require('../config/config.js');
 const app = express();
 
 //auth setup
+app.use(bodyParser.json());
 app.use(require('body-parser').urlencoded({ extended: true }));
 
 // set up cors to allow us to accept requests from our client

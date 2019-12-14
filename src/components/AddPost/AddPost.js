@@ -73,10 +73,11 @@ class AddPost extends Component {
   }
 
   handlePostImageClick() {
+    var that = this;
     let uploadPhotosPromises = this.state.pictures.map(image => {
       let data = new FormData();
-
       data.append('image', image, image.name);
+      data.append('user', that.state.user[0].userId);
       return axios.post('http://localhost:4000/uploadImage', data);
     });
     axios

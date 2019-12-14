@@ -4,6 +4,9 @@ import Navbar from './components/Navbar/Navbar';
 import Sidebar from './components/Sidebar/Sidebar';
 import AddPost from './components/AddPost/AddPost';
 import Post from './components/Post/Post';
+import Profile from './components/userProfile/Profile';
+import SearchPeople from './components/Search/SearchPeople';
+import SearchPosts from './components/Search/SearchPosts';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import combineReducers from './reducers/index';
@@ -29,18 +32,18 @@ class App extends React.Component {
         'Access-Control-Allow-Credentials': true
       }
     })
-      .then((response) => {
+      .then(response => {
         if (response.status === 200) return response.json();
         throw new Error('failed to authenticate user');
       })
-      .then((responseJson) => {
-        console.log(responseJson.user);
+      .then(responseJson => {
+        // console.log(responseJson.user);
         this.setState({
           authenticated: true,
           user: responseJson.user
         });
       })
-      .catch((error) => {
+      .catch(error => {
         this.setState({
           authenticated: false,
           error: 'Failed to authenticate user'
@@ -58,16 +61,29 @@ class App extends React.Component {
           <>
             <Provider store={store}>
               <Router>
-                <div className='App'>
-                  <Switch>
+                <Navbar />
+                <Sidebar />
+                <div className='container'>
+                  <Switch className='App'>
                     <Route path='/home'>
-                      <Navbar />
-                      <Sidebar />
-                      <div className='container'>
-                        <AddPost />
-                        <Post />
-                      </div>
+                      <AddPost />
+                      <Post />
                     </Route>
+                    <Route
+                      exact
+                      path='/profile/:id'
+                      component={Profile}
+                    ></Route>
+                    <Route
+                      exact
+                      path='/search/users/'
+                      component={SearchPeople}
+                    ></Route>
+                    <Route
+                      exact
+                      path='/search/posts/'
+                      component={SearchPosts}
+                    ></Route>
                   </Switch>
                 </div>
               </Router>
