@@ -158,7 +158,7 @@ export class Profile extends Component {
                         </p>
                         <span>
                           <a
-                            href={project.projectLink}
+                            href={`http://${project.projectLink}`}
                             target='_blank'
                             rel='noopener noreferrer'
                           >
