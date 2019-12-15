@@ -145,8 +145,8 @@ DROP TABLE IF EXISTS `userDetails`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `userDetails` (
   `userId` int(11) NOT NULL,
-  `cohortId` int(11) NOT NULL DEFAULT '1',
-  `empStatus` int(11) NOT NULL DEFAULT '1',
+  `cohortId` int(11) NOT NULL DEFAULT NULL,
+  `empStatus` int(11) NOT NULL DEFAULT NULL,
   `github` varchar(500) DEFAULT NULL,
   `facebook` varchar(500) DEFAULT NULL,
   `twitter` varchar(500) DEFAULT NULL,
