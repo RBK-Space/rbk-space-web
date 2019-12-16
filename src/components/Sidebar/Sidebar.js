@@ -8,6 +8,7 @@ import {
   faGithub
 } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link } from 'react-router-dom';
 import './style.css';
 
 library.add(fas, faFacebookF, faTwitter, faLinkedin, faGithub);
@@ -30,17 +31,17 @@ class Sidebar extends Component {
         'Access-Control-Allow-Credentials': true
       }
     })
-      .then((response) => {
+      .then(response => {
         if (response.status === 200) return response.json();
         throw new Error('failed to authenticate user');
       })
-      .then((responseJson) => {
+      .then(responseJson => {
         this.setState({
           authenticated: true,
           user: responseJson.user
         });
       })
-      .catch((error) => {
+      .catch(error => {
         this.setState({
           authenticated: false,
           error: 'Failed to authenticate user'
@@ -50,7 +51,6 @@ class Sidebar extends Component {
 
   render() {
     const { authenticated } = this.state;
-
     return (
       <div className='home-page'>
         {!authenticated ? null : (
@@ -110,10 +110,10 @@ class Sidebar extends Component {
               {this.state.user[0].empStat}
             </span>
             <span className='edit-profile'>
-              {/* <a href='#'> */}
-              <FontAwesomeIcon icon={faUserEdit} color='#000' size='lg' />
-              <span className='edit-profile-text'>Edit Profile</span>
-              {/* </a> */}
+              <Link to={`/editProfile/${this.state.user[0].userId}`}>
+                <FontAwesomeIcon icon={faUserEdit} color='#000' size='lg' />
+                <span className='edit-profile-text'>Edit Profile</span>
+              </Link>
             </span>
           </aside>
         )}

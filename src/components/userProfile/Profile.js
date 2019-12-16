@@ -24,9 +24,9 @@ export class Profile extends Component {
     };
   }
 
-  getData = (props) => {
+  getData = props => {
     const { id } = props.match.params;
-    axios(`http://localhost:4000/user/${id}`).then((result) => {
+    axios(`http://localhost:4000/user/${id}`).then(result => {
       this.setState({
         user: result.data[0]
       });
@@ -111,7 +111,7 @@ export class Profile extends Component {
                   <div className='general-info'>
                     <p>
                       Hello! My name is {this.state.user.fullName} &amp; I'm
-                      from cohort {this.state.user.cohort}
+                      from {this.state.user.cohort}
                     </p>
                     <p>Employment status: {this.state.user.empStat} </p>
                   </div>
@@ -158,7 +158,7 @@ export class Profile extends Component {
                         </p>
                         <span>
                           <a
-                            href={project.projectLink}
+                            href={`http://${project.projectLink}`}
                             target='_blank'
                             rel='noopener noreferrer'
                           >

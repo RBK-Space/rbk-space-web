@@ -15,7 +15,11 @@
     "db_port": 3306,
     "user": "root",
     "password": "akif-rbk-space-2019",
-    "database": "rbk"
+    "database": "rbk",
+    "AWSaccessKeyId": "AKIAJASNVLXKPNNIV6YQ",
+    "AWSsecretAccessKey": "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",
+    "AWSregion": "eu-central-1",
+    "AWSBucket": "rbk-space"
   },
   "testing": {
     "config_id": "testing",

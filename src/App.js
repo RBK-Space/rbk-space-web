@@ -7,6 +7,7 @@ import Post from './components/Post/Post';
 import Profile from './components/userProfile/Profile';
 import SearchPeople from './components/Search/SearchPeople';
 import SearchPosts from './components/Search/SearchPosts';
+import EditProfileForm from './components/EditProfile/EditProfile';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import combineReducers from './reducers/index';
@@ -32,18 +33,18 @@ class App extends React.Component {
         'Access-Control-Allow-Credentials': true
       }
     })
-      .then((response) => {
+      .then(response => {
         if (response.status === 200) return response.json();
         throw new Error('failed to authenticate user');
       })
-      .then((responseJson) => {
+      .then(responseJson => {
         // console.log(responseJson.user);
         this.setState({
           authenticated: true,
           user: responseJson.user
         });
       })
-      .catch((error) => {
+      .catch(error => {
         this.setState({
           authenticated: false,
           error: 'Failed to authenticate user'
@@ -84,6 +85,15 @@ class App extends React.Component {
                       path='/search/posts/'
                       component={SearchPosts}
                     ></Route>
+                    {/* <Router
+                      exact
+                      path='/editProfile/:id'
+                      component={EditProfile}
+                    ></Router> */}
+                    <Route
+                      path='/editProfile/:id'
+                      component={EditProfileForm}
+                    />
                   </Switch>
                 </div>
               </Router>

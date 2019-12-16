@@ -14,7 +14,7 @@ export class SearchPeople extends Component {
     const urlParams = new URLSearchParams(window.location.search);
     const query = urlParams.get('query');
     var that = this;
-    axios(`http://localhost:4000/users/?query=${query}`).then((result) => {
+    axios(`http://localhost:4000/users/?query=${query}`).then(result => {
       that.setState({
         peopleSearchResult: result.data
       });

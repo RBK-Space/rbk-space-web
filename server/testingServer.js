@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const cors = require('cors');
-const uploadImageToS3 = require('../helpers/uploadToS3');
 var request = require('request');
 var db = require('../../database/index.js');
 var bodyParser = require('body-parser');
@@ -112,7 +111,6 @@ router.post('/user/login', (req, res) => {
 
 // Route to edit user's basic info
 router.post('/user/edit/basic', (req, res) => {
-  console.log(req.body);
   var imgUrl = req.body.imgUrl || null;
   var bio = req.body.bio || null;
   var empStatus = req.body.empStatus || null;
@@ -120,6 +118,7 @@ router.post('/user/edit/basic', (req, res) => {
   var cohortId = req.body.cohortId || null;
   var fullName = req.body.fullName || null;
   //check if skills are array
+  // console.log(req.body);
   if (
     userId !== null &&
     cohortId != null &&
@@ -138,10 +137,8 @@ router.post('/user/edit/basic', (req, res) => {
 });
 
 router.post('/user/edit/skill', (req, res) => {
-  console.log(req.body);
-  var userId = req.body.userId;
   var skillId = req.body.skillId || [];
-  if (skillId !== null && skillId.length > 0) {
+  if (userId !== null && skillId.length > 0) {
     skillId.forEach((element) => {
       db.users.addUserSkill([userId, element], function(err, dbUser) {
         res.json(formatUser(dbUser));
@@ -174,7 +171,6 @@ router.post('/user/edit/contact', (req, res) => {
 //Route to edit user's portfolio
 
 router.post('/user/edit/portfolio', (req, res) => {
-  console.log(req.body);
   var title = req.body.title;
   var link = req.body.link;
   var description = req.body.description;
@@ -297,15 +293,17 @@ router.get('/project/:projectId', (req, res) => {
 //Route to get all posts
 router.get('/posts', (req, res) => {
   var query = req.query.query;
+  console.log(query);
   if (!query) {
     db.posts.get(function(err, results) {
-      res.json(formatPost(results));
+      res.json(results[0]);
     });
   } else {
+    console.log(query);
     db.posts.search(function(err, results) {
       if (results[0].length > 0) {
         console.log(results);
-        res.json(formatPost(results));
+        res.json(results[0]);
       } else {
         res.json([]);
       }
@@ -341,7 +339,6 @@ router.get('/user/posts/body/:text', (req, res) => {
   }, text);
 });
 //Route to add a post
-router.post('/uploadImage', uploadImageToS3.uploadImageToS3);
 router.post('/user/post/add', (req, res) => {
   console.log(req.body);
   const data = req.body;
@@ -370,104 +367,65 @@ router.post('/user/post/delete', (req, res) => {
 //   var skills =
 // });
 
-let formatUser = function(results) {
+formatUser = function(results) {
   var users = [];
   var ids = [];
   var skills = [];
   var projects = [];
-  console.log(results[0]);
-  if (results !== undefined) {
-    for (var i = 0; i < results[0].length; i++) {
-      var user = {};
-      user.userId = results[0][i].userId;
-      user.fullName = results[0][i].fullName;
-      user.username = results[0][i].username;
-      user.image = results[0][i].image;
-      user.email = results[0][i].email;
-      user.bio = results[0][i].bio;
-      user.fb = results[0][i].fb;
-      user.gh = results[0][i].gh;
-      user.li = results[0][i].li;
-      user.tw = results[0][i].tw;
-      user.cohort = results[0][i].cohort;
-      user.cohortId = results[0][i].cohortId;
-      user.empStat = results[0][i].empStat;
-      user.epmId = results[0][i].empId;
+  for (var i = 0; i < results[0].length; i++) {
+    var user = {};
+    user.userId = results[0][i].userId;
+    user.fullName = results[0][i].fullName;
+    user.username = results[0][i].username;
+    user.image = results[0][i].image;
+    user.email = results[0][i].email;
+    user.bio = results[0][i].bio;
+    user.fb = results[0][i].fb;
+    user.gh = results[0][i].gh;
+    user.li = results[0][i].li;
+    user.tw = results[0][i].tw;
+    user.cohort = results[0][i].cohort;
+    user.empStat = results[0][i].empStat;
 
-      var skillId = results[0][i].skillId;
-      var skill = {};
-      skill.skillId = skillId;
-      skill.skillName = results[0][i].skillName;
-      if (_.findWhere(skills, skill) == null && skillId !== null) {
-        skills.push(skill);
-      }
-      user.skills = skills;
+    var skillId = results[0][i].skillId;
+    var skill = {};
+    skill.skillId = skillId;
+    skill.skillName = results[0][i].skillName;
+    if (_.findWhere(skills, skill) == null && skillId !== null) {
+      skills.push(skill);
+    }
+    user.skills = skills;
 
-      var projectId = results[0][i].projectId;
-      var project = {};
-      project.projectId = projectId;
-      project.projectTitle = results[0][i].projectTitle;
-      project.projectLink = results[0][i].projectLink;
-      project.projectDesc = results[0][i].projectDesc;
-      if (_.findWhere(projects, project) == null && projectId !== null) {
-        projects.push(project);
-      }
-      user.projects = projects;
+    var projectId = results[0][i].projectId;
+    var project = {};
+    project.projectId = projectId;
+    project.projectTitle = results[0][i].projectTitle;
+    project.projectLink = results[0][i].projectLink;
+    project.projectDesc = results[0][i].projectDesc;
+    if (_.findWhere(projects, project) == null && projectId !== null) {
+      projects.push(project);
+    }
+    user.projects = projects;
 
-      //console.log(user);
-      if (!ids.includes(user.userId)) {
-        users.push(user);
-        ids.push(user.userId);
-      }
+    //console.log(user);
+    if (!ids.includes(user.userId)) {
+      users.push(user);
+      ids.push(user.userId);
     }
   }
-
   //console.log(results[0].length);
   return users;
 };
-let formatPost = function(results) {
-  console.log(results[0].length);
-  var posts = [];
-  var comments = [];
-  for (var i = 0; i < results[0].length; i++) {
-    var post = {};
-    post.userId = results[0][i].userId;
-    post.fullName = results[0][i].fullName;
-    post.username = results[0][i].username;
-    post.imgUrl = results[0][i].imgUrl;
-    post.email = results[0][i].email;
-    post.createdAt = results[0][i].createdAt;
-    post.postId = results[0][i].postId;
-    post.postBody = results[0][i].postBody;
-    post.postType = results[0][i].postType;
-    post.createdAt = results[0][i].createdAt;
-
-    var commentId = results[0][i].commentId;
-    var comment = {};
-    comment.commentId = commentId;
-    comment.commentBody = results[0][i].commentBody;
-    comment.cTime = results[0][i].cTime;
-    comment.userId = results[0][i].cUserId;
-    comment.cUserName = results[0][i].cUserName;
-    comment.cFullName = results[0][i].cFullName;
-    comment.cImgUrl = results[0][i].cImgUrl;
-    comment.cPostId = results[0][i].cPostId;
-    let ids = [];
-    if (_.findWhere(comments, comment) == null && commentId !== null) {
-      comments.push(comment);
-    }
-    if (post.postId === comment.cPostId) {
-      post.comments = comments;
-    } else {
-      post.comments = [];
-    }
-    ids = [];
-    if (!ids.includes(post.postId)) {
-      posts.push(post);
-      ids.push(post.postId);
-    }
-  }
-  return posts;
+getUserSkills = function(userId) {
+  return new Promise(function(resolve, reject) {
+    db.users.getUserSkills(function(err, results) {
+      if (results === undefined) {
+        reject(new Error('Error resuls is undefined'));
+      } else {
+        resolve(results);
+      }
+    }, userId);
+  });
 };
 
 module.exports = router;
