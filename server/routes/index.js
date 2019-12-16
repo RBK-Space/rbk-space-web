@@ -118,7 +118,6 @@ router.post("/user/edit/basic", (req, res) => {
   var cohortId = req.body.cohortId || null;
   var fullName = req.body.fullName || null;
   //check if skills are array
-  // console.log(req.body);
   if (
     userId !== null &&
     cohortId != null &&
