@@ -137,8 +137,11 @@ module.exports = {
         }
       });
     },
-    editUserDetails : function(x, callback) {
-      connection.query(" call `editUserDetails`(?, ?, ?, ?, ?, ?)", x, function(err, result){
+    editUserDetails: function(x, callback) {
+      connection.query(" call `editUserDetails`(?, ?, ?, ?, ?, ?)", x, function(
+        err,
+        results
+      ) {
         if (err) {
           console.log("Can not edit user", err);
         } else {
@@ -146,7 +149,7 @@ module.exports = {
           //console.log(someVal);
           callback(err, results[0]);
         }
-      })
+      });
     },
     editUserSM: function(x, callback) {
       connection.query(" call editSocialMedia(?, ?, ?, ?, ?) ", x, function(
