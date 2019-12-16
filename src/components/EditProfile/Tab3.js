@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Form, Input, Tooltip, Avatar, Icon, Select, Button } from 'antd';
+import { Form, Input, Button } from 'antd';
 import axios from 'axios';
-const { Option } = Select;
 
 export class Tab3 extends Component {
   constructor(props) {
@@ -57,7 +56,6 @@ export class Tab3 extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { TextArea } = Input;
 
     const formItemLayout = {
       labelCol: {

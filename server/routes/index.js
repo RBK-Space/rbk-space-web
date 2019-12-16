@@ -137,21 +137,12 @@ router.post('/user/edit/basic', (req, res) => {
   }
 });
 
-<<<<<<< HEAD
 router.post('/user/edit/skill', (req, res) => {
   console.log(req.body);
   var userId = req.body.userId;
   var skillId = req.body.skillId || [];
   if (skillId !== null && skillId.length > 0) {
     skillId.forEach((element) => {
-=======
-router.post("/user/edit/skill", (req, res) => {
-  console.log(req.body);
-  var userId = req.body.userId ;
-  var skillId = req.body.skillId || [];
-  if (skillId !== null && skillId.length > 0) {
-    skillId.forEach(element => {
->>>>>>> a231d5b04c47fb495205f6f2cd4aa18aaa66c659
       db.users.addUserSkill([userId, element], function(err, dbUser) {
         res.json(formatUser(dbUser));
       });
