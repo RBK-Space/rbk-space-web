@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Tabs, Input, Button, message } from 'antd';
 import { connect } from 'react-redux';
 import { addPost, getAllPosts } from '../../actions/posts';
-import ImageUploader from 'react-images-upload';
+// import ImageUploader from 'react-images-upload';
 import './style.css';
 import axios from 'axios';
 
@@ -124,7 +124,7 @@ class AddPost extends Component {
             </Button>
           </TabPane>
           <TabPane className='tab' tab='Add Image' key='2'>
-            <ImageUploader
+            {/* <ImageUploader
               withIcon={true}
               buttonText='Choose images'
               onChange={this.onDrop}
@@ -132,7 +132,7 @@ class AddPost extends Component {
               maxFileSize={5242880}
               withPreview={true}
               key={this.state.key}
-            />
+            /> */}
             {this.state.pictures && this.state.pictures.length > 0 ? (
               <Button
                 type='primary'

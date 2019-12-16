@@ -48,7 +48,7 @@ class Post extends Component<IPostProps> {
                   <div className='post-data'>
                     <div className='user-time'>
                       <Link to={`/profile/${post.userId}`}>
-                        <span className='post-writer'>{post.userName}</span>
+                        <span className='post-writer'>{post.username}</span>
                       </Link>
                       <span className='post-date'>
                         <TimeAgo
@@ -62,7 +62,7 @@ class Post extends Component<IPostProps> {
                           .split(' ')
                           .splice(0, 30)
                           .join(' ')}
-                        <span id={`dots${post.postId}`}>...</span>
+                        <span id={`dots${post.postId}`}></span>
                         <span id={`more${post.postId}`} className='hide'>
                           {post.postBody
                             .split(' ')
