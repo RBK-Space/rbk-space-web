@@ -111,7 +111,7 @@ export class Profile extends Component {
                   <div className='general-info'>
                     <p>
                       Hello! My name is {this.state.user.fullName} &amp; I'm
-                      from cohort {this.state.user.cohort}
+                      from {this.state.user.cohort}
                     </p>
                     <p>Employment status: {this.state.user.empStat} </p>
                   </div>
