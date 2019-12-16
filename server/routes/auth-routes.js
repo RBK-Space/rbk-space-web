@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const passport = require('passport');
 const CLIENT_HOME_PAGE_URL = 'http://localhost:3000';
+const path = require('path');
+const fs = require('fs');
 
 // when login is successful, retrieve user info
 router.get('/login/success', (req, res) => {
@@ -34,12 +36,22 @@ router.get('/logout', (req, res) => {
 router.get('/github', passport.authenticate('github'));
 router.get('/auth/github', passport.authenticate('github'));
 
+// router.get('/failed', (req, res) => {
+//   fs.readFile(
+//     path.join(__dirname, '../../public/unauthorized.html'),
+//     'utf8',
+//     function(err, data) {
+//       if (err) throw err;
+//       res.status(401).send(data);
+//     }
+//   );
+// });
 // redirect to home page after successfully login via github
 router.get(
   '/github/callback',
   passport.authenticate('github', { failureRedirect: '/login' }),
   function(req, res) {
-    res.redirect('http://localhost:3000/home');
+    res.redirect(`${CLIENT_HOME_PAGE_URL}/home`);
   }
 );
 

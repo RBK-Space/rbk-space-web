@@ -23,7 +23,7 @@ passport.use(
           //Create new user
           //Check if the user is a member in rbk-org organization
           axios.get(profile._json.organizations_url).then(function(orgz) {
-            orgz.data.forEach((org) => {
+            orgz.data.forEach(org => {
               if (org.login === 'hackreactor') {
                 db.users.addUser(
                   [
