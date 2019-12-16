@@ -1,23 +1,26 @@
 const aws = require('aws-sdk');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
-const uuid = require('uuid/v4');
+const db = require('../../database/index');
+const config = require('../../config/config');
+
 aws.config.update({
-  accessKeyId: 'AKIAJASNVLXKPNNIV6YQ',
-  secretAccessKey: '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',
-  region: 'eu-central-1'
+  accessKeyId: global.gConfig.AWSaccessKeyId,
+  secretAccessKey: global.gConfig.AWSsecretAccessKey,
+  region: global.gConfig.AWSregion
 });
 const s3 = new aws.S3();
 
+//use multer to handel multipart object comming from the client
 var upload = multer({
   storage: multerS3({
     s3,
-    bucket: 'rbk-space',
+    bucket: global.gConfig.AWSBucket,
     metadata: function(req, file, cb) {
       cb(null, { fieldName: file.fieldname });
     },
     key: function(req, file, cb) {
-      cb(null, req.s3Key);
+      cb(null, file.originalname);
     }
   })
 });
@@ -25,11 +28,9 @@ var upload = multer({
 const singleFileUpload = upload.single('image');
 
 function uploadToS3(req, res) {
-  req.s3Key = uuid();
-  let downloadURL = `https://s3-eu-central-1.amazonaws.com/rbk-space/${req.s3Key}`;
-
   return new Promise((resolve, reject) => {
     return singleFileUpload(req, res, err => {
+      const downloadURL = res.req.file.location;
       const { user } = req.body;
       if (err) reject(err);
       else {
@@ -42,7 +43,12 @@ module.exports = {
   uploadImageToS3: (req, res) => {
     uploadToS3(req, res)
       .then((downloadURL, user) => {
-        //TODO: save to DB
+        db.posts.addPost(
+          ['1', downloadURL.downloadURL, downloadURL.user],
+          function(err, result) {
+            console.log('image added done');
+          }
+        );
         return res.status(200).send({ downloadURL, user });
       })
       .catch(err => {

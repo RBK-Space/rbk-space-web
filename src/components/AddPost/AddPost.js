@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import { Tabs, Input, Button, Icon, message } from 'antd';
+import { Tabs, Input, Button, message } from 'antd';
 import { connect } from 'react-redux';
 import { addPost, getAllPosts } from '../../actions/posts';
 import ImageUploader from 'react-images-upload';
 import './style.css';
 import axios from 'axios';
+
 const { TextArea } = Input;
 const { TabPane } = Tabs;
+
 class AddPost extends Component {
   constructor(props) {
     super(props);
@@ -15,7 +17,8 @@ class AddPost extends Component {
       error: null,
       authenticated: false,
       text: '',
-      pictures: []
+      pictures: [],
+      key: 0
     };
     this.onDrop = this.onDrop.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -74,17 +77,18 @@ class AddPost extends Component {
 
   handlePostImageClick() {
     var that = this;
+    //generate a promise for every image upload
     let uploadPhotosPromises = this.state.pictures.map(image => {
       let data = new FormData();
       data.append('image', image, image.name);
       data.append('user', that.state.user[0].userId);
+      //the key here is a dummy prop, used for purpose of re-render the component
+      that.setState({ pictures: [], key: Math.random() });
       return axios.post('http://localhost:4000/uploadImage', data);
     });
     axios
       .all(uploadPhotosPromises)
-      .then(function(values) {
-        console.log(values);
-      })
+      .then(function(values) {})
       .catch(err => console.log(err));
   }
   handleInputChange(e) {
@@ -98,6 +102,11 @@ class AddPost extends Component {
   }
 
   render() {
+    //success message, shown when the upload success
+    const success = () => {
+      message.success('Uploaded Successfuly!');
+    };
+
     return (
       <div className='tabs-wrapper'>
         <Tabs className='tabs' defaultActiveKey='1' onChange={this.callback}>
@@ -122,12 +131,16 @@ class AddPost extends Component {
               imgExtension={['.jpg', '.png', '.gif']}
               maxFileSize={5242880}
               withPreview={true}
+              key={this.state.key}
             />
             {this.state.pictures && this.state.pictures.length > 0 ? (
               <Button
                 type='primary'
                 className='post-btn'
-                onClick={this.handlePostImageClick}
+                onClick={() => {
+                  this.handlePostImageClick();
+                  success();
+                }}
               >
                 Upload
               </Button>
