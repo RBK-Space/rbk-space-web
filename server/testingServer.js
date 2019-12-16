@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const cors = require('cors');
-const uploadImageToS3 = require('../helpers/uploadToS3');
 var request = require('request');
 var db = require('../../database/index.js');
 var bodyParser = require('body-parser');
@@ -140,7 +139,7 @@ router.post('/user/edit/basic', (req, res) => {
 router.post('/user/edit/skill', (req, res) => {
   var skillId = req.body.skillId || [];
   if (userId !== null && skillId.length > 0) {
-    skillId.forEach(element => {
+    skillId.forEach((element) => {
       db.users.addUserSkill([userId, element], function(err, dbUser) {
         res.json(formatUser(dbUser));
       });
@@ -294,15 +293,17 @@ router.get('/project/:projectId', (req, res) => {
 //Route to get all posts
 router.get('/posts', (req, res) => {
   var query = req.query.query;
+  console.log(query);
   if (!query) {
     db.posts.get(function(err, results) {
-      res.json(formatPost(results));
+      res.json(results[0]);
     });
   } else {
+    console.log(query);
     db.posts.search(function(err, results) {
       if (results[0].length > 0) {
         console.log(results);
-        res.json(formatPost(results));
+        res.json(results[0]);
       } else {
         res.json([]);
       }
@@ -338,7 +339,6 @@ router.get('/user/posts/body/:text', (req, res) => {
   }, text);
 });
 //Route to add a post
-router.post('/uploadImage', uploadImageToS3.uploadImageToS3);
 router.post('/user/post/add', (req, res) => {
   console.log(req.body);
   const data = req.body;
@@ -385,9 +385,7 @@ formatUser = function(results) {
     user.li = results[0][i].li;
     user.tw = results[0][i].tw;
     user.cohort = results[0][i].cohort;
-    user.cohortId = results[0][i].cohortId;
     user.empStat = results[0][i].empStat;
-    user.epmId = results[0][i].empId;
 
     var skillId = results[0][i].skillId;
     var skill = {};
@@ -418,49 +416,16 @@ formatUser = function(results) {
   //console.log(results[0].length);
   return users;
 };
-formatPost = function(results) {
-  console.log(results[0].length);
-  var posts = [];
-  var comments = [];
-  for (var i = 0; i < results[0].length; i++) {
-    var post = {};
-    post.userId = results[0][i].userId;
-    post.fullName = results[0][i].fullName;
-    post.username = results[0][i].username;
-    post.imgUrl = results[0][i].imgUrl;
-    post.email = results[0][i].email;
-    post.createdAt = results[0][i].createdAt;
-    post.postId = results[0][i].postId;
-    post.postBody = results[0][i].postBody;
-    post.postType = results[0][i].postType;
-    post.createdAt = results[0][i].createdAt;
-
-    var commentId = results[0][i].commentId;
-    var comment = {};
-    comment.commentId = commentId;
-    comment.commentBody = results[0][i].commentBody;
-    comment.cTime = results[0][i].cTime;
-    comment.userId = results[0][i].cUserId;
-    comment.cUserName = results[0][i].cUserName;
-    comment.cFullName = results[0][i].cFullName;
-    comment.cImgUrl = results[0][i].cImgUrl;
-    comment.cPostId = results[0][i].cPostId;
-    ids = [];
-    if (_.findWhere(comments, comment) == null && commentId !== null) {
-      comments.push(comment);
-    }
-    if (post.postId === comment.cPostId) {
-      post.comments = comments;
-    } else {
-      post.comments = [];
-    }
-    ids = [];
-    if (!ids.includes(post.postId)) {
-      posts.push(post);
-      ids.push(post.postId);
-    }
-  }
-  return posts;
+getUserSkills = function(userId) {
+  return new Promise(function(resolve, reject) {
+    db.users.getUserSkills(function(err, results) {
+      if (results === undefined) {
+        reject(new Error('Error resuls is undefined'));
+      } else {
+        resolve(results);
+      }
+    }, userId);
+  });
 };
 
 module.exports = router;
