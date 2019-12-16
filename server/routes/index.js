@@ -383,7 +383,10 @@ formatUser = function(results) {
     user.li = results[0][i].li;
     user.tw = results[0][i].tw;
     user.cohort = results[0][i].cohort;
+    user.cohortId = results[0][i].cohortId;
     user.empStat = results[0][i].empStat;
+    user.epmId = results[0][i].empId;
+    
 
     var skillId = results[0][i].skillId;
     var skill = {};
