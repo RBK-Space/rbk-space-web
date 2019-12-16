@@ -137,8 +137,10 @@ router.post("/user/edit/basic", (req, res) => {
 });
 
 router.post("/user/edit/skill", (req, res) => {
+  console.log(req.body);
+  var userId = req.body.userId ;
   var skillId = req.body.skillId || [];
-  if (userId !== null && skillId.length > 0) {
+  if (skillId !== null && skillId.length > 0) {
     skillId.forEach(element => {
       db.users.addUserSkill([userId, element], function(err, dbUser) {
         res.json(formatUser(dbUser));
@@ -366,7 +368,7 @@ router.post("/user/post/delete", (req, res) => {
 //   var skills =
 // });
 
-formatUser = function(results) {
+let formatUser = function(results) {
   var users = [];
   var ids = [];
   var skills = [];
@@ -421,7 +423,7 @@ formatUser = function(results) {
   //console.log(results[0].length);
   return users;
 };
-formatPost = function(results) {
+let formatPost = function(results) {
   console.log(results[0].length);
   var posts = [];
   var comments = [];
