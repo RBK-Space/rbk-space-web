@@ -62,7 +62,15 @@ class EditProfile extends React.Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
+        values.image = this.state.user.image;
+        console.log('Received values of form: ', values.image);
+        axios.post('http://localhost:4000/user/edit/basic', values)
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
       }
     });
   };
