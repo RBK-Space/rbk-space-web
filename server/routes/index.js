@@ -137,7 +137,7 @@ router.post("/user/edit/basic", (req, res) => {
   }
 });
 
-router.post("/user/edit/skill", async (req, res) => {
+router.post("/user/edit/skill", (req, res) => {
   console.log(req.body);
   var userId = req.body.userId;
   var skillId = req.body.skillId || [];
