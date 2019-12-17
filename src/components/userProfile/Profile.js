@@ -22,7 +22,8 @@ export class Profile extends Component {
     this.state = {
       user: {},
       error: null,
-      authenticated: false
+      authenticated: false,
+      loggedInUser: {}
     };
   }
 
@@ -35,6 +36,32 @@ export class Profile extends Component {
     });
   };
   componentDidMount() {
+    fetch('http://localhost:4000/auth/login/success', {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Credentials': true
+      }
+    })
+      .then((response) => {
+        if (response.status === 200) return response.json();
+        throw new Error('failed to authenticate user');
+      })
+      .then((responseJson) => {
+        // console.log(responseJson.user);
+        this.setState({
+          authenticated: true,
+          loggedInUser: responseJson.user
+        });
+      })
+      .catch((error) => {
+        this.setState({
+          authenticated: false,
+          error: 'Failed to authenticate user'
+        });
+      });
     this.getData(this.props);
   }
   componentWillReceiveProps(props) {
@@ -65,18 +92,21 @@ export class Profile extends Component {
             <div className='general-wrapper'>
               <h1 id='user-profile-heading'>User Profile</h1>
               <div className='general'>
-                {/* FIX_ME 
                 <div className='editt'>
                   <span className='section-id'>General</span>
-                  <Link to={`/editProfile/${this.state.user.userId}`}>
-                    <FontAwesomeIcon
-                      icon={faUserEdit}
-                      color='##1890ff'
-                      size='lg'
-                    />
-                    <span className='edit-profile-text'>Edit Profile</span>
-                  </Link>
-                </div> */}
+                  {this.state.loggedInUser[0] &&
+                  this.state.loggedInUser[0].userId ===
+                    this.state.user.userId ? (
+                    <Link to={`/editProfile/${this.state.user.userId}`}>
+                      <FontAwesomeIcon
+                        icon={faUserEdit}
+                        color='##1890ff'
+                        size='lg'
+                      />
+                      <span className='edit-profile-text'>Edit Profile</span>
+                    </Link>
+                  ) : null}
+                </div>
 
                 <div className='general-border'>
                   <div className='img-social-wrapper'>
