@@ -6,6 +6,7 @@ var request = require("request");
 var db = require("../../database/index.js");
 var bodyParser = require("body-parser");
 var _ = require("underscore");
+const { check, validationResult } = require("express-validator");
 
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
@@ -136,13 +137,14 @@ router.post("/user/edit/basic", (req, res) => {
   }
 });
 
-router.post("/user/edit/skill", (req, res) => {
+router.post("/user/edit/skill", async (req, res) => {
   console.log(req.body);
-  var userId = req.body.userId ;
+  var userId = req.body.userId;
   var skillId = req.body.skillId || [];
   if (skillId !== null && skillId.length > 0) {
-    skillId.forEach(element => {
-      db.users.addUserSkill([userId, element], function(err, dbUser) {
+    asyncForEach(skillId, async element => {
+      await db.users.addUserSkill([userId, element], function(err, dbUser) {
+        console.log(element);
         res.json(formatUser(dbUser));
       });
     });
@@ -374,7 +376,7 @@ let formatUser = function(results) {
   var skills = [];
   var projects = [];
   console.log(results[0]);
-  if(results !== undefined) {
+  if (results !== undefined) {
     for (var i = 0; i < results[0].length; i++) {
       var user = {};
       user.userId = results[0][i].userId;
@@ -391,7 +393,7 @@ let formatUser = function(results) {
       user.cohortId = results[0][i].cohortId;
       user.empStat = results[0][i].empStat;
       user.epmId = results[0][i].empId;
-  
+
       var skillId = results[0][i].skillId;
       var skill = {};
       skill.skillId = skillId;
@@ -400,7 +402,7 @@ let formatUser = function(results) {
         skills.push(skill);
       }
       user.skills = skills;
-  
+
       var projectId = results[0][i].projectId;
       var project = {};
       project.projectId = projectId;
@@ -411,7 +413,7 @@ let formatUser = function(results) {
         projects.push(project);
       }
       user.projects = projects;
-  
+
       //console.log(user);
       if (!ids.includes(user.userId)) {
         users.push(user);
@@ -419,7 +421,7 @@ let formatUser = function(results) {
       }
     }
   }
-  
+
   //console.log(results[0].length);
   return users;
 };
@@ -467,5 +469,11 @@ let formatPost = function(results) {
   }
   return posts;
 };
+
+async function asyncForEach(array, callback) {
+  for (let index = 0; index < array.length; index++) {
+    await callback(array[index], index, array);
+  }
+}
 
 module.exports = router;
