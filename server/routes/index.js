@@ -113,6 +113,7 @@ router.post("/user/login", (req, res) => {
 
 // Route to edit user's basic info
 router.post("/user/edit/basic", (req, res) => {
+  console.log(req.body);
   var imgUrl = req.body.imgUrl || null;
   var bio = req.body.bio || null;
   var empStatus = req.body.empStatus || null;
@@ -137,17 +138,58 @@ router.post("/user/edit/basic", (req, res) => {
   }
 });
 
+// router.post("/user/edit/skill", (req, res) => {
+//   console.log(req.body);
+//   var userId = req.body.userId;
+//   var skillId = req.body.skillId || [];
+//   if (skillId !== null && skillId.length > 0) {
+//     // axios.post(skillId).then(function(element) {
+//     //   element.forEach(async skill => {
+//     //     await db.users.addUserSkill([userId, skill], function(err, dbUser) {
+//     //       console.log(skill);
+//     //       res.json(formatUser(dbUser));
+//     //     });
+//     //   });
+//     // });
+//     //   asyncForEach(skillId, async element => {
+//     //     await db.users.addUserSkill([userId, element], function(err, dbUser) {
+//     //       console.log(element);
+//     //       res.json(formatUser(dbUser));
+//     //     });
+//     //   });
+//     try {
+//       skillId.foreach(element => {
+//         db.users.addUserSkill([userId, element], function(err, dbUser) {
+//           //console.log(element);
+//           //res.json(formatUser(dbUser));
+//           console.log("Skill/s added Successfully");
+//         });
+//       });
+//       db.users.getUserById(userId, function(err, dbUser) {
+//         console.log("User", dbUser);
+//         res.json(formatUser(dbUser));
+//       });
+//     } catch (err) {
+//       // handle error
+//     }
+//   }
+// });
 router.post("/user/edit/skill", (req, res) => {
   console.log(req.body);
   var userId = req.body.userId;
   var skillId = req.body.skillId || [];
   if (skillId !== null && skillId.length > 0) {
-    asyncForEach(skillId, async element => {
-      await db.users.addUserSkill([userId, element], function(err, dbUser) {
-        console.log(element);
-        res.json(formatUser(dbUser));
-      });
+    skillId.forEach(element => {
+      db.users.addUserSkill([userId, element], function(err, dbUser) {});
     });
+    db.users.getUserById(function(err, results) {
+      if (results[0].length > 0) {
+        console.log(formatUser(results));
+        res.json(formatUser(results));
+      } else {
+        res.json([]);
+      }
+    }, userId);
   }
 });
 // Route to edit user's contact info
@@ -175,6 +217,7 @@ router.post("/user/edit/contact", (req, res) => {
 //Route to edit user's portfolio
 
 router.post("/user/edit/portfolio", (req, res) => {
+  console.log(req.body);
   var title = req.body.title;
   var link = req.body.link;
   var description = req.body.description;
@@ -375,7 +418,6 @@ let formatUser = function(results) {
   var ids = [];
   var skills = [];
   var projects = [];
-  console.log(results[0]);
   if (results !== undefined) {
     for (var i = 0; i < results[0].length; i++) {
       var user = {};
@@ -452,7 +494,7 @@ let formatPost = function(results) {
     comment.cFullName = results[0][i].cFullName;
     comment.cImgUrl = results[0][i].cImgUrl;
     comment.cPostId = results[0][i].cPostId;
-    ids = [];
+    let ids = [];
     if (_.findWhere(comments, comment) == null && commentId !== null) {
       comments.push(comment);
     }
