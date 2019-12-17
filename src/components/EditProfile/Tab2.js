@@ -60,7 +60,7 @@ export class Tab2 extends Component {
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 8 }
+        sm: { span: 4 }
       },
       wrapperCol: {
         xs: { span: 24 },
@@ -100,7 +100,6 @@ export class Tab2 extends Component {
                 initialValue: this.state.user.fb,
                 rules: [
                   {
-                    required: true,
                     message: 'Please input your Facebook!',
                     whitespace: true
                   }
@@ -112,7 +111,6 @@ export class Tab2 extends Component {
                 initialValue: this.state.user.li,
                 rules: [
                   {
-                    required: true,
                     message: 'Please input your LinkedIn!',
                     whitespace: true
                   }
@@ -124,7 +122,6 @@ export class Tab2 extends Component {
                 initialValue: this.state.user.tw,
                 rules: [
                   {
-                    required: true,
                     message: 'Please input your Twitter!',
                     whitespace: true
                   }
