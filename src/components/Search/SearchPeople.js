@@ -14,7 +14,7 @@ export class SearchPeople extends Component {
     const urlParams = new URLSearchParams(window.location.search);
     const query = urlParams.get('query');
     var that = this;
-    axios(`http://localhost:4000/users/?query=${query}`).then(result => {
+    axios(`http://localhost:4000/users/?query=${query}`).then((result) => {
       that.setState({
         peopleSearchResult: result.data
       });
@@ -32,7 +32,12 @@ export class SearchPeople extends Component {
       <div>
         {this.state.peopleSearchResult.length === 0 ? (
           <div>
-            <h1>No People found</h1>
+            <h1>
+              <img
+                src='https://cdn.dribbble.com/users/1512427/screenshots/6201637/02.png'
+                alt=''
+              />
+            </h1>
           </div>
         ) : (
           <div className='general-wrapper'>

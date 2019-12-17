@@ -16,7 +16,7 @@ export class SearchPeople extends Component {
     const urlParams = new URLSearchParams(window.location.search);
     const query = urlParams.get('query');
     var that = this;
-    axios(`http://localhost:4000/posts/?query=${query}`).then(result => {
+    axios(`http://localhost:4000/posts/?query=${query}`).then((result) => {
       that.setState({
         postsSearchResult: result.data
       });
@@ -50,10 +50,17 @@ export class SearchPeople extends Component {
       <div>
         {this.state.postsSearchResult.length === 0 ? (
           <div>
-            <h1>No Posts found</h1>
+            <h1>
+              {' '}
+              <img
+                src='https://cdn.dribbble.com/users/1512427/screenshots/6201637/02.png'
+                alt=''
+              />
+            </h1>
           </div>
         ) : (
           <div className='post-wrapper'>
+            <h1 id='user-profile-heading'>Posts Result</h1>
             {this.state.postsSearchResult.map((post, index) => (
               <>
                 <div className='post' key={index}>
@@ -63,7 +70,7 @@ export class SearchPeople extends Component {
                   <div className='post-data'>
                     <div className='user-time'>
                       <Link to={`/profile/${post.userId}`}>
-                        <span className='post-writer'>{post.userName}</span>
+                        <span className='post-writer'>{post.fullName}</span>
                       </Link>
                       <span className='post-date'>
                         <TimeAgo
@@ -87,7 +94,7 @@ export class SearchPeople extends Component {
                       </p>
                       {post.postBody.split(' ').length > 30 ? (
                         <Button
-                          onClick={event => {
+                          onClick={(event) => {
                             this.myFunction(event.target.id.substring(5));
                           }}
                           id={`myBtn${post.postId}`}

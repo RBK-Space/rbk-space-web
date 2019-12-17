@@ -15,24 +15,48 @@
 }
 .loginPage .description {
   color: #fff;
-  font-size: 16px;
+  font-size: 20px;
+}
+.loginPage .instructions-wrapper {
+  color: #fff;
+  text-align: left;
+  margin-top: 100px;
+}
+.loginPage .instructions {
+  width: 1150px;
+  margin: auto;
+  padding-left: 40px;
+}
+.loginPage .instructions {
+  text-align: left;
+}
+.loginPage #first-time {
+  display: block;
+  margin: auto;
+  text-align: center;
+  width: 950px;
+  color: #b40381 !important;
+  font-weight: bold;
+  font-size: 22px;
+  font-family: 'Tomorrow', sans-serif;
 }
 .opacity {
   display: table;
   width: 100%;
-  background-color: rgb(0, 0, 0, 0.85);
+  background-color: rgb(0, 0, 0, 0.8);
 }
 .opacity h1 {
   font-family: 'Tomorrow', sans-serif;
   color: #b40381 !important;
-  font-size: 60px;
+  font-size: 75px;
   font-weight: bold;
   margin-bottom: 10px;
 }
 .loginPage ul {
-  list-style: none;
+  /* list-style: none; */
   padding-left: 0px;
   margin-top: 40px;
+  font-size: 18px;
 }
 .loginPage .github-btn {
   width: 210px !important;

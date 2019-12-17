@@ -76,3 +76,6 @@ content {
   border-radius: 4px;
   line-height: 31px;
 }
+.ant-search-btn {
+  height: 34px;
+}
