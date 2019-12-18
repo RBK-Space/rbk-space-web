@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, message } from 'antd';
 import axios from 'axios';
+const key = 'updatable';
 
 export class Tab2 extends Component {
   constructor(props) {
@@ -37,6 +38,7 @@ export class Tab2 extends Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         console.log(values);
+        this.openMessage();
         axios
           .post('http://localhost:4000/user/edit/contact', {
             userId: that.state.user.userId,
@@ -54,13 +56,19 @@ export class Tab2 extends Component {
       }
     });
   };
+  openMessage() {
+    message.loading({ content: 'Updating...', key });
+    setTimeout(() => {
+      message.success({ content: 'Updated!', key, duration: 3 });
+    }, 1500);
+  }
   render() {
     const { getFieldDecorator } = this.props.form;
 
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 8 }
+        sm: { span: 4 }
       },
       wrapperCol: {
         xs: { span: 24 },
@@ -100,7 +108,6 @@ export class Tab2 extends Component {
                 initialValue: this.state.user.fb,
                 rules: [
                   {
-                    required: true,
                     message: 'Please input your Facebook!',
                     whitespace: true
                   }
@@ -112,7 +119,6 @@ export class Tab2 extends Component {
                 initialValue: this.state.user.li,
                 rules: [
                   {
-                    required: true,
                     message: 'Please input your LinkedIn!',
                     whitespace: true
                   }
@@ -124,7 +130,6 @@ export class Tab2 extends Component {
                 initialValue: this.state.user.tw,
                 rules: [
                   {
-                    required: true,
                     message: 'Please input your Twitter!',
                     whitespace: true
                   }

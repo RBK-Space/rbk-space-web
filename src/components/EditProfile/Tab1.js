@@ -1,7 +1,17 @@
 import React, { Component } from 'react';
-import { Form, Input, Tooltip, Avatar, Icon, Select, Button } from 'antd';
+import {
+  Form,
+  Input,
+  Tooltip,
+  Avatar,
+  Icon,
+  Select,
+  Button,
+  message
+} from 'antd';
 import axios from 'axios';
 const { Option } = Select;
+const key = 'updatable';
 
 export class Tab1 extends Component {
   constructor(props) {
@@ -59,6 +69,7 @@ export class Tab1 extends Component {
     var that = this;
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
+        this.openMessage();
         values.imgUrl = this.state.user.image;
         values.userId = this.state.user.userId;
         console.log('Received values of form: ', values);
@@ -101,6 +112,13 @@ export class Tab1 extends Component {
     console.log(`selected ${value}`);
   }
 
+  openMessage() {
+    message.loading({ content: 'Updating...', key });
+    setTimeout(() => {
+      message.success({ content: 'Updated!', key, duration: 3 });
+    }, 1500);
+  }
+
   render() {
     const { getFieldDecorator } = this.props.form;
     const { TextArea } = Input;
@@ -108,7 +126,7 @@ export class Tab1 extends Component {
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 8 }
+        sm: { span: 4 }
       },
       wrapperCol: {
         xs: { span: 24 },
@@ -127,6 +145,7 @@ export class Tab1 extends Component {
         }
       }
     };
+
     return (
       <>
         {this.state.user ? (
@@ -212,7 +231,6 @@ export class Tab1 extends Component {
               {getFieldDecorator('skills', {
                 rules: [
                   {
-                    required: true,
                     message: 'Please input your skills!'
                   }
                 ]

@@ -31,17 +31,17 @@ class Sidebar extends Component {
         'Access-Control-Allow-Credentials': true
       }
     })
-      .then(response => {
+      .then((response) => {
         if (response.status === 200) return response.json();
         throw new Error('failed to authenticate user');
       })
-      .then(responseJson => {
+      .then((responseJson) => {
         this.setState({
           authenticated: true,
           user: responseJson.user
         });
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({
           authenticated: false,
           error: 'Failed to authenticate user'
