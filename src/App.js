@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import Navbar from './components/Navbar/Navbar';
-import Sidebar from './components/Sidebar/Sidebar';
+// import Sidebar from './components/Sidebar/Sidebar';
 import AddPost from './components/AddPost/AddPost';
 import Post from './components/Post/Post';
 import Profile from './components/userProfile/Profile';
@@ -33,18 +33,18 @@ class App extends React.Component {
         'Access-Control-Allow-Credentials': true
       }
     })
-      .then(response => {
+      .then((response) => {
         if (response.status === 200) return response.json();
         throw new Error('failed to authenticate user');
       })
-      .then(responseJson => {
+      .then((responseJson) => {
         // console.log(responseJson.user);
         this.setState({
           authenticated: true,
           user: responseJson.user
         });
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({
           authenticated: false,
           error: 'Failed to authenticate user'
@@ -63,7 +63,7 @@ class App extends React.Component {
             <Provider store={store}>
               <Router>
                 <Navbar />
-                <Sidebar />
+                {/* <Sidebar /> */}
                 <div className='container'>
                   <Switch className='App'>
                     <Route path='/home'>

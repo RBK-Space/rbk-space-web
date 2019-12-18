@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Tag, Collapse, Icon } from 'antd';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { fas } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
+import { fas, faUserEdit } from '@fortawesome/free-solid-svg-icons';
+
 import axios from 'axios';
 import {
   faFacebookF,
@@ -20,19 +22,46 @@ export class Profile extends Component {
     this.state = {
       user: {},
       error: null,
-      authenticated: false
+      authenticated: false,
+      loggedInUser: {}
     };
   }
 
-  getData = props => {
+  getData = (props) => {
     const { id } = props.match.params;
-    axios(`http://localhost:4000/user/${id}`).then(result => {
+    axios(`http://localhost:4000/user/${id}`).then((result) => {
       this.setState({
         user: result.data[0]
       });
     });
   };
   componentDidMount() {
+    fetch('http://localhost:4000/auth/login/success', {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Credentials': true
+      }
+    })
+      .then((response) => {
+        if (response.status === 200) return response.json();
+        throw new Error('failed to authenticate user');
+      })
+      .then((responseJson) => {
+        // console.log(responseJson.user);
+        this.setState({
+          authenticated: true,
+          loggedInUser: responseJson.user
+        });
+      })
+      .catch((error) => {
+        this.setState({
+          authenticated: false,
+          error: 'Failed to authenticate user'
+        });
+      });
     this.getData(this.props);
   }
   componentWillReceiveProps(props) {
@@ -63,57 +92,96 @@ export class Profile extends Component {
             <div className='general-wrapper'>
               <h1 id='user-profile-heading'>User Profile</h1>
               <div className='general'>
-                <span className='section-id'>General</span>
+                <div className='editt'>
+                  <span className='section-id'>General</span>
+                  {this.state.loggedInUser[0] &&
+                  this.state.loggedInUser[0].userId ===
+                    this.state.user.userId ? (
+                    <Link to={`/editProfile/${this.state.user.userId}`}>
+                      <FontAwesomeIcon
+                        icon={faUserEdit}
+                        color='##1890ff'
+                        size='lg'
+                      />
+                      <span className='edit-profile-text'>Edit Profile</span>
+                    </Link>
+                  ) : null}
+                </div>
+
                 <div className='general-border'>
                   <div className='img-social-wrapper'>
                     <div className='user-img'>
                       <img src={this.state.user.image} alt='' />
                     </div>
                     <ul className='social-links'>
-                      <li className='social-item'>
-                        <a
-                          href={this.state.user.gh}
-                          target='_blank'
-                          rel='noopener noreferrer'
-                        >
-                          <FontAwesomeIcon icon={faGithub} color='#211F1F' />
-                        </a>
-                      </li>
-                      <li className='social-item'>
-                        <a
-                          href={this.state.user.fb}
-                          target='_blank'
-                          rel='noopener noreferrer'
-                        >
-                          <FontAwesomeIcon icon={faFacebookF} color='#3b5998' />
-                        </a>
-                      </li>
-                      <li className='social-item'>
-                        <a
-                          href={this.state.user.li}
-                          target='_blank'
-                          rel='noopener noreferrer'
-                        >
-                          <FontAwesomeIcon icon={faLinkedin} color='#0e76a8' />
-                        </a>
-                      </li>
-                      <li className='social-item'>
-                        <a
-                          href={this.state.user.tw}
-                          target='_blank'
-                          rel='noopener noreferrer'
-                        >
-                          <FontAwesomeIcon icon={faTwitter} color='#1da1f2' />
-                        </a>
-                      </li>
+                      {this.state.user.gh ? (
+                        <li className='social-item'>
+                          <a
+                            href={this.state.user.gh}
+                            target='_blank'
+                            rel='noopener noreferrer'
+                          >
+                            <FontAwesomeIcon icon={faGithub} color='#211F1F' />
+                          </a>
+                        </li>
+                      ) : null}
+                      {this.state.user.fb ? (
+                        <li className='social-item'>
+                          <a
+                            href={this.state.user.fb}
+                            target='_blank'
+                            rel='noopener noreferrer'
+                          >
+                            <FontAwesomeIcon
+                              icon={faFacebookF}
+                              color='#3b5998'
+                            />
+                          </a>
+                        </li>
+                      ) : null}
+
+                      {this.state.user.li ? (
+                        <li className='social-item'>
+                          <a
+                            href={this.state.user.li}
+                            target='_blank'
+                            rel='noopener noreferrer'
+                          >
+                            <FontAwesomeIcon
+                              icon={faLinkedin}
+                              color='#0e76a8'
+                            />
+                          </a>
+                        </li>
+                      ) : null}
+
+                      {this.state.user.tw ? (
+                        <li className='social-item'>
+                          <a
+                            href={this.state.user.tw}
+                            target='_blank'
+                            rel='noopener noreferrer'
+                          >
+                            <FontAwesomeIcon icon={faTwitter} color='#1da1f2' />
+                          </a>
+                        </li>
+                      ) : null}
                     </ul>
                   </div>
                   <div className='general-info'>
                     <p>
-                      Hello! My name is {this.state.user.fullName} &amp; I'm
-                      from {this.state.user.cohort}
+                      Hello! My name is {this.state.user.fullName}{' '}
+                      {this.state.user.cohort
+                        ? `& I'm
+                      from ${this.state.user.cohort}`
+                        : null}
                     </p>
-                    <p>Employment status: {this.state.user.empStat} </p>
+                    <p>
+                      {' '}
+                      {this.state.user.empStat
+                        ? `Employment status: ${this.state.user.empStat}`
+                        : null}{' '}
+                    </p>
                   </div>
                 </div>
               </div>

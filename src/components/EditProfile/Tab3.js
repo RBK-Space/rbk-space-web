@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, message } from 'antd';
 import axios from 'axios';
+const { TextArea } = Input;
+const key = 'updatable';
 
 export class Tab3 extends Component {
   constructor(props) {
@@ -36,6 +38,7 @@ export class Tab3 extends Component {
     var that = this;
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
+        this.openMessage();
         console.log(values);
         axios
           .post('http://localhost:4000/user/edit/portfolio', {
@@ -53,6 +56,12 @@ export class Tab3 extends Component {
       }
     });
   };
+  openMessage() {
+    message.loading({ content: 'Adding project...', key });
+    setTimeout(() => {
+      message.success({ content: 'project added!', key, duration: 3 });
+    }, 1500);
+  }
 
   render() {
     const { getFieldDecorator } = this.props.form;
@@ -60,7 +69,7 @@ export class Tab3 extends Component {
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 8 }
+        sm: { span: 4 }
       },
       wrapperCol: {
         xs: { span: 24 },
@@ -79,6 +88,7 @@ export class Tab3 extends Component {
         }
       }
     };
+
     return (
       <>
         {this.state.user ? (
@@ -103,7 +113,7 @@ export class Tab3 extends Component {
                     whitespace: true
                   }
                 ]
-              })(<Input />)}
+              })(<TextArea rows={5} />)}
             </Form.Item>
             <Form.Item label={<span>projectLink&nbsp;</span>}>
               {getFieldDecorator('projectLink', {
@@ -120,6 +130,14 @@ export class Tab3 extends Component {
             <Form.Item {...tailFormItemLayout}>
               <Button type='primary' htmlType='submit'>
                 Add
+              </Button>
+              <Button
+                onClick={(e) => {
+                  this.props.form.resetFields();
+                }}
+                className='clear-btn'
+              >
+                Clear
               </Button>
             </Form.Item>
           </Form>

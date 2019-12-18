@@ -45,17 +45,17 @@ class Navbar extends React.Component {
         'Access-Control-Allow-Credentials': true
       }
     })
-      .then(response => {
+      .then((response) => {
         if (response.status === 200) return response.json();
         throw new Error('failed to authenticate user');
       })
-      .then(responseJson => {
+      .then((responseJson) => {
         that.setState({
           authenticated: true,
           user: responseJson.user
         });
       })
-      .catch(error => {
+      .catch((error) => {
         that.setState({
           authenticated: false,
           error: 'Failed to authenticate user'
@@ -99,13 +99,17 @@ class Navbar extends React.Component {
                       <Link
                         to={`/search/users/?query=${this.state.searchWord}`}
                       >
-                        <button className='search-btn'>Search</button>
+                        <Button type='primary' className='ant-search-btn'>
+                          Search
+                        </Button>
                       </Link>
                     ) : (
                       <Link
                         to={`/search/posts/?query=${this.state.searchWord}`}
                       >
-                        <button className='search-btn'>Search</button>
+                        <Button type='primary' className='ant-search-btn'>
+                          Search
+                        </Button>
                       </Link>
                     )}
                   </div>
