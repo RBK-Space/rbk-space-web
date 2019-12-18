@@ -46,7 +46,7 @@ class EditProfile extends React.Component {
         {this.state.user ? (
           <div>
             <div className='edit-profile'>
-              <h1>Edit Profile</h1>
+              <h1 id='edit-profile-heading'>Edit Profile</h1>
               <div className='edit-tabs'>
                 <Tabs defaultActiveKey='1' onChange={this.callback}>
                   <TabPane tab='Basic Info' key='1'>

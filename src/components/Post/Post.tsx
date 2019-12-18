@@ -48,7 +48,7 @@ class Post extends Component<IPostProps> {
                   <div className='post-data'>
                     <div className='user-time'>
                       <Link to={`/profile/${post.userId}`}>
-                        <span className='post-writer'>{post.username}</span>
+                        <span className='post-writer'>{post.fullName}</span>
                       </Link>
                       <span className='post-date'>
                         <TimeAgo
@@ -56,33 +56,39 @@ class Post extends Component<IPostProps> {
                         />
                       </span>
                     </div>
-                    <div className='post-body'>
-                      <p>
-                        {post.postBody
-                          .split(' ')
-                          .splice(0, 30)
-                          .join(' ')}
-                        <span id={`dots${post.postId}`}></span>
-                        <span id={`more${post.postId}`} className='hide'>
+                    {post.postType === 1 ? (
+                      <div className='post-body'>
+                        <img src={post.postBody} alt='' className='post-img' />
+                      </div>
+                    ) : (
+                      <div className='post-body'>
+                        <p>
                           {post.postBody
                             .split(' ')
-                            .splice(30)
+                            .splice(0, 30)
                             .join(' ')}
-                        </span>
-                      </p>
-                      {post.postBody.split(' ').length > 30 ? (
-                        <Button
-                          onClick={(event: React.MouseEvent<HTMLElement>) => {
-                            this.myFunction(
-                              (event.target as HTMLElement).id.substring(5)
-                            );
-                          }}
-                          id={`myBtn${post.postId}`}
-                        >
-                          Read more
-                        </Button>
-                      ) : null}
-                    </div>
+                          <span id={`dots${post.postId}`}></span>
+                          <span id={`more${post.postId}`} className='hide'>
+                            {post.postBody
+                              .split(' ')
+                              .splice(30)
+                              .join(' ')}
+                          </span>
+                        </p>
+                        {post.postBody.split(' ').length > 30 ? (
+                          <Button
+                            onClick={(event: React.MouseEvent<HTMLElement>) => {
+                              this.myFunction(
+                                (event.target as HTMLElement).id.substring(5)
+                              );
+                            }}
+                            id={`myBtn${post.postId}`}
+                          >
+                            Read more
+                          </Button>
+                        ) : null}
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}
