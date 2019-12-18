@@ -21,7 +21,7 @@ export default class HomePage extends Component {
 
   componentDidMount() {
     // Fetch does not send cookies. So you should add credentials: 'include'
-    fetch('http://localhost:4000/auth/login/success', {
+    fetch('https://rbk-space.herokuapp.com/auth/login/success', {
       method: 'GET',
       credentials: 'include',
       headers: {

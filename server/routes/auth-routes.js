@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const passport = require('passport');
-const CLIENT_HOME_PAGE_URL = 'http://localhost:3000';
+const config = require('../../config/config');
+const CLIENT_HOME_PAGE_URL = global.gConfig.url;
 const path = require('path');
 const fs = require('fs');
 

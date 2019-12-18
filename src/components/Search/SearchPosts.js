@@ -16,11 +16,13 @@ export class SearchPeople extends Component {
     const urlParams = new URLSearchParams(window.location.search);
     const query = urlParams.get('query');
     var that = this;
-    axios(`http://localhost:4000/posts/?query=${query}`).then((result) => {
-      that.setState({
-        postsSearchResult: result.data
-      });
-    });
+    axios(`https://rbk-space.herokuapp.com/posts/?query=${query}`).then(
+      result => {
+        that.setState({
+          postsSearchResult: result.data
+        });
+      }
+    );
   };
   componentDidMount() {
     this.getData(this.props);
@@ -94,7 +96,7 @@ export class SearchPeople extends Component {
                       </p>
                       {post.postBody.split(' ').length > 30 ? (
                         <Button
-                          onClick={(event) => {
+                          onClick={event => {
                             this.myFunction(event.target.id.substring(5));
                           }}
                           id={`myBtn${post.postId}`}

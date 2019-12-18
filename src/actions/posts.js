@@ -1,9 +1,10 @@
 import axios from 'axios';
 import { GET_ALL_POSTS, ADD_POST } from './types';
+// import '../../config/config';
 
 export const getAllPosts = () => dispatch => {
   axios
-    .get('http://localhost:4000/posts')
+    .get(`${global.gConfig.url}/posts`)
     .then(response => {
       dispatch({
         type: GET_ALL_POSTS,

@@ -11,7 +11,7 @@ var bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser'); // parse cookie header
 
 //environment variables
-process.env.NODE_ENV = 'development';
+process.env.NODE_ENV = 'deployed';
 
 //config
 const config = require('../config/config.js');
@@ -26,7 +26,7 @@ app.use(require('body-parser').urlencoded({ extended: true }));
 // set up cors to allow us to accept requests from our client
 app.use(
   cors({
-    origin: 'http://localhost:3000', // allow to server to accept request from different origin
+    origin: '*', // allow to server to accept request from different origin
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true // allow session cookie from browser to pass through
   })
