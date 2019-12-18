@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import Navbar from './components/Navbar/Navbar';
-import Sidebar from './components/Sidebar/Sidebar';
+// import Sidebar from './components/Sidebar/Sidebar';
 import AddPost from './components/AddPost/AddPost';
 import Post from './components/Post/Post';
 import Profile from './components/userProfile/Profile';
