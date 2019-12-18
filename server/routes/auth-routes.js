@@ -6,7 +6,7 @@ const path = require('path');
 const fs = require('fs');
 
 // when login is successful, retrieve user info
-router.get('/login/success', (req, res) => {
+router.get(`${global.gConfig.url}/login/success`, (req, res) => {
   if (req.user) {
     res.json({
       success: true,
@@ -20,7 +20,7 @@ router.get('/login/success', (req, res) => {
 });
 
 // when login failed, send failed msg
-router.get('/login/failed', (req, res) => {
+router.get(`${global.gConfig.url}/login/failed`, (req, res) => {
   res.status(401).json({
     success: false,
     message: 'user failed to authenticate.'
@@ -28,16 +28,19 @@ router.get('/login/failed', (req, res) => {
 });
 
 // When logout, redirect to client
-router.get('/logout', (req, res) => {
+router.get(`${global.gConfig.url}/logout`, (req, res) => {
   req.logout();
   res.redirect(CLIENT_HOME_PAGE_URL);
 });
 
 // auth with github
-router.get('/github', passport.authenticate('github'));
-router.get('/auth/github', passport.authenticate('github'));
+router.get(`${global.gConfig.url}/github`, passport.authenticate('github'));
+router.get(
+  `${global.gConfig.url}/auth/github`,
+  passport.authenticate('github')
+);
 
-router.get('/failed', (req, res) => {
+router.get(`${global.gConfig.url}/failed`, (req, res) => {
   fs.readFile(
     path.join(__dirname, '../../public/unauthorized.html'),
     'utf8',
@@ -49,8 +52,10 @@ router.get('/failed', (req, res) => {
 });
 // redirect to home page after successfully login via github
 router.get(
-  '/github/callback',
-  passport.authenticate('github', { failureRedirect: '/auth/failed' }),
+  `${global.gConfig.url}/github/callback`,
+  passport.authenticate('github', {
+    failureRedirect: `${global.gConfig.url}/auth/failed`
+  }),
   function(req, res) {
     res.redirect(`${CLIENT_HOME_PAGE_URL}/home`);
   }
