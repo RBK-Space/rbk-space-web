@@ -207,6 +207,15 @@ module.exports = {
         }
       });
     },
+    getSkills: function(x, callback) {
+      connection.query(" call getUserSkills(?) ", x, function(err, results) {
+        if (err) {
+          console.log("Can not get user's skills ", err);
+        } else {
+          callback(err, results);
+        }
+      });
+    },
     deleteUserSkill: function(x, callback) {
       connection.query(" call deleteUserSkill(?, ?) ", x, function(
         err,
