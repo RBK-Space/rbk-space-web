@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Tabs, Input, Button, message } from 'antd';
 import { connect } from 'react-redux';
 import { addPost, getAllPosts } from '../../actions/posts';
-// import ImageUploader from 'react-images-upload';
+import ImageUploader from 'react-images-upload';
 import './style.css';
 import axios from 'axios';
 
@@ -28,7 +28,7 @@ class AddPost extends Component {
 
   componentDidMount() {
     // Fetch does not send cookies. So you should add credentials: 'include'
-    fetch('http://localhost:4000/auth/login/success', {
+    fetch('https://rbk-space.herokuapp.com/auth/login/success', {
       method: 'GET',
       credentials: 'include',
       headers: {
@@ -37,18 +37,18 @@ class AddPost extends Component {
         'Access-Control-Allow-Credentials': true
       }
     })
-      .then((response) => {
+      .then(response => {
         if (response.status === 200) return response.json();
         throw new Error('failed to authenticate user');
       })
-      .then((responseJson) => {
+      .then(responseJson => {
         console.log(responseJson.user);
         this.setState({
           authenticated: true,
           user: responseJson.user
         });
       })
-      .catch((error) => {
+      .catch(error => {
         this.setState({
           authenticated: false,
           error: 'Failed to authenticate user'
@@ -79,18 +79,18 @@ class AddPost extends Component {
   handlePostImageClick() {
     var that = this;
     //generate a promise for every image upload
-    let uploadPhotosPromises = this.state.pictures.map((image) => {
+    let uploadPhotosPromises = this.state.pictures.map(image => {
       let data = new FormData();
       data.append('image', image, image.name);
       data.append('user', that.state.user[0].userId);
       //the key here is a dummy prop, used for purpose of re-render the component
       that.setState({ pictures: [], key: Math.random() });
-      return axios.post('http://localhost:4000/uploadImage', data);
+      return axios.post('https://rbk-space.herokuapp.com/uploadImage', data);
     });
     axios
       .all(uploadPhotosPromises)
       .then(function(values) {})
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   }
   handleInputChange(e) {
     const value = e.target.value;
@@ -125,7 +125,7 @@ class AddPost extends Component {
             </Button>
           </TabPane>
           <TabPane className='tab' tab='Add Image' key='2'>
-            {/* <ImageUploader
+            <ImageUploader
               withIcon={true}
               buttonText='Choose images'
               onChange={this.onDrop}
@@ -133,7 +133,7 @@ class AddPost extends Component {
               maxFileSize={5242880}
               withPreview={true}
               key={this.state.key}
-            /> */}
+            />
             {this.state.pictures && this.state.pictures.length > 0 ? (
               <Button
                 type='primary'
@@ -152,7 +152,7 @@ class AddPost extends Component {
     );
   }
 }
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   posts: state.allPostsReducer.posts
 });
 

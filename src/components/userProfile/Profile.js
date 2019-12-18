@@ -27,16 +27,16 @@ export class Profile extends Component {
     };
   }
 
-  getData = (props) => {
+  getData = props => {
     const { id } = props.match.params;
-    axios(`http://localhost:4000/user/${id}`).then((result) => {
+    axios(`https://rbk-space.herokuapp.com/user/${id}`).then(result => {
       this.setState({
         user: result.data[0]
       });
     });
   };
   componentDidMount() {
-    fetch('http://localhost:4000/auth/login/success', {
+    fetch('https://rbk-space.herokuapp.com/auth/login/success', {
       method: 'GET',
       credentials: 'include',
       headers: {
@@ -45,18 +45,18 @@ export class Profile extends Component {
         'Access-Control-Allow-Credentials': true
       }
     })
-      .then((response) => {
+      .then(response => {
         if (response.status === 200) return response.json();
         throw new Error('failed to authenticate user');
       })
-      .then((responseJson) => {
+      .then(responseJson => {
         // console.log(responseJson.user);
         this.setState({
           authenticated: true,
           loggedInUser: responseJson.user
         });
       })
-      .catch((error) => {
+      .catch(error => {
         this.setState({
           authenticated: false,
           error: 'Failed to authenticate user'

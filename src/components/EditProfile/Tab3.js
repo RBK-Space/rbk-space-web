@@ -19,10 +19,10 @@ export class Tab3 extends Component {
       skillId: []
     };
   }
-  getData = (props) => {
+  getData = props => {
     console.log(props);
     const id = props.id;
-    axios(`http://localhost:4000/user/${id}`).then((result) => {
+    axios(`https://rbk-space.herokuapp.com/user/${id}`).then(result => {
       console.log(result.data[0]);
       this.setState({
         user: result.data[0]
@@ -33,7 +33,7 @@ export class Tab3 extends Component {
   componentDidMount() {
     this.getData(this.props);
   }
-  handleSubmitProjects = (e) => {
+  handleSubmitProjects = e => {
     e.preventDefault();
     var that = this;
     this.props.form.validateFieldsAndScroll((err, values) => {
@@ -41,7 +41,7 @@ export class Tab3 extends Component {
         this.openMessage();
         console.log(values);
         axios
-          .post('http://localhost:4000/user/edit/portfolio', {
+          .post('https://rbk-space.herokuapp.com/user/edit/portfolio', {
             userId: that.state.user.userId,
             title: values.projectTitle,
             description: values.projectDesc,
@@ -132,7 +132,7 @@ export class Tab3 extends Component {
                 Add
               </Button>
               <Button
-                onClick={(e) => {
+                onClick={e => {
                   this.props.form.resetFields();
                 }}
                 className='clear-btn'

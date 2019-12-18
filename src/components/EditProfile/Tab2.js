@@ -18,10 +18,10 @@ export class Tab2 extends Component {
       skillId: []
     };
   }
-  getData = (props) => {
+  getData = props => {
     console.log(props);
     const id = props.id;
-    axios(`http://localhost:4000/user/${id}`).then((result) => {
+    axios(`https://rbk-space.herokuapp.com/user/${id}`).then(result => {
       console.log(result.data[0]);
       this.setState({
         user: result.data[0]
@@ -32,7 +32,7 @@ export class Tab2 extends Component {
     this.getData(this.props);
   }
 
-  handleSubmitLinks = (e) => {
+  handleSubmitLinks = e => {
     e.preventDefault();
     var that = this;
     this.props.form.validateFieldsAndScroll((err, values) => {
@@ -40,7 +40,7 @@ export class Tab2 extends Component {
         console.log(values);
         this.openMessage();
         axios
-          .post('http://localhost:4000/user/edit/contact', {
+          .post('https://rbk-space.herokuapp.com/user/edit/contact', {
             userId: that.state.user.userId,
             facebook: values.facebook,
             github: values.github,

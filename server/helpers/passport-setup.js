@@ -3,6 +3,7 @@ const config = require('../../config/config');
 const axios = require('axios');
 var GitHubStrategy = require('passport-github').Strategy;
 var db = require('../../database/index.js');
+const { check, validationResult } = require('express-validator');
 
 //send email
 const sendEmail = require('./email-sender');
@@ -17,15 +18,17 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       //if the logged in user is already exists in the DB
       await db.users.getUserByEmail(function(err, results) {
+        console.log('old user');
         if (results.length > 0) {
           done(null, results);
         } else {
           //Create new user
           //Check if the user is a member in rbk-org organization
           axios.get(profile._json.organizations_url).then(function(orgz) {
-            orgz.data.forEach(org => {
-              if (org.login === 'hackreactor') {
-                db.users.addUser(
+            orgz.data.forEach(async org => {
+              if (org.login === 'rbk-org') {
+                console.log('not err');
+                await db.users.addUser(
                   [
                     profile._json.name,
                     profile._json.login,
@@ -42,6 +45,12 @@ passport.use(
                     sendEmail(profile._json.email);
                   }
                 );
+              } else {
+                //FIXME:
+                console.log('err');
+                setTimeout(() => {
+                  done(err, null);
+                }, 3000);
               }
             });
           });
