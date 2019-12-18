@@ -37,18 +37,18 @@ class AddPost extends Component {
         'Access-Control-Allow-Credentials': true
       }
     })
-      .then(response => {
+      .then((response) => {
         if (response.status === 200) return response.json();
         throw new Error('failed to authenticate user');
       })
-      .then(responseJson => {
+      .then((responseJson) => {
         console.log(responseJson.user);
         this.setState({
           authenticated: true,
           user: responseJson.user
         });
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({
           authenticated: false,
           error: 'Failed to authenticate user'
@@ -69,6 +69,7 @@ class AddPost extends Component {
     const { getAllPosts } = this.props;
     getAllPosts();
   }
+
   onDrop(pictureFiles, pictureDataURLs) {
     this.setState({
       pictures: this.state.pictures.concat(pictureFiles)
@@ -78,7 +79,7 @@ class AddPost extends Component {
   handlePostImageClick() {
     var that = this;
     //generate a promise for every image upload
-    let uploadPhotosPromises = this.state.pictures.map(image => {
+    let uploadPhotosPromises = this.state.pictures.map((image) => {
       let data = new FormData();
       data.append('image', image, image.name);
       data.append('user', that.state.user[0].userId);
@@ -89,7 +90,7 @@ class AddPost extends Component {
     axios
       .all(uploadPhotosPromises)
       .then(function(values) {})
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   }
   handleInputChange(e) {
     const value = e.target.value;
@@ -151,7 +152,7 @@ class AddPost extends Component {
     );
   }
 }
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   posts: state.allPostsReducer.posts
 });
 

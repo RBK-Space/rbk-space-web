@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, message } from 'antd';
 import axios from 'axios';
+const key = 'updatable';
 
 export class Tab2 extends Component {
   constructor(props) {
@@ -37,6 +38,7 @@ export class Tab2 extends Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         console.log(values);
+        this.openMessage();
         axios
           .post('http://localhost:4000/user/edit/contact', {
             userId: that.state.user.userId,
@@ -54,6 +56,12 @@ export class Tab2 extends Component {
       }
     });
   };
+  openMessage() {
+    message.loading({ content: 'Updating...', key });
+    setTimeout(() => {
+      message.success({ content: 'Updated!', key, duration: 3 });
+    }, 1500);
+  }
   render() {
     const { getFieldDecorator } = this.props.form;
 

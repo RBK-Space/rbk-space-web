@@ -53,14 +53,19 @@ export class SearchPeople extends Component {
                     </div>
                     <div className='general-info'>
                       <p>
-                        Hello! My name is {user.fullName} &amp; I'm from cohort
-                        {user.cohort}
+                        Hello! My name is {user.fullName}{' '}
+                        {user.cohort
+                          ? `& I'm
+                      from ${user.cohort}`
+                          : null}
                       </p>
                       <p>
+                        {' '}
                         {user.empStat
                           ? `Employment status: ${user.empStat}`
                           : null}{' '}
                       </p>
+
                       <Link to={`/profile/${user.userId}`}>
                         <span className='search-profile-link'>
                           Profile Link

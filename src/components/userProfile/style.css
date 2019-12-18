@@ -100,3 +100,9 @@
   font-weight: bold;
   font-size: 16px;
 }
+.clear-btn {
+  color: #1890ff;
+  border-color: #1890ff;
+  padding: 0px 10px;
+  margin-left: 10px;
+}
