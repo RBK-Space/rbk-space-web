@@ -15,6 +15,7 @@ process.env.NODE_ENV = 'deployed';
 
 //config
 const config = require('../config/config.js');
+const port = process.env.PORT || global.gConfig.node_port;
 
 //module
 const app = express();
@@ -71,8 +72,8 @@ const authRoutes = require('./routes/auth-routes');
 app.use('/', authCheck, routes);
 app.use('/auth', authRoutes);
 
-app.listen(global.gConfig.node_port, () => {
+app.listen(port, () => {
   console.log(
-    `${global.gConfig.config_id} : ${global.gConfig.app_name} listening on port ${global.gConfig.node_port}`
+    `${global.gConfig.config_id} : ${global.gConfig.app_name} listening on port ${port}`
   );
 });
