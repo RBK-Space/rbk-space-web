@@ -58,8 +58,9 @@
   },
   "scripts": {
     "dev": "nodemon server/server.js",
-    "start": "react-scripts start",
+    "start": "pm2 start server/server.js",
     "build": "pm2 start server/server.js",
+    "heroku-postbuild":"pm2 start server/server.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
