@@ -27,9 +27,9 @@ export class Profile extends Component {
     };
   }
 
-  getData = props => {
+  getData = (props) => {
     const { id } = props.match.params;
-    axios(`/user/${id}`).then(result => {
+    axios(`/user/${id}`).then((result) => {
       this.setState({
         user: result.data[0]
       });
@@ -45,18 +45,18 @@ export class Profile extends Component {
         'Access-Control-Allow-Credentials': true
       }
     })
-      .then(response => {
+      .then((response) => {
         if (response.status === 200) return response.json();
         throw new Error('failed to authenticate user');
       })
-      .then(responseJson => {
+      .then((responseJson) => {
         // console.log(responseJson.user);
         this.setState({
           authenticated: true,
           loggedInUser: responseJson.user
         });
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({
           authenticated: false,
           error: 'Failed to authenticate user'
@@ -94,9 +94,7 @@ export class Profile extends Component {
               <div className='general'>
                 <div className='editt'>
                   <span className='section-id'>General</span>
-                  {this.state.loggedInUser[0] &&
-                  this.state.loggedInUser[0].userId ===
-                    this.state.user.userId ? (
+                  {true ? (
                     <Link to={`/editProfile/${this.state.user.userId}`}>
                       <FontAwesomeIcon
                         icon={faUserEdit}

@@ -85,11 +85,6 @@ class App extends React.Component {
                       path='/search/posts/'
                       component={SearchPosts}
                     ></Route>
-                    {/* <Router
-                      exact
-                      path='/editProfile/:id'
-                      component={EditProfile}
-                    ></Router> */}
                     <Route
                       path='/editProfile/:id'
                       component={EditProfileForm}
