@@ -45,17 +45,17 @@ class Navbar extends React.Component {
         'Access-Control-Allow-Credentials': true
       }
     })
-      .then(response => {
+      .then((response) => {
         if (response.status === 200) return response.json();
         throw new Error('failed to authenticate user');
       })
-      .then(responseJson => {
+      .then((responseJson) => {
         that.setState({
           authenticated: true,
           user: responseJson.user
         });
       })
-      .catch(error => {
+      .catch((error) => {
         that.setState({
           authenticated: false,
           error: 'Failed to authenticate user'
@@ -73,7 +73,7 @@ class Navbar extends React.Component {
         {!authenticated ? null : (
           <Header className='header'>
             <div className='logo'>
-              <Link to='/home'>
+              <Link to='/'>
                 <img
                   src='https://i.ibb.co/19WCkMF/output-onlinepngtools.png'
                   alt=''

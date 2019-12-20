@@ -66,7 +66,7 @@ class App extends React.Component {
                 {/* <Sidebar /> */}
                 <div className='container'>
                   <Switch className='App'>
-                    <Route path='/home'>
+                    <Route path='/'>
                       <AddPost />
                       <Post />
                     </Route>
@@ -86,6 +86,7 @@ class App extends React.Component {
                       component={SearchPosts}
                     ></Route>
                     <Route
+                      exact
                       path='/editProfile/:id'
                       component={EditProfileForm}
                     />
