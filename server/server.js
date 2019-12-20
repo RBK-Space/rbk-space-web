@@ -28,7 +28,7 @@ app.use(require('body-parser').urlencoded({ extended: true }));
 // app.use(express.static(publicPath));
 
 // if (process.env.NODE_ENV === "production") {
-const root = require('path').join(__dirname, 'build');
+const root = require('path').join(__dirname, '..', 'build');
 app.use(express.static(root));
 app.get('*', (req, res) => {
   res.sendFile('index.html', { root });
