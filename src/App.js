@@ -66,7 +66,7 @@ class App extends React.Component {
                 {/* <Sidebar /> */}
                 <div className='container'>
                   <Switch className='App'>
-                    <Route path='/'>
+                    <Route exact path='/'>
                       <AddPost />
                       <Post />
                     </Route>
