@@ -28,13 +28,11 @@ app.use(require('body-parser').urlencoded({ extended: true }));
 // app.use(express.static(publicPath));
 
 // if (process.env.NODE_ENV === "production") {
-app.use(express.static('/build'));
-// const path = require("path");
+const root = require('path').join(__dirname, 'build');
+app.use(express.static(root));
 app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '..', 'build', 'index.html'));
+  res.sendFile('index.html', { root });
 });
-// }
-
 // set up cors to allow us to accept requests from our client
 app.use(
   cors({
