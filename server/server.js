@@ -66,7 +66,7 @@ const authCheck = (req, res, next) => {
   }
 };
 
-app.get('/', (req, res) => {
+app.get('/api', authCheck,(req, res) => {
   res.status(200).json({
     authenticated: true,
     message: 'user successfully authenticated',

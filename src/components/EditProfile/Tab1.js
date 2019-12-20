@@ -31,14 +31,14 @@ export class Tab1 extends Component {
   getData = (props) => {
     console.log(props);
     const id = props.id;
-    axios(`/cohorts`).then((result) => {
+    axios(`/api/cohorts`).then((result) => {
       console.log(result.data[0]);
       this.setState({
         cohorts: result.data[0]
       });
     });
 
-    axios(`/user/${id}`).then((result) => {
+    axios(`/api/user/${id}`).then((result) => {
       console.log(result.data[0]);
       this.setState({
         user: result.data[0]
@@ -52,7 +52,7 @@ export class Tab1 extends Component {
       });
     });
 
-    axios(`/empStatus`).then((result) => {
+    axios(`/api/empStatus`).then((result) => {
       console.log(result.data[0]);
       this.setState({
         empStatus: result.data[0]
@@ -74,11 +74,11 @@ export class Tab1 extends Component {
         values.userId = this.state.user.userId;
         console.log('Received values of form: ', values);
         axios
-          .post('/user/edit/basic', values)
+          .post('/api/user/edit/basic', values)
           .then(function(response) {
             console.log(that.state.skillId[that.state.skillId.length - 1]);
             axios
-              .post('/user/edit/skill', {
+              .post('/api/user/edit/skill', {
                 userId: that.state.user.userId,
                 skillId: that.state.skillId[that.state.skillId.length - 1]
               })

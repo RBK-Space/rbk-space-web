@@ -21,7 +21,7 @@ export class Tab2 extends Component {
   getData = (props) => {
     console.log(props);
     const id = props.id;
-    axios(`/user/${id}`).then((result) => {
+    axios(`/api/user/${id}`).then((result) => {
       console.log(result.data[0]);
       this.setState({
         user: result.data[0]
@@ -40,7 +40,7 @@ export class Tab2 extends Component {
         console.log(values);
         this.openMessage();
         axios
-          .post('/user/edit/contact', {
+          .post('/api/user/edit/contact', {
             userId: that.state.user.userId,
             facebook: values.facebook,
             github: values.github,

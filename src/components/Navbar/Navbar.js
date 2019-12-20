@@ -97,7 +97,7 @@ class Navbar extends React.Component {
                     />
                     {this.state.searchToggle === 1 ? (
                       <Link
-                        to={`/search/users/?query=${this.state.searchWord}`}
+                        to={`/api/search/users/?query=${this.state.searchWord}`}
                       >
                         <Button type='primary' className='ant-search-btn'>
                           Search
@@ -105,7 +105,7 @@ class Navbar extends React.Component {
                       </Link>
                     ) : (
                       <Link
-                        to={`/search/posts/?query=${this.state.searchWord}`}
+                        to={`/api/search/posts/?query=${this.state.searchWord}`}
                       >
                         <Button type='primary' className='ant-search-btn'>
                           Search
@@ -140,7 +140,7 @@ class Navbar extends React.Component {
               </Menu>
             </div>
             <div className='user-img'>
-              <Link to={`/profile/${this.state.user[0].userId}`}>
+              <Link to={`/api/profile/${this.state.user[0].userId}`}>
                 <img src={this.state.user[0].image} alt='' />
               </Link>
 

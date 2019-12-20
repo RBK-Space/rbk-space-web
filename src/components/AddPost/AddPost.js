@@ -85,7 +85,7 @@ class AddPost extends Component {
       data.append('user', that.state.user[0].userId);
       //the key here is a dummy prop, used for purpose of re-render the component
       that.setState({ pictures: [], key: Math.random() });
-      return axios.post('/uploadImage', data);
+      return axios.post('/api/uploadImage', data);
     });
     axios
       .all(uploadPhotosPromises)

@@ -47,7 +47,7 @@ class Post extends Component<IPostProps> {
                   </div>
                   <div className='post-data'>
                     <div className='user-time'>
-                      <Link to={`/profile/${post.userId}`}>
+                      <Link to={`/api/profile/${post.userId}`}>
                         <span className='post-writer'>{post.fullName}</span>
                       </Link>
                       <span className='post-date'>

@@ -16,7 +16,7 @@ export class SearchPeople extends Component {
     const urlParams = new URLSearchParams(window.location.search);
     const query = urlParams.get('query');
     var that = this;
-    axios(`/posts/?query=${query}`).then(
+    axios(`/api/posts/?query=${query}`).then(
       result => {
         that.setState({
           postsSearchResult: result.data
@@ -71,7 +71,7 @@ export class SearchPeople extends Component {
                   </div>
                   <div className='post-data'>
                     <div className='user-time'>
-                      <Link to={`/profile/${post.userId}`}>
+                      <Link to={`/api/profile/${post.userId}`}>
                         <span className='post-writer'>{post.fullName}</span>
                       </Link>
                       <span className='post-date'>

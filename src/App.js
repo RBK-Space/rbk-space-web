@@ -72,22 +72,22 @@ class App extends React.Component {
                     </Route>
                     <Route
                       exact
-                      path='/profile/:id'
+                      path='/api/profile/:id'
                       component={Profile}
                     ></Route>
                     <Route
                       exact
-                      path='/search/users/'
+                      path='/api/search/users/'
                       component={SearchPeople}
                     ></Route>
                     <Route
                       exact
-                      path='/search/posts/'
+                      path='/api/search/posts/'
                       component={SearchPosts}
                     ></Route>
                     <Route
                       exact
-                      path='/editProfile/:id'
+                      path='/api/editProfile/:id'
                       component={EditProfileForm}
                     />
                   </Switch>

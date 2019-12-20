@@ -28,7 +28,7 @@ class EditProfile extends React.Component {
     const { id } = props.match.params;
     console.log(id);
     this.setState({ id: id });
-    axios(`/user/${id}`).then((result) => {
+    axios(`/api/user/${id}`).then((result) => {
       console.log(result.data[0]);
       this.setState({
         user: result.data[0]

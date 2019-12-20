@@ -97,7 +97,7 @@ export class Profile extends Component {
                   {this.state.loggedInUser[0] &&
                   this.state.loggedInUser[0].userId ===
                     this.state.user.userId ? (
-                    <Link to={`/editProfile/${this.state.user.userId}`}>
+                    <Link to={`/api/editProfile/${this.state.user.userId}`}>
                       <FontAwesomeIcon
                         icon={faUserEdit}
                         color='##1890ff'

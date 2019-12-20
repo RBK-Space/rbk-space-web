@@ -22,7 +22,7 @@ export class Tab3 extends Component {
   getData = (props) => {
     console.log(props);
     const id = props.id;
-    axios(`/user/${id}`).then((result) => {
+    axios(`/api/user/${id}`).then((result) => {
       console.log(result.data[0]);
       this.setState({
         user: result.data[0]
@@ -41,7 +41,7 @@ export class Tab3 extends Component {
         this.openMessage();
         console.log(values);
         axios
-          .post('/user/edit/portfolio', {
+          .post('/api/user/edit/portfolio', {
             userId: that.state.user.userId,
             title: values.projectTitle,
             description: values.projectDesc,
