@@ -36,7 +36,7 @@ export class Profile extends Component {
     });
   };
   componentDidMount() {
-    fetch('https://rbk-frontend.herokuapp.com/auth/login/success', {
+    fetch('https://rbk-space01.herokuapp.com/auth/login/success', {
       method: 'GET',
       credentials: 'include',
       headers: {
