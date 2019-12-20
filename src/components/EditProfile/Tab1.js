@@ -103,6 +103,8 @@ export class Tab1 extends Component {
   }
 
   handleSkillsChange(value) {
+    console.log(this.state.skillId);
+    console.log(value);
     this.setState({
       skillId: [...this.state.skillId, value]
     });
@@ -240,6 +242,7 @@ export class Tab1 extends Component {
                   style={{ width: '100%' }}
                   placeholder='select your skills'
                   onChange={this.handleSkillsChange.bind(this)}
+                  defaultValue={["1"]}
                 >
                   {this.state.skills
                     ? this.state.skills.map((skill, index) => (

@@ -1,7 +1,7 @@
 {
   "development": {
     "config_id": "development",
-    "url": "https://rbk-space01.herokuapp.com/m",
+    "url": "https://rbk-space01.herokuapp.com/",
     "app_name": "rbk-space",
     "app_desc": "rbk-space desc",
     "node_port": 4000,
