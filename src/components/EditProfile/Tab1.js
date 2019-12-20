@@ -242,7 +242,7 @@ export class Tab1 extends Component {
                   style={{ width: '100%' }}
                   placeholder='select your skills'
                   onChange={this.handleSkillsChange.bind(this)}
-                  defaultValue={["1"]}
+                  defaultValue={this.state.skills}
                 >
                   {this.state.skills
                     ? this.state.skills.map((skill, index) => (
