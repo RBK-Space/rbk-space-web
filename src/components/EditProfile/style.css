@@ -1,0 +1,11 @@
+@import '~antd/dist/antd.css';
+.ant-form-item-label {
+  text-align: left !important;
+}
+.ant-tabs-nav-scroll {
+  text-align: center;
+}
+#edit-profile-heading {
+  font-family: monospace;
+  text-align: center;
+}
