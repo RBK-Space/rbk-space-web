@@ -36,7 +36,7 @@ export class Profile extends Component {
     });
   };
   componentDidMount() {
-    fetch('auth/login/success', {
+    fetch('https://rbk-frontend.herokuapp.com/auth/login/success', {
       method: 'GET',
       credentials: 'include',
       headers: {
@@ -94,7 +94,9 @@ export class Profile extends Component {
               <div className='general'>
                 <div className='editt'>
                   <span className='section-id'>General</span>
-                  {true ? (
+                  {this.state.loggedInUser[0] &&
+                  this.state.loggedInUser[0].userId ===
+                    this.state.user.userId ? (
                     <Link to={`/editProfile/${this.state.user.userId}`}>
                       <FontAwesomeIcon
                         icon={faUserEdit}
