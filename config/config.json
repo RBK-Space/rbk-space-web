@@ -1,7 +1,7 @@
 {
   "development": {
     "config_id": "development",
-    "url": "https://rbk-frontend.herokuapp.com",
+    "url": "https://rbk-space01.herokuapp.com/m",
     "app_name": "rbk-space",
     "app_desc": "rbk-space desc",
     "node_port": 4000,
@@ -9,7 +9,7 @@
     "sessionSecret": "rbk-space-session-secret",
     "githubClientId": "a34af9c4a1fdc8a7ef9b",
     "githubClientSecret": "8c9c4366d327e1d976f9452ef440fdf25ef8265e",
-    "githubCallbackUrl": "https://rbk-frontend.herokuapp.com/auth/github/callback",
+    "githubCallbackUrl": "https://rbk-space01.herokuapp.com/auth/github/callback",
     "rbkEmail": "rbk.space1@gmail.com",
     "rbkEmailPassword": "FY]u4pM~[ugG.,?}",
     "host": "rbkspace.cmyr6nxvt4ka.us-east-2.rds.amazonaws.com",
@@ -24,7 +24,7 @@
   },
   "deployed": {
     "config_id": "deployed",
-    "url": "https://rbk-frontend.herokuapp.com/",
+    "url": "https://rbk-space01.herokuapp.com/",
     "app_name": "rbk-space",
     "app_desc": "rbk-space desc",
     "node_port": 4000,
@@ -32,7 +32,7 @@
     "sessionSecret": "rbk-space-session-secret",
     "githubClientId": "a34af9c4a1fdc8a7ef9b",
     "githubClientSecret": "8c9c4366d327e1d976f9452ef440fdf25ef8265e",
-    "githubCallbackUrl": "https://rbk-frontend.herokuapp.com/auth/github/callback",
+    "githubCallbackUrl": "https://rbk-space01.herokuapp.com/auth/github/callback",
     "rbkEmail": "rbk.space1@gmail.com",
     "rbkEmailPassword": "FY]u4pM~[ugG.,?}",
     "host": "rbkspace.cmyr6nxvt4ka.us-east-2.rds.amazonaws.com",
