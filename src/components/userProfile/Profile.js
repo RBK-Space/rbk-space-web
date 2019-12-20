@@ -29,7 +29,7 @@ export class Profile extends Component {
 
   getData = (props) => {
     const { id } = props.match.params;
-    axios(`/user/${id}`).then((result) => {
+    axios(`/api/user/${id}`).then((result) => {
       this.setState({
         user: result.data[0]
       });
