@@ -12,9 +12,9 @@ const path = require('path');
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
-router.get('/', (req, res) => {
-  res.status(200).send('Home Page');
-});
+// router.get('/', (req, res) => {
+//   res.status(200).send('Home Page');
+// });
 //users routes
 //Route to get all users
 router.get('/api/users', (req, res) => {

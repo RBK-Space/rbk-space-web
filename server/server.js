@@ -30,17 +30,17 @@ app.use(require('body-parser').urlencoded({ extended: true }));
 // if (process.env.NODE_ENV === "production") {
 const root = require('path').join(__dirname, '..', 'build');
 app.use(express.static(root));
-app.get('/', (req, res) => {
+app.get('*', (req, res) => {
   res.sendFile('index.html', { root });
 });
 // set up cors to allow us to accept requests from our client
-app.use(
-  cors({
-    origin: '/', // allow to server to accept request from different origin
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true // allow session cookie from browser to pass through
-  })
-);
+// app.use(
+//   cors({
+//     origin: '/', // allow to server to accept request from different origin
+//     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+//     credentials: true // allow session cookie from browser to pass through
+//   })
+// );
 // deserialize cookie from the browser
 app.use(cookieParser());
 app.use(
