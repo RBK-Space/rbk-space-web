@@ -78,7 +78,7 @@ app.use('/api', authCheck);
 const routes = require('./routes/index');
 const authRoutes = require('./routes/auth-routes');
 
-app.use('/', routes);
+app.use('/*', routes);
 app.use('/auth', authRoutes);
 
 app.listen(process.env.PORT || global.gConfig.node_port, () => {

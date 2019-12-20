@@ -70,16 +70,23 @@ class App extends React.Component {
                       <AddPost />
                       <Post />
                     </Route>
-                    <Route path='/api/profile/:id' component={Profile}></Route>
                     <Route
+                      exact
+                      path='/api/profile/:id'
+                      component={Profile}
+                    ></Route>
+                    <Route
+                      exact
                       path='/api/search/users/'
                       component={SearchPeople}
                     ></Route>
                     <Route
+                      exact
                       path='/api/search/posts/'
                       component={SearchPosts}
                     ></Route>
                     <Route
+                      exact
                       path='/api/editProfile/:id'
                       component={EditProfileForm}
                     />
