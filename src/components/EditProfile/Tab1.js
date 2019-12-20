@@ -25,7 +25,7 @@ export class Tab1 extends Component {
       cohortNo: null,
       skills: null,
       empStatus: null,
-      skillId: []
+      skillId: [1]
     };
   }
   getData = (props) => {
@@ -229,11 +229,11 @@ export class Tab1 extends Component {
 
             <Form.Item label='Skills'>
               {getFieldDecorator('skills', {
-                rules: [
-                  {
-                    message: 'Please input your skills!'
-                  }
-                ]
+                // rules: [
+                //   {
+                //     message: 'Please input your skills!'
+                //   }
+                // ]
               })(
                 <Select
                   mode='tags'
