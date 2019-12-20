@@ -30,7 +30,7 @@ router.get(`/login/failed`, (req, res) => {
 // When logout, redirect to client
 router.get(`/logout`, (req, res) => {
   req.logout();
-  res.redirect('/home');
+  res.redirect('/');
 });
 
 // auth with github
@@ -54,7 +54,7 @@ router.get(
     failureRedirect: `/auth/failed`
   }),
   function(req, res) {
-    res.redirect(`/home`);
+    res.redirect(`/`);
   }
 );
 
