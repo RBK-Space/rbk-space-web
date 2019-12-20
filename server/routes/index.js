@@ -218,7 +218,7 @@ router.post('/api/userProject/delete', (req, res) => {
 });
 //cohorts routes
 //Route to get all cohorts data
-router.get('/cohorts', (req, res) => {
+router.get('/api/cohorts', (req, res) => {
   db.cohorts.get(function(err, results) {
     res.json(results);
   });
@@ -240,7 +240,7 @@ router.get('/api/skills', (req, res) => {
   });
 });
 //Route to get all users who have a skill
-router.get('/skillUsers/:skill', (req, res) => {
+router.get('/api/skillUsers/:skill', (req, res) => {
   var skill = req.params.skill;
   db.cohorts.getCohortUsers(function(err, results) {
     res.json(results);

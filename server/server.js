@@ -65,15 +65,15 @@ const authCheck = (req, res, next) => {
     next();
   }
 };
-
-app.get('/api', authCheck,(req, res) => {
-  res.status(200).json({
-    authenticated: true,
-    message: 'user successfully authenticated',
-    user: req.user,
-    cookies: req.cookies
-  });
-});
+app.use('/api', authCheck);
+// app.get('/api/', authCheck, (req, res) => {
+//   res.status(200).json({
+//     authenticated: true,
+//     message: 'user successfully authenticated',
+//     user: req.user,
+//     cookies: req.cookies
+//   });
+// });
 //routes
 const routes = require('./routes/index');
 const authRoutes = require('./routes/auth-routes');

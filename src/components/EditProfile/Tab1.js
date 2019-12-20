@@ -45,7 +45,7 @@ export class Tab1 extends Component {
       });
     });
 
-    axios(`/skills`).then((result) => {
+    axios(`/api/skills`).then((result) => {
       console.log(result.data[0]);
       this.setState({
         skills: result.data[0]
