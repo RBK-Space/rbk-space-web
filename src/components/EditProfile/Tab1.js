@@ -25,7 +25,7 @@ export class Tab1 extends Component {
       cohortNo: null,
       skills: null,
       empStatus: null,
-      skillId: [1]
+      skillId: [['8']]
     };
   }
   getData = (props) => {
