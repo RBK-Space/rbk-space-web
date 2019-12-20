@@ -24,8 +24,16 @@ const app = express();
 app.use(bodyParser.json());
 app.use(require('body-parser').urlencoded({ extended: true }));
 
-const publicPath = path.join(__dirname, '..', 'public');
-app.use(express.static(publicPath));
+// const publicPath = path.join(__dirname, '..', 'public');
+// app.use(express.static(publicPath));
+
+// if (process.env.NODE_ENV === "production") {
+app.use(express.static('/build'));
+// const path = require("path");
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'build', 'index.html'));
+});
+// }
 
 // set up cors to allow us to accept requests from our client
 app.use(
