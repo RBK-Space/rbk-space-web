@@ -7,10 +7,12 @@ var db = require('../../database/index.js');
 var bodyParser = require('body-parser');
 var _ = require('underscore');
 const { check, validationResult } = require('express-validator');
+const path = require('path');
 
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
-
+const publicPath = path.join(__dirname, '..', 'public');
+router.use(express.static(publicPath));
 router.get('/', (req, res) => {
   res.status(200).send('Home Page');
 });
