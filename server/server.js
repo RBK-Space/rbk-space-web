@@ -26,7 +26,6 @@ app.use(require('body-parser').urlencoded({ extended: true }));
 
 // const publicPath = path.join(__dirname, '..', 'public');
 // app.use(express.static(publicPath));
-
 // if (process.env.NODE_ENV === "production") {
 const root = require('path').join(__dirname, '..', 'build');
 app.use(express.static(root));
