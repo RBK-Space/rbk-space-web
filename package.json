@@ -58,7 +58,7 @@
     "uuid": "^3.3.3"
   },
   "scripts": {
-    "dev": "nodemon server/server.js",
+    "dev": "node server/server.js",
     "start": "concurrently \" npm run dev\" \"react-scripts start\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
