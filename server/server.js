@@ -15,6 +15,7 @@ process.env.NODE_ENV = 'deployed';
 
 //config
 const config = require('../config/config.js');
+const path = require('path');
 
 //module
 const app = express();
@@ -23,10 +24,13 @@ const app = express();
 app.use(bodyParser.json());
 app.use(require('body-parser').urlencoded({ extended: true }));
 
+const publicPath = path.join(__dirname, '..', 'public');
+app.use(express.static(publicPath));
+
 // set up cors to allow us to accept requests from our client
 app.use(
   cors({
-    origin: 'http://localhost:3000', // allow to server to accept request from different origin
+    origin: '/', // allow to server to accept request from different origin
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true // allow session cookie from browser to pass through
   })
