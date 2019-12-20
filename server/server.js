@@ -31,7 +31,7 @@ app.use(require('body-parser').urlencoded({ extended: true }));
 app.use(express.static('/build'));
 // const path = require("path");
 app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, 'build', 'index.html'));
+  res.sendFile(path.resolve(__dirname, '..', 'build', 'index.html'));
 });
 // }
 
