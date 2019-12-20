@@ -66,27 +66,20 @@ class App extends React.Component {
                 {/* <Sidebar /> */}
                 <div className='container'>
                   <Switch className='App'>
-                    <Route exact path='/'>
+                    <Route path='/'>
                       <AddPost />
                       <Post />
                     </Route>
+                    <Route path='/api/profile/:id' component={Profile}></Route>
                     <Route
-                      exact
-                      path='/api/profile/:id'
-                      component={Profile}
-                    ></Route>
-                    <Route
-                      exact
                       path='/api/search/users/'
                       component={SearchPeople}
                     ></Route>
                     <Route
-                      exact
                       path='/api/search/posts/'
                       component={SearchPosts}
                     ></Route>
                     <Route
-                      exact
                       path='/api/editProfile/:id'
                       component={EditProfileForm}
                     />
