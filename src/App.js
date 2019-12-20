@@ -24,7 +24,7 @@ class App extends React.Component {
   };
   componentDidMount() {
     // Fetch does not send cookies. So you should add credentials: 'include'
-    fetch('https://rbk-space.herokuapp.com/auth/login/success', {
+    fetch('/auth/login/success', {
       method: 'GET',
       credentials: 'include',
       headers: {
@@ -33,18 +33,18 @@ class App extends React.Component {
         'Access-Control-Allow-Credentials': true
       }
     })
-      .then(response => {
+      .then((response) => {
         if (response.status === 200) return response.json();
         throw new Error('failed to authenticate user');
       })
-      .then(responseJson => {
+      .then((responseJson) => {
         // console.log(responseJson.user);
         this.setState({
           authenticated: true,
           user: responseJson.user
         });
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({
           authenticated: false,
           error: 'Failed to authenticate user'

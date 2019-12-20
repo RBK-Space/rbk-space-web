@@ -29,14 +29,14 @@ export class Profile extends Component {
 
   getData = props => {
     const { id } = props.match.params;
-    axios(`https://rbk-space.herokuapp.com/user/${id}`).then(result => {
+    axios(`/user/${id}`).then(result => {
       this.setState({
         user: result.data[0]
       });
     });
   };
   componentDidMount() {
-    fetch('https://rbk-space.herokuapp.com/auth/login/success', {
+    fetch('auth/login/success', {
       method: 'GET',
       credentials: 'include',
       headers: {

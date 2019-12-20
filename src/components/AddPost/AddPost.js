@@ -28,7 +28,7 @@ class AddPost extends Component {
 
   componentDidMount() {
     // Fetch does not send cookies. So you should add credentials: 'include'
-    fetch('https://rbk-space.herokuapp.com/auth/login/success', {
+    fetch('/auth/login/success', {
       method: 'GET',
       credentials: 'include',
       headers: {
@@ -85,7 +85,7 @@ class AddPost extends Component {
       data.append('user', that.state.user[0].userId);
       //the key here is a dummy prop, used for purpose of re-render the component
       that.setState({ pictures: [], key: Math.random() });
-      return axios.post('https://rbk-space.herokuapp.com/uploadImage', data);
+      return axios.post('/uploadImage', data);
     });
     axios
       .all(uploadPhotosPromises)

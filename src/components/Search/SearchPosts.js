@@ -16,7 +16,7 @@ export class SearchPeople extends Component {
     const urlParams = new URLSearchParams(window.location.search);
     const query = urlParams.get('query');
     var that = this;
-    axios(`https://rbk-space.herokuapp.com/posts/?query=${query}`).then(
+    axios(`/posts/?query=${query}`).then(
       result => {
         that.setState({
           postsSearchResult: result.data

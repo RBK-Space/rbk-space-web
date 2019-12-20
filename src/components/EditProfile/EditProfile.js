@@ -24,11 +24,11 @@ class EditProfile extends React.Component {
     };
   }
 
-  getData = props => {
+  getData = (props) => {
     const { id } = props.match.params;
     console.log(id);
     this.setState({ id: id });
-    axios(`https://rbk-space.herokuapp.com/user/${id}`).then(result => {
+    axios(`/user/${id}`).then((result) => {
       console.log(result.data[0]);
       this.setState({
         user: result.data[0]

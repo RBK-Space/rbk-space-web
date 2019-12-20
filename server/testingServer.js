@@ -136,16 +136,16 @@ router.post('/user/edit/basic', (req, res) => {
   }
 });
 
-router.post('/user/edit/skill', (req, res) => {
-  var skillId = req.body.skillId || [];
-  if (userId !== null && skillId.length > 0) {
-    skillId.forEach((element) => {
-      db.users.addUserSkill([userId, element], function(err, dbUser) {
-        res.json(formatUser(dbUser));
-      });
-    });
-  }
-});
+// router.post('/user/edit/skill', (req, res) => {
+//   var skillId = req.body.skillId || [];
+//   if (userId !== null && skillId.length > 0) {
+//     skillId.forEach((element) => {
+//       db.users.addUserSkill([userId, element], function(err, dbUser) {
+//         res.json(formatUser(dbUser));
+//       });
+//     });
+//   }
+// });
 // Route to edit user's contact info
 router.post('/user/edit/contact', (req, res) => {
   var facebook = req.body.facebook || null;
@@ -367,7 +367,7 @@ router.post('/user/post/delete', (req, res) => {
 //   var skills =
 // });
 
-formatUser = function(results) {
+var formatUser = function(results) {
   var users = [];
   var ids = [];
   var skills = [];
@@ -416,7 +416,7 @@ formatUser = function(results) {
   //console.log(results[0].length);
   return users;
 };
-getUserSkills = function(userId) {
+var getUserSkills = function(userId) {
   return new Promise(function(resolve, reject) {
     db.users.getUserSkills(function(err, results) {
       if (results === undefined) {

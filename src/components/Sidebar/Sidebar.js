@@ -22,7 +22,7 @@ class Sidebar extends Component {
 
   componentDidMount() {
     // Fetch does not send cookies. So you should add credentials: 'include'
-    fetch('https://rbk-space.herokuapp.com/auth/login/success', {
+    fetch('/auth/login/success', {
       method: 'GET',
       credentials: 'include',
       headers: {

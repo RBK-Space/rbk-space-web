@@ -26,7 +26,7 @@ app.use(require('body-parser').urlencoded({ extended: true }));
 // set up cors to allow us to accept requests from our client
 app.use(
   cors({
-    origin: 'https://rbk-space.herokuapp.com/', // allow to server to accept request from different origin
+    origin: 'http://localhost:3000', // allow to server to accept request from different origin
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true // allow session cookie from browser to pass through
   })
@@ -68,7 +68,7 @@ app.get('/', authCheck, (req, res) => {
 const routes = require('./routes/index');
 const authRoutes = require('./routes/auth-routes');
 
-app.use('/', authCheck, routes);
+app.use('/', routes);
 app.use('/auth', authRoutes);
 
 app.listen(global.gConfig.node_port, () => {

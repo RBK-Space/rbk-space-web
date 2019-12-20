@@ -179,7 +179,7 @@ router.post('/user/edit/skill', (req, res) => {
   var userId = req.body.userId;
   var skillId = req.body.skillId || [];
   if (skillId !== null && skillId.length > 0) {
-    skillId.forEach(element => {
+    skillId.forEach((element) => {
       db.users.addUserSkill([userId, element], function(err, dbUser) {});
     });
     db.users.getUserById(function(err, results) {

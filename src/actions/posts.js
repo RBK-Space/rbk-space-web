@@ -4,7 +4,7 @@ import { GET_ALL_POSTS, ADD_POST } from './types';
 
 export const getAllPosts = () => dispatch => {
   axios
-    .get(`https://rbk-space.herokuapp.com/posts`)
+    .get(`/posts`)
     .then(response => {
       dispatch({
         type: GET_ALL_POSTS,
@@ -18,7 +18,7 @@ export const getAllPosts = () => dispatch => {
 
 export const addPost = data => dispatch => {
   axios
-    .post(`https://rbk-space.herokuapp.com/user/post/add`, data)
+    .post(`/user/post/add`, data)
     .then(
       response => {
         dispatch({ type: ADD_POST, payload: response.data[0] });

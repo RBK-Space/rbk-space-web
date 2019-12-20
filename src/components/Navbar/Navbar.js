@@ -29,14 +29,14 @@ class Navbar extends React.Component {
   _handleLogoutClick = () => {
     // Logout using Twitter passport api
     // Set authenticated state to false in the HomePage
-    window.open('https://rbk-space.herokuapp.com/auth/logout', '_self');
+    window.open('/auth/logout', '_self');
     this.props.handleNotAuthenticated();
   };
 
   componentDidMount() {
     var that = this;
     // Fetch does not send cookies. So you should add credentials: 'include'
-    fetch('https://rbk-space.herokuapp.com/auth/login/success', {
+    fetch('/auth/login/success', {
       method: 'GET',
       credentials: 'include',
       headers: {

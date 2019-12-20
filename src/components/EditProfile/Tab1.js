@@ -28,31 +28,31 @@ export class Tab1 extends Component {
       skillId: []
     };
   }
-  getData = props => {
+  getData = (props) => {
     console.log(props);
     const id = props.id;
-    axios(`https://rbk-space.herokuapp.com/cohorts`).then(result => {
+    axios(`/cohorts`).then((result) => {
       console.log(result.data[0]);
       this.setState({
         cohorts: result.data[0]
       });
     });
 
-    axios(`https://rbk-space.herokuapp.com/user/${id}`).then(result => {
+    axios(`/user/${id}`).then((result) => {
       console.log(result.data[0]);
       this.setState({
         user: result.data[0]
       });
     });
 
-    axios(`https://rbk-space.herokuapp.com/skills`).then(result => {
+    axios(`/skills`).then((result) => {
       console.log(result.data[0]);
       this.setState({
         skills: result.data[0]
       });
     });
 
-    axios(`https://rbk-space.herokuapp.com/empStatus`).then(result => {
+    axios(`/empStatus`).then((result) => {
       console.log(result.data[0]);
       this.setState({
         empStatus: result.data[0]
@@ -64,7 +64,7 @@ export class Tab1 extends Component {
     this.getData(this.props);
   }
 
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
     var that = this;
     this.props.form.validateFieldsAndScroll((err, values) => {
@@ -74,11 +74,11 @@ export class Tab1 extends Component {
         values.userId = this.state.user.userId;
         console.log('Received values of form: ', values);
         axios
-          .post('https://rbk-space.herokuapp.com/user/edit/basic', values)
+          .post('/user/edit/basic', values)
           .then(function(response) {
             console.log(that.state.skillId[that.state.skillId.length - 1]);
             axios
-              .post('https://rbk-space.herokuapp.com/user/edit/skill', {
+              .post('/user/edit/skill', {
                 userId: that.state.user.userId,
                 skillId: that.state.skillId[that.state.skillId.length - 1]
               })
