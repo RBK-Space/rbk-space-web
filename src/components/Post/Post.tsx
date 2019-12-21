@@ -51,9 +51,7 @@ class Post extends Component<IPostProps> {
                         <span className='post-writer'>{post.fullName}</span>
                       </Link>
                       <span className='post-date'>
-                        <TimeAgo
-                          date={`${post.createdAt.substring(0, 19)}+0200`}
-                        />
+                        <TimeAgo date={post.createdAt} />
                       </span>
                     </div>
                     {post.postType === 1 ? (
