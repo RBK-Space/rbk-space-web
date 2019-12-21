@@ -10,6 +10,8 @@ import {
   message
 } from 'antd';
 import axios from 'axios';
+import ImageUploader from 'react-images-upload';
+
 const { Option } = Select;
 const key = 'updatable';
 
@@ -228,6 +230,15 @@ export class Tab1 extends Component {
                 ]
               })(<TextArea placeholder='Write your Bio here!' />)}
             </Form.Item>
+            <ImageUploader
+              withIcon={true}
+              buttonText='Choose images'
+              onChange={this.onDrop}
+              imgExtension={['.jpg', '.png', '.gif']}
+              maxFileSize={5242880}
+              withPreview={true}
+              key={this.state.key}
+            />
 
             <Form.Item label='Skills'>
               {getFieldDecorator('skills', {
